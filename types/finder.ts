@@ -42,3 +42,13 @@ export type FinderRecommendation = {
   tradeOffs: string[];
   reasons: string[];
 };
+
+export type FinderAiExplanation = {
+  summary: string;
+  mainReasons: string[];
+  tradeOffs: string[];
+  cta: string;
+};
+
+export type FinderAiStatus =
+  "available" | "not_configured" | "rate_limited" | "unavailable";

@@ -294,6 +294,21 @@ export const getPopularMountains = cache(
   },
 );
 
+export async function getFinderMountains(): Promise<Mountain[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("mountains")
+    .select(MOUNTAIN_WITH_ROUTES_COLUMNS)
+    .eq("status", "published")
+    .order("name", { ascending: true });
+
+  if (error) {
+    throw new Error(`Gagal memuat kandidat Finder: ${error.message}`);
+  }
+
+  return ((data ?? []) as MountainRow[]).map(toMountain);
+}
+
 export const getSimilarMountains = cache(
   async (
     mountainId: string,
