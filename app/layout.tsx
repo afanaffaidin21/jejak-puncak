@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import { BottomNavigation } from "@/components/common/bottom-navigation";
+import { Footer } from "@/components/common/footer";
+import { Header } from "@/components/common/header";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,7 +31,20 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <a
+          className="fixed top-sm left-sm z-overlay -translate-y-3xl rounded-md bg-primary px-sm py-xs text-label font-semibold text-primary-foreground shadow-floating transition-transform duration-fast ease-standard focus:translate-y-0"
+          href="#main-content"
+        >
+          Lewati ke konten utama
+        </a>
+        <div className="flex min-h-screen flex-col pb-mobile-nav lg:pb-0">
+          <Header />
+          <main className="flex-1" id="main-content" tabIndex={-1}>
+            {children}
+          </main>
+          <Footer />
+        </div>
+        <BottomNavigation />
       </body>
     </html>
   );

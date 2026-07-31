@@ -1,6 +1,7 @@
 import { MountainSnow, UserRound } from "lucide-react";
 import Link from "next/link";
 
+import { Container } from "@/components/common/container";
 import { StickyHeader } from "@/components/common/sticky-header";
 import { cn } from "@/lib/utils";
 
@@ -35,7 +36,7 @@ export function Header({
 
   return (
     <StickyHeader className={className} variant={variant}>
-      <div className="mx-auto flex min-h-mobile-nav w-full max-w-content items-center justify-between gap-md px-sm sm:px-md lg:px-lg">
+      <Container className="flex min-h-mobile-nav items-center justify-between gap-md">
         <Link
           className="inline-flex min-h-touch items-center gap-2xs rounded-md font-heading text-h4 font-semibold tracking-tight text-text-primary group-data-[appearance=transparent]/site-header:text-primary-foreground"
           href="/"
@@ -81,7 +82,7 @@ export function Header({
             {accountLabel}
           </Link>
         </div>
-      </div>
+      </Container>
     </StickyHeader>
   );
 }

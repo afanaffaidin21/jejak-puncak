@@ -1,6 +1,8 @@
 import { CodeXml, MountainSnow } from "lucide-react";
 import Link from "next/link";
 
+import { Container } from "@/components/common/container";
+
 const SECONDARY_NAV_ITEMS = [
   { href: "/explore", label: "Jelajahi gunung" },
   { href: "/compare", label: "Bandingkan" },
@@ -21,7 +23,7 @@ const footerLinkClassName =
 export function Footer() {
   return (
     <footer className="border-t border-divider bg-surface">
-      <div className="mx-auto w-full max-w-content px-sm py-2xl sm:px-md md:py-3xl lg:px-lg">
+      <Container className="py-2xl md:py-3xl">
         <div className="grid grid-cols-4 gap-x-md gap-y-2xl md:grid-cols-8 lg:grid-cols-12">
           <div className="col-span-4 lg:col-span-5">
             <Link
@@ -106,7 +108,7 @@ export function Footer() {
             </ul>
           </nav>
         </div>
-      </div>
+      </Container>
     </footer>
   );
 }
