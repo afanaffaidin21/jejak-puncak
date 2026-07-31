@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Ilustrasi pegunungan saat fajar</title>
+  <desc id="desc">Lapisan punggungan gunung hijau dengan langit pagi berwarna hangat.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cfe3e8"/>
+      <stop offset="0.58" stop-color="#f1dcc1"/>
+      <stop offset="1" stop-color="#f7f0df"/>
+    </linearGradient>
+    <linearGradient id="back" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#78948b"/>
+      <stop offset="1" stop-color="#536f64"/>
+    </linearGradient>
+    <linearGradient id="front" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#426255"/>
+      <stop offset="1" stop-color="#203d33"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <circle cx="1180" cy="250" r="88" fill="#f5d49a" opacity=".85"/>
+  <path d="M0 650 180 510l145 100 260-280 220 255 180-150 250 215 175-130 210 160v320H0Z" fill="url(#back)"/>
+  <path d="M0 780 215 610l175 110 300-245 250 275 240-175 420 270v155H0Z" fill="url(#front)"/>
+  <path d="m585 330 100 116 42-54 78 193-220-255Z" fill="#edf0e8" opacity=".75"/>
+  <path d="M0 850c280-55 520-38 760 18s540 60 840-2v134H0Z" fill="#183129" opacity=".55"/>
+</svg>

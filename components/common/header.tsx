@@ -1,5 +1,8 @@
+"use client";
+
 import { MountainSnow, UserRound } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { Container } from "@/components/common/container";
 import { StickyHeader } from "@/components/common/sticky-header";
@@ -29,13 +32,16 @@ const navigationLinkClassName = cn(
 export function Header({
   className,
   isAuthenticated = false,
-  variant = "solid",
+  variant,
 }: HeaderProps) {
+  const pathname = usePathname();
   const accountLabel = isAuthenticated ? "Profile" : "Login";
   const accountHref = isAuthenticated ? "/profile" : "/login";
+  const resolvedVariant =
+    variant ?? (pathname === "/" ? "transparent" : "solid");
 
   return (
-    <StickyHeader className={className} variant={variant}>
+    <StickyHeader className={className} variant={resolvedVariant}>
       <Container className="flex min-h-mobile-nav items-center justify-between gap-md">
         <Link
           className="inline-flex min-h-touch items-center gap-2xs rounded-md font-heading text-h4 font-semibold tracking-tight text-text-primary group-data-[appearance=transparent]/site-header:text-primary-foreground"
