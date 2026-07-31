@@ -111,7 +111,7 @@ export function DetailContent({ mountain }: { mountain: Mountain }) {
                         <RouteIcon aria-hidden="true" className="size-xs" />
                         Jarak
                       </dt>
-                      <dd className="mt-3xs font-semibold text-text-primary">
+                      <dd className="mt-3xs font-semibold tabular-nums text-text-primary">
                         {formatNumber(route.distanceKm, {
                           maximumFractionDigits: 1,
                         })}{" "}
@@ -123,7 +123,7 @@ export function DetailContent({ mountain }: { mountain: Mountain }) {
                         <MountainIcon aria-hidden="true" className="size-xs" />
                         Gain
                       </dt>
-                      <dd className="mt-3xs font-semibold text-text-primary">
+                      <dd className="mt-3xs font-semibold tabular-nums text-text-primary">
                         {formatNumber(route.elevationGain)} m
                       </dd>
                     </div>
@@ -132,7 +132,7 @@ export function DetailContent({ mountain }: { mountain: Mountain }) {
                         <Clock3 aria-hidden="true" className="size-xs" />
                         Waktu
                       </dt>
-                      <dd className="mt-3xs font-semibold text-text-primary">
+                      <dd className="mt-3xs font-semibold tabular-nums text-text-primary">
                         {formatNumber(route.estimatedHours, {
                           maximumFractionDigits: 1,
                         })}{" "}

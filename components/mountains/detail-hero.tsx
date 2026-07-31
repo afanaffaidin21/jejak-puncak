@@ -72,14 +72,14 @@ export function DetailHero({ mountain }: { mountain: Mountain }) {
           <dl className="mt-lg flex flex-wrap gap-xs">
             <div className="rounded-full border border-primary-foreground/25 bg-background/10 px-sm py-2xs backdrop-blur">
               <dt className="sr-only">Elevasi</dt>
-              <dd className="inline-flex items-center gap-2xs text-label font-semibold">
+              <dd className="inline-flex items-center gap-2xs text-label font-semibold tabular-nums">
                 <MountainIcon aria-hidden="true" className="size-sm" />
                 {formatNumber(mountain.elevation)} mdpl
               </dd>
             </div>
             <div className="rounded-full border border-primary-foreground/25 bg-background/10 px-sm py-2xs backdrop-blur">
               <dt className="sr-only">Durasi</dt>
-              <dd className="inline-flex items-center gap-2xs text-label font-semibold">
+              <dd className="inline-flex items-center gap-2xs text-label font-semibold tabular-nums">
                 <CalendarDays aria-hidden="true" className="size-sm" />
                 {formatDuration(mountain.durationDays)}
               </dd>

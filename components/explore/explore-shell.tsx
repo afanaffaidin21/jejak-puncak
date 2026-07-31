@@ -67,6 +67,10 @@ function selectedValues(searchParams: URLSearchParams, key: string) {
     .filter(Boolean);
 }
 
+function controlId(prefix: string, value: string) {
+  return `${prefix}-${value.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-")}`;
+}
+
 type ExploreShellProps = {
   children: ReactNode;
   resultCount: number;
@@ -183,12 +187,12 @@ export function ExploreShell({ children, resultCount }: ExploreShellProps) {
                 checked={selectedValues(searchParams, "province").includes(
                   province,
                 )}
-                id={`province-${province}`}
+                id={controlId("province", province)}
                 onCheckedChange={(checked) =>
                   toggleValue("province", province, checked)
                 }
               />
-              <FieldLabel htmlFor={`province-${province}`}>
+              <FieldLabel htmlFor={controlId("province", province)}>
                 {province}
               </FieldLabel>
             </Field>
@@ -205,12 +209,14 @@ export function ExploreShell({ children, resultCount }: ExploreShellProps) {
                 checked={selectedValues(searchParams, "island").includes(
                   island,
                 )}
-                id={`island-${island}`}
+                id={controlId("island", island)}
                 onCheckedChange={(checked) =>
                   toggleValue("island", island, checked)
                 }
               />
-              <FieldLabel htmlFor={`island-${island}`}>{island}</FieldLabel>
+              <FieldLabel htmlFor={controlId("island", island)}>
+                {island}
+              </FieldLabel>
             </Field>
           ))}
         </div>
@@ -342,9 +348,11 @@ export function ExploreShell({ children, resultCount }: ExploreShellProps) {
                 className="pointer-events-none absolute top-1/2 left-sm size-sm -translate-y-1/2 text-text-muted"
               />
               <Input
+                autoComplete="off"
                 className="pr-touch pl-xl"
+                name="search"
                 onChange={(event) => setSearchValue(event.target.value)}
-                placeholder="Contoh: Rinjani"
+                placeholder="Contoh: Rinjani…"
                 type="search"
                 value={searchValue}
               />
@@ -421,7 +429,7 @@ export function ExploreShell({ children, resultCount }: ExploreShellProps) {
 
         <div className="mb-md flex items-center justify-between gap-sm">
           <p aria-live="polite" className="text-body-sm text-text-secondary">
-            <strong className="font-semibold text-text-primary">
+            <strong className="font-semibold tabular-nums text-text-primary">
               {resultCount}
             </strong>{" "}
             gunung ditemukan

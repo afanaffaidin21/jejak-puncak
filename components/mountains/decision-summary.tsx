@@ -80,7 +80,7 @@ export function DecisionSummary({ mountain }: { mountain: Mountain }) {
                       />
                       {item.label}
                     </dt>
-                    <dd className="mt-xs font-heading text-h4 font-semibold text-text-primary">
+                    <dd className="mt-xs font-heading text-h4 font-semibold tabular-nums text-text-primary">
                       {item.value}
                     </dd>
                   </div>

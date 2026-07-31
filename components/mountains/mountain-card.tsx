@@ -84,7 +84,7 @@ export function MountainCard({
               <MountainIcon aria-hidden="true" className="size-xs" />
               Elevasi
             </dt>
-            <dd className="mt-3xs font-semibold text-text-primary">
+            <dd className="mt-3xs font-semibold tabular-nums text-text-primary">
               {formatNumber(mountain.elevation)} mdpl
             </dd>
           </div>
@@ -93,7 +93,7 @@ export function MountainCard({
               <CalendarDays aria-hidden="true" className="size-xs" />
               Durasi
             </dt>
-            <dd className="mt-3xs font-semibold text-text-primary">
+            <dd className="mt-3xs font-semibold tabular-nums text-text-primary">
               {formatDuration(mountain.durationDays)}
             </dd>
           </div>

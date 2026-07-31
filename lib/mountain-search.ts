@@ -4,7 +4,7 @@ import {
   type MountainDifficulty,
   type MountainFilters,
   type MountainSort,
-} from "@/types/mountain";
+} from "../types/mountain.ts";
 
 export type ExploreSearchParams = Record<string, string | string[] | undefined>;
 

@@ -51,7 +51,7 @@ function SheetContent({
       <SheetOverlay />
       <SheetPrimitive.Popup
         className={cn(
-          "fixed z-overlay flex flex-col gap-sm overflow-y-auto bg-popover text-popover-foreground shadow-floating transition duration-normal ease-standard data-ending-style:opacity-0 data-starting-style:opacity-0",
+          "fixed z-overlay flex flex-col gap-sm overflow-y-auto overscroll-contain bg-popover text-popover-foreground shadow-floating transition duration-normal ease-standard data-ending-style:opacity-0 data-starting-style:opacity-0",
           "data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:max-h-[85svh] data-[side=bottom]:rounded-t-xl data-[side=bottom]:border-t data-[side=bottom]:data-ending-style:translate-y-xl data-[side=bottom]:data-starting-style:translate-y-xl",
           "data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:w-[min(90vw,24rem)] data-[side=left]:border-r data-[side=left]:data-ending-style:-translate-x-xl data-[side=left]:data-starting-style:-translate-x-xl",
           "data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:w-[min(90vw,24rem)] data-[side=right]:border-l data-[side=right]:data-ending-style:translate-x-xl data-[side=right]:data-starting-style:translate-x-xl",
