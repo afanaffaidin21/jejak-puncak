@@ -48,6 +48,7 @@
   --spacing-5xl: 6rem;
   --spacing-touch: 2.75rem;
   --spacing-mobile-nav: 5rem;
+  --spacing-safe-area: env(safe-area-inset-bottom, 0px);
 
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
