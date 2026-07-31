@@ -185,6 +185,25 @@ export async function getAllMountains(
     query = query.lte("duration_days", filters.maxDurationDays);
   }
 
+  if (filters.elevationBands?.length) {
+    const elevationPredicates = filters.elevationBands.flatMap((band) => {
+      switch (band) {
+        case "under-2500":
+          return ["elevation.lt.2500"];
+        case "2500-3000":
+          return ["and(elevation.gte.2500,elevation.lt.3000)"];
+        case "over-3000":
+          return ["elevation.gte.3000"];
+        default:
+          return [];
+      }
+    });
+
+    if (elevationPredicates.length < 3) {
+      query = query.or(elevationPredicates.join(","));
+    }
+  }
+
   if (filters.minElevation !== undefined) {
     query = query.gte("elevation", filters.minElevation);
   }

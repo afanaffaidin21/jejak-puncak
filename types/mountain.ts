@@ -55,12 +55,15 @@ export type MountainSort =
   | "duration-asc"
   | "beginner-desc";
 
+export type ElevationBand = "under-2500" | "2500-3000" | "over-3000";
+
 export type MountainFilters = {
   search?: string;
   provinces?: string[];
   islands?: string[];
   difficulties?: MountainDifficulty[];
   maxDurationDays?: number;
+  elevationBands?: ElevationBand[];
   minElevation?: number;
   maxElevation?: number;
   minBeginnerScore?: number;
