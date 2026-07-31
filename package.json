@@ -14,7 +14,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test": "node --test lib/format.test.ts lib/utils.test.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
