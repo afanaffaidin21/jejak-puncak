@@ -111,6 +111,12 @@ function hasRequiredData(mountain: Mountain) {
     mountain.beginnerScore >= 0 &&
     Number.isFinite(mountain.durationDays) &&
     mountain.durationDays > 0 &&
+    Number.isFinite(mountain.sunriseRating) &&
+    mountain.sunriseRating >= 0 &&
+    Number.isFinite(mountain.popularityScore) &&
+    mountain.popularityScore >= 0 &&
+    typeof mountain.campingAvailable === "boolean" &&
+    typeof mountain.waterSource === "boolean" &&
     mountain.budgetCategory &&
     getElevationGain(mountain) !== null,
   );
@@ -302,7 +308,7 @@ function buildNarrative(
 function scoreMountain(
   mountain: Mountain,
   answers: FinderAnswers,
-): FinderRecommendation {
+): FinderRecommendation | null {
   const breakdown: FinderScoreBreakdown = {
     beginnerSuitability: scoreBeginnerSuitability(mountain, answers.experience),
     durationCompatibility: scoreDuration(
@@ -321,6 +327,14 @@ function scoreMountain(
       total + breakdown[dimension] * FINDER_SCORE_WEIGHTS[dimension],
     0,
   );
+
+  if (Number.isNaN(weightedTotal)) {
+    console.warn(
+      "Skipping mountain due to invalid score calculation:",
+      mountain.slug,
+    );
+    return null;
+  }
 
   return {
     mountain,
@@ -354,6 +368,10 @@ export function scoreFinderRecommendations(
   return mountains
     .filter((mountain) => passesHardFilters(mountain, answers))
     .map((mountain) => scoreMountain(mountain, answers))
+    .filter(
+      (recommendation): recommendation is FinderRecommendation =>
+        recommendation !== null,
+    )
     .sort(
       (left, right) =>
         right.score - left.score ||

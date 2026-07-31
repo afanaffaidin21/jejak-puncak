@@ -207,6 +207,36 @@ test("hard filters remove incompatible and incomplete candidates", () => {
   );
 });
 
+const INVALID_SCORING_FIELDS = [
+  { field: "sunriseRating", value: null },
+  { field: "sunriseRating", value: undefined },
+  { field: "popularityScore", value: null },
+  { field: "popularityScore", value: undefined },
+  { field: "campingAvailable", value: null },
+  { field: "campingAvailable", value: undefined },
+  { field: "waterSource", value: null },
+  { field: "waterSource", value: undefined },
+] as const;
+
+for (const { field, value } of INVALID_SCORING_FIELDS) {
+  test(`rejects a mountain with invalid ${field}=${String(value)}`, () => {
+    const mountain = mountainFixture({
+      id: `invalid-${field}-${String(value)}`,
+      name: `Gunung Invalid ${field}`,
+      slug: `gunung-invalid-${field}-${String(value)}`,
+      [field]: value,
+    } as unknown as Partial<Mountain> & Pick<Mountain, "id" | "name" | "slug">);
+
+    const results = scoreFinderRecommendations(BASE_ANSWERS, [mountain]);
+
+    assert.equal(results.length, 0);
+    assert.equal(
+      results.some((recommendation) => Number.isNaN(recommendation.score)),
+      false,
+    );
+  });
+}
+
 test("ranking is stable for identical scores and input changes", () => {
   const alpha = mountainFixture({
     id: "alpha",
