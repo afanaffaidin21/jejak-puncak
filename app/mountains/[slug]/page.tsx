@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { DecisionSummary } from "@/components/mountains/decision-summary";
+import { DetailContent } from "@/components/mountains/detail-content";
 import { DetailHero } from "@/components/mountains/detail-hero";
+import { MobileDetailCta } from "@/components/mountains/mobile-detail-cta";
 import { MountainViewTracker } from "@/components/mountains/mountain-view-tracker";
+import { getMountainFaqs } from "@/lib/mountains";
 import { getAllMountains, getMountainBySlug } from "@/services/mountains";
 
 type MountainDetailPageProps = {
@@ -54,6 +57,7 @@ export default async function MountainDetailPage({
     notFound();
   }
 
+  const faqs = getMountainFaqs(mountain);
   const structuredData = [
     {
       "@context": "https://schema.org",
@@ -97,6 +101,18 @@ export default async function MountainDetailPage({
         },
       ],
     },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
+    },
   ];
 
   return (
@@ -110,6 +126,8 @@ export default async function MountainDetailPage({
       <MountainViewTracker slug={mountain.slug} />
       <DetailHero mountain={mountain} />
       <DecisionSummary mountain={mountain} />
+      <DetailContent mountain={mountain} />
+      <MobileDetailCta name={mountain.name} slug={mountain.slug} />
     </>
   );
 }

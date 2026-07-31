@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Ilustrasi perkemahan gunung</title>
+  <desc id="desc">Tenda kecil di punggungan gunung saat cahaya fajar muncul.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#213e4d"/>
+      <stop offset=".62" stop-color="#d18f72"/>
+      <stop offset="1" stop-color="#f3d3a2"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <circle cx="1230" cy="245" r="80" fill="#f3d8a8" opacity=".85"/>
+  <path d="M0 630 280 410l220 190 260-290 300 315 210-170 330 245v300H0Z" fill="#35564e"/>
+  <path d="M0 790c250-115 500-90 740 15s520 102 860-30v225H0Z" fill="#1f3b31"/>
+  <path d="m650 825 120-170 155 170Z" fill="#d4a15f"/>
+  <path d="m770 655 45 170h110Z" fill="#a96c42"/>
+  <path d="M780 825h-22V675h22Z" fill="#e7c584"/>
+</svg>

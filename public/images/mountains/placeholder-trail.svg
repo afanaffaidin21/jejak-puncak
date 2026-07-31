@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Ilustrasi jalur gunung</title>
+  <desc id="desc">Jalur berkelok menuju punggungan gunung hijau di bawah langit biru.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b9d8e0"/>
+      <stop offset="1" stop-color="#f5e9cf"/>
+    </linearGradient>
+    <linearGradient id="hill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5f8170"/>
+      <stop offset="1" stop-color="#29483a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <path d="M0 550 330 300l250 225 260-310 330 320 190-145 240 190v420H0Z" fill="#6f8d82"/>
+  <path d="M0 690 290 490l270 180 340-230 310 240 390-160v480H0Z" fill="url(#hill)"/>
+  <path d="M740 1000c-90-210-22-325 115-410 63-39 84-75 67-136 96 125 38 205-63 275-80 56-85 141-45 271Z" fill="#d8bf8b"/>
+</svg>
