@@ -16,6 +16,7 @@ test-results/
 .env
 .env.*
 !.env.example
+!.env.local.example
 
 # Vercel
 .vercel/
@@ -41,4 +42,3 @@ Thumbs.db
 .supabase/
 supabase/.branches/
 supabase/.temp/
-
