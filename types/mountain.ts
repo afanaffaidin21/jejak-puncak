@@ -47,6 +47,19 @@ export type Mountain = {
   routes: MountainRoute[];
 };
 
+export type MountainCardData = Pick<
+  Mountain,
+  | "difficulty"
+  | "durationDays"
+  | "elevation"
+  | "heroImage"
+  | "id"
+  | "name"
+  | "province"
+  | "slug"
+  | "summary"
+>;
+
 export type MountainSort =
   | "popular"
   | "name-asc"

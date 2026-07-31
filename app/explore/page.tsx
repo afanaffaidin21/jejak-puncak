@@ -3,10 +3,12 @@ import type { Metadata } from "next";
 import { Container } from "@/components/common/container";
 import { ErrorState } from "@/components/common/error-state";
 import { ExploreShell } from "@/components/explore/explore-shell";
+import { InfiniteMountainGrid } from "@/components/explore/infinite-mountain-grid";
 import {
   parseMountainSearchParams,
   type ExploreSearchParams,
 } from "@/lib/mountain-search";
+import { toMountainCardData } from "@/lib/mountains";
 import { getAllMountains } from "@/services/mountains";
 
 export const metadata: Metadata = {
@@ -23,9 +25,47 @@ export default async function ExplorePage({ searchParams }: ExplorePageProps) {
   const resolvedSearchParams = await searchParams;
   const filters = parseMountainSearchParams(resolvedSearchParams);
   const result = await getAllMountains(filters).catch(() => null);
+  const baseQuery = new URLSearchParams();
+
+  for (const [key, rawValue] of Object.entries(resolvedSearchParams)) {
+    const values = Array.isArray(rawValue) ? rawValue : [rawValue];
+    values.forEach((value) => {
+      if (value !== undefined && key !== "page") {
+        baseQuery.append(key, value);
+      }
+    });
+  }
+
+  const structuredData = result
+    ? {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        name: "Explore Gunung Indonesia",
+        description:
+          "Katalog gunung Indonesia dengan filter wilayah, kesulitan, durasi, elevasi, camping, dan sunrise.",
+        mainEntity: {
+          "@type": "ItemList",
+          numberOfItems: result.count,
+          itemListElement: result.mountains.map((mountain, index) => ({
+            "@type": "ListItem",
+            position: (result.page - 1) * result.pageSize + index + 1,
+            url: `https://jejak-puncak.vercel.app/mountains/${mountain.slug}`,
+            name: mountain.name,
+          })),
+        },
+      }
+    : null;
 
   return (
     <>
+      {structuredData ? (
+        <script
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData).replaceAll("<", "\\u003c"),
+          }}
+          type="application/ld+json"
+        />
+      ) : null}
       <section className="border-b border-divider bg-surface py-2xl md:py-3xl">
         <Container>
           <p className="text-label font-semibold text-primary">Explore</p>
@@ -45,16 +85,16 @@ export default async function ExplorePage({ searchParams }: ExplorePageProps) {
       >
         <Container>
           {result ? (
-            <ExploreShell key={filters.search ?? ""} resultCount={result.count}>
-              <div className="rounded-xl border border-dashed border-divider bg-surface p-xl text-center">
-                <p className="font-heading text-h4 font-semibold text-text-primary">
-                  Kontrol pencarian dan filter siap digunakan.
-                </p>
-                <p className="mt-xs text-body-sm text-text-secondary">
-                  Grid hasil, aksi wishlist/compare, dan infinite scroll
-                  diselesaikan pada issue hasil Explore berikutnya.
-                </p>
-              </div>
+            <ExploreShell
+              key={JSON.stringify(filters)}
+              resultCount={result.count}
+            >
+              <InfiniteMountainGrid
+                baseQuery={baseQuery.toString()}
+                initialHasMore={result.hasMore}
+                initialMountains={result.mountains.map(toMountainCardData)}
+                initialPage={result.page}
+              />
             </ExploreShell>
           ) : (
             <ErrorState

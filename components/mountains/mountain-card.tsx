@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
+  CardAction,
   CardContent,
   CardFooter,
   CardHeader,
@@ -19,21 +20,24 @@ import {
 } from "@/components/ui/card";
 import { DIFFICULTY_LABELS, formatDuration } from "@/lib/mountains";
 import { formatNumber } from "@/lib/format";
-import type { Mountain } from "@/types/mountain";
+import type { MountainCardData } from "@/types/mountain";
+import type { ReactNode } from "react";
 
 type MountainCardProps = {
-  mountain: Mountain;
+  actions?: ReactNode;
+  mountain: MountainCardData;
   priority?: boolean;
 };
 
 export function MountainCard({
+  actions,
   mountain,
   priority = false,
 }: MountainCardProps) {
   const detailHref = `/mountains/${mountain.slug}`;
 
   return (
-    <Card className="h-full" interactive>
+    <Card className="relative h-full" interactive>
       <CardMedia className="relative">
         <Image
           alt={`Ilustrasi sementara lanskap ${mountain.name}`}
@@ -52,6 +56,9 @@ export function MountainCard({
         </Badge>
       </CardMedia>
       <CardHeader>
+        {actions ? (
+          <CardAction className="relative z-10">{actions}</CardAction>
+        ) : null}
         <CardMetadata>
           <span className="inline-flex items-center gap-3xs">
             <MapPin aria-hidden="true" className="size-xs" />

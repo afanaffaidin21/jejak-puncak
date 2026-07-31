@@ -1,4 +1,8 @@
-import type { MountainDifficulty } from "@/types/mountain";
+import type {
+  Mountain,
+  MountainCardData,
+  MountainDifficulty,
+} from "@/types/mountain";
 
 export const DIFFICULTY_LABELS: Record<MountainDifficulty, string> = {
   easy: "Mudah",
@@ -21,4 +25,18 @@ export function formatDuration(days: number) {
   return `${new Intl.NumberFormat("id-ID", {
     maximumFractionDigits: 1,
   }).format(days)} hari`;
+}
+
+export function toMountainCardData(mountain: Mountain): MountainCardData {
+  return {
+    difficulty: mountain.difficulty,
+    durationDays: mountain.durationDays,
+    elevation: mountain.elevation,
+    heroImage: mountain.heroImage,
+    id: mountain.id,
+    name: mountain.name,
+    province: mountain.province,
+    slug: mountain.slug,
+    summary: mountain.summary,
+  };
 }
