@@ -15,7 +15,7 @@ type RetryButtonProps = Omit<
 
 export function RetryButton({
   label = "Coba lagi",
-  loadingLabel = "Mencoba lagi",
+  loadingLabel = "Mencoba lagi…",
   onRetry,
   variant = "secondary",
   ...props

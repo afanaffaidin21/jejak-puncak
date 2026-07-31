@@ -34,7 +34,9 @@ export function EmptyState({
         <EmptyMedia variant="icon">
           {illustration ?? <MountainSnow aria-hidden="true" />}
         </EmptyMedia>
-        <EmptyTitle>{title}</EmptyTitle>
+        <EmptyTitle aria-level={2} role="heading">
+          {title}
+        </EmptyTitle>
         <EmptyDescription>{description}</EmptyDescription>
       </EmptyHeader>
       {action ? <EmptyContent>{action}</EmptyContent> : null}

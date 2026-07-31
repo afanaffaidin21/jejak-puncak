@@ -47,7 +47,7 @@ export function Header({
             className="size-md"
             strokeWidth={1.8}
           />
-          <span>Jejak Puncak</span>
+          <span translate="no">Jejak Puncak</span>
         </Link>
 
         <div className="hidden items-center gap-2xs lg:flex">

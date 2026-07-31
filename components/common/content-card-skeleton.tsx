@@ -9,7 +9,7 @@ type ContentCardSkeletonProps = {
 
 export function ContentCardSkeleton({
   className,
-  label = "Memuat konten",
+  label = "Memuat konten…",
 }: ContentCardSkeletonProps) {
   return (
     <Card

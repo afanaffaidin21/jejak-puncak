@@ -2,6 +2,9 @@ import { CodeXml, MountainSnow } from "lucide-react";
 import Link from "next/link";
 
 import { Container } from "@/components/common/container";
+import { formatDate } from "@/lib/format";
+
+const COPYRIGHT_YEAR = formatDate(new Date(), { year: "numeric" });
 
 const SECONDARY_NAV_ITEMS = [
   { href: "/explore", label: "Jelajahi gunung" },
@@ -35,7 +38,7 @@ export function Footer() {
                 className="size-md"
                 strokeWidth={1.8}
               />
-              Jejak Puncak
+              <span translate="no">Jejak Puncak</span>
             </Link>
             <p className="mt-sm max-w-reading text-body-sm text-text-secondary">
               Ruang tenang untuk menemukan, membandingkan, dan mencatat
@@ -92,10 +95,7 @@ export function Footer() {
         </div>
 
         <div className="mt-2xl flex flex-col gap-sm border-t border-divider pt-md text-caption text-text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            &copy; {new Date().getFullYear()} Jejak Puncak. Hak cipta
-            dilindungi.
-          </p>
+          <p>&copy; {COPYRIGHT_YEAR} Jejak Puncak. Hak cipta dilindungi.</p>
           <nav aria-label="Informasi legal">
             <ul className="flex flex-wrap items-center gap-md">
               {LEGAL_NAV_ITEMS.map((item) => (

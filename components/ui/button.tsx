@@ -54,7 +54,7 @@ function Button({
   className,
   disabled,
   isLoading = false,
-  loadingLabel = "Memuat",
+  loadingLabel = "Memuat…",
   variant = "primary",
   size = "default",
   ...props

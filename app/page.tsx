@@ -14,12 +14,12 @@ export default function Home() {
               Fondasi Jejak Puncak
             </p>
             <h1
-              className="mt-sm font-heading text-h1 font-semibold text-text-primary"
+              className="mt-sm text-balance font-heading text-h1 font-semibold text-text-primary"
               id="foundation-heading"
             >
               Siap untuk perjalanan berikutnya.
             </h1>
-            <p className="mx-auto mt-md max-w-reading text-body-lg text-text-secondary">
+            <p className="mx-auto mt-md max-w-reading text-pretty text-body-lg text-text-secondary">
               Design system dan layout bersama sudah siap untuk pengembangan
               fitur secara bertahap.
             </p>
