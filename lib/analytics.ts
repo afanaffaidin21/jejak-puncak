@@ -6,7 +6,13 @@ export type AnalyticsEventName =
   | "wishlist_redirect"
   | "compare_toggle"
   | "gallery_open"
-  | "route_select";
+  | "route_select"
+  | "finder_view"
+  | "finder_started"
+  | "question_answered"
+  | "finder_completed"
+  | "recommendation_clicked"
+  | "restart_finder";
 
 export function trackEvent(
   name: AnalyticsEventName,
