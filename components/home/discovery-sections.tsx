@@ -268,12 +268,10 @@ export function PassportSection() {
       className="bg-primary py-3xl text-primary-foreground md:py-4xl"
     >
       <Container>
-        <div className="grid items-center gap-xl md:grid-cols-[auto_1fr_auto]">
-          <span className="flex size-2xl items-center justify-center rounded-full bg-primary-foreground/10">
-            <Stamp aria-hidden="true" className="size-md" />
-          </span>
+        <div className="grid items-center gap-xl md:grid-cols-[minmax(0,1fr)_auto]">
           <div>
-            <p className="text-label font-semibold text-primary-foreground/75">
+            <p className="inline-flex items-center gap-2xs text-label font-semibold text-primary-foreground/75">
+              <Stamp aria-hidden="true" className="size-sm shrink-0" />
               Jejak Passport
             </p>
             <h2
