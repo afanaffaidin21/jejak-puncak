@@ -6,6 +6,7 @@ import {
   createFinderExplanation,
   isFinderAiConfigured,
 } from "@/services/finder-explanation";
+import { saveFinderResult } from "@/services/finder-results";
 import { scoreFinderRecommendations } from "@/services/finder-scoring";
 import { getFinderMountains } from "@/services/mountains";
 import type { FinderAiStatus } from "@/types/finder";
@@ -46,6 +47,7 @@ export async function POST(request: Request) {
         recommendations,
         explanation: null,
         aiStatus: "unavailable" satisfies FinderAiStatus,
+        saved: false,
       });
     }
 
@@ -65,10 +67,13 @@ export async function POST(request: Request) {
 
     if (explanation) aiStatus = "available";
 
+    const saved = await saveFinderResult(answers, recommendations);
+
     const response = NextResponse.json({
       recommendations,
       explanation,
       aiStatus,
+      saved,
     });
 
     response.headers.set("X-RateLimit-Limit", String(rateLimit.limit));

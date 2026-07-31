@@ -17,26 +17,16 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import { Container } from "@/components/common/container";
+import { FinderResults } from "@/components/finder/finder-results";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { parseFinderAnswers } from "@/lib/finder-validation";
 import { trackEvent } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
-import type {
-  FinderAiExplanation,
-  FinderAiStatus,
-  FinderAnswers,
-  FinderRecommendation,
-} from "@/types/finder";
+import type { FinderAnswers, FinderResultPayload } from "@/types/finder";
 
 type FinderPhase = "welcome" | "questions" | "processing" | "ready" | "error";
-
-type FinderApiResponse = {
-  recommendations: FinderRecommendation[];
-  explanation: FinderAiExplanation | null;
-  aiStatus: FinderAiStatus;
-};
 
 type FinderQuestion = {
   key: keyof FinderAnswers;
@@ -249,7 +239,7 @@ export function FinderFlow() {
   const [phase, setPhase] = useState<FinderPhase>("welcome");
   const [stepIndex, setStepIndex] = useState(0);
   const [answers, setAnswers] = useState<Partial<FinderAnswers>>({});
-  const [result, setResult] = useState<FinderApiResponse | null>(null);
+  const [result, setResult] = useState<FinderResultPayload | null>(null);
   const hasTrackedView = useRef(false);
 
   const question = QUESTIONS[stepIndex];
@@ -353,7 +343,7 @@ export function FinderFlow() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(completeAnswers),
       });
-      const payload = (await response.json()) as FinderApiResponse & {
+      const payload = (await response.json()) as FinderResultPayload & {
         error?: string;
       };
 
@@ -481,44 +471,9 @@ export function FinderFlow() {
   }
 
   if (phase === "ready") {
-    const topRecommendation = result?.recommendations[0];
-
-    return (
-      <section className="bg-surface py-3xl md:py-5xl">
-        <Container className="max-w-3xl">
-          <div className="rounded-2xl border border-border bg-card p-lg text-center shadow-surface md:p-2xl">
-            <span className="mx-auto grid size-16 place-items-center rounded-full bg-success/10 text-success">
-              <Check className="size-lg" aria-hidden="true" />
-            </span>
-            <p className="mt-md text-label font-semibold text-primary">
-              Rekomendasi siap
-            </p>
-            <h1 className="mt-xs text-balance font-heading text-h2 font-semibold text-text-primary">
-              {topRecommendation
-                ? `${topRecommendation.mountain.name} adalah kecocokan teratasmu.`
-                : "Belum ada rekomendasi yang sesuai."}
-            </h1>
-            {topRecommendation ? (
-              <p className="mt-sm text-body-lg text-text-secondary">
-                Skor kecocokan {topRecommendation.score}%
-              </p>
-            ) : (
-              <p className="mt-sm text-text-secondary">
-                Coba jawaban lain atau jelajahi katalog lengkap kami.
-              </p>
-            )}
-            <div className="mt-lg flex flex-wrap justify-center gap-xs">
-              <Button onClick={restartFinder} variant="outline">
-                Ulangi Finder
-              </Button>
-              <Link className={buttonVariants()} href="/explore">
-                Jelajahi gunung
-              </Link>
-            </div>
-          </div>
-        </Container>
-      </section>
-    );
+    return result ? (
+      <FinderResults onRestart={restartFinder} result={result} />
+    ) : null;
   }
 
   if (!question) return null;

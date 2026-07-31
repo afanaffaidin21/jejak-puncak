@@ -290,6 +290,12 @@ function buildNarrative(
     );
   }
 
+  if (!reasons.length) {
+    reasons.push(
+      "Gunung ini memenuhi batas pengalaman, waktu, wilayah, dan kelengkapan data untuk profilmu.",
+    );
+  }
+
   return { matchedAttributes, mismatchedAttributes, tradeOffs, reasons };
 }
 

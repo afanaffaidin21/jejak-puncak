@@ -52,3 +52,10 @@ export type FinderAiExplanation = {
 
 export type FinderAiStatus =
   "available" | "not_configured" | "rate_limited" | "unavailable";
+
+export type FinderResultPayload = {
+  recommendations: FinderRecommendation[];
+  explanation: FinderAiExplanation | null;
+  aiStatus: FinderAiStatus;
+  saved: boolean;
+};

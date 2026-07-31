@@ -12,6 +12,7 @@ export type AnalyticsEventName =
   | "question_answered"
   | "finder_completed"
   | "recommendation_clicked"
+  | "wishlist_clicked"
   | "restart_finder";
 
 export function trackEvent(

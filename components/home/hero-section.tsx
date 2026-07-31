@@ -124,20 +124,16 @@ export function FinderIntroduction() {
               Mulai dari kesiapanmu, bukan sekadar nama gunung.
             </h2>
             <p className="mt-md max-w-reading text-pretty text-body-lg text-text-secondary">
-              Ceritakan waktu, pengalaman, dan gaya perjalananmu. Untuk fase
-              ini, kami mengarahkan pilihanmu ke katalog dengan filter yang
-              paling relevan.
+              Ceritakan waktu, pengalaman, dan gaya perjalananmu. Finder akan
+              menyusun pilihan berdasarkan kesiapan dan tujuanmu.
             </p>
             <Link
               className={cn(buttonVariants({ variant: "outline" }), "mt-lg")}
-              href="/explore?beginner=70"
+              href="/finder"
             >
-              Temukan pilihan ramah pemula
+              Mulai Jejak Finder
               <ArrowRight aria-hidden="true" data-icon="inline-end" />
             </Link>
-            <p className="mt-xs text-caption text-text-muted">
-              Finder personal lengkap akan hadir pada fase berikutnya.
-            </p>
           </div>
 
           <div className="grid gap-sm" aria-label="Pertimbangan Jejak Finder">
