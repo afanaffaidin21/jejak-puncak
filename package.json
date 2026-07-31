@@ -7,7 +7,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -28,10 +32,16 @@
     "@types/node": "20.19.24",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.2.12",
+    "eslint-config-prettier": "10.1.8",
+    "prettier": "3.9.6",
     "tailwindcss": "4.3.3",
     "typescript": "5.9.3"
   },
   "overrides": {
+    "brace-expansion": "5.0.9",
+    "minimatch": "10.2.6",
     "postcss": "8.5.25",
     "sharp": "0.35.3"
   }

@@ -1,0 +1,9 @@
+.agents/
+.next/
+coverage/
+docs/
+node_modules/
+out/
+package-lock.json
+public/
+skills-lock.json
