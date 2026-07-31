@@ -82,6 +82,7 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
   --color-primary: var(--primary);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
@@ -148,6 +149,7 @@
   --popover: var(--surface-elevated);
   --popover-foreground: var(--text-primary);
   --primary: var(--palette-forest-700);
+  --primary-hover: oklch(0.32 0.075 148);
   --primary-foreground: oklch(0.985 0.006 100);
   --secondary: var(--palette-sand-200);
   --secondary-foreground: var(--palette-forest-950);
@@ -218,6 +220,7 @@
   --popover: var(--surface-elevated);
   --popover-foreground: var(--foreground);
   --primary: oklch(0.7 0.105 145);
+  --primary-hover: oklch(0.76 0.1 145);
   --primary-foreground: oklch(0.19 0.016 145);
   --secondary: oklch(0.34 0.03 82);
   --secondary-foreground: var(--foreground);
