@@ -31,18 +31,18 @@ export function HeroSection() {
       />
 
       <Container className="relative flex min-h-[calc(100svh-var(--spacing-mobile-nav))] items-end py-2xl md:items-center md:py-4xl">
-        <div className="w-full max-w-4xl">
+        <div className="min-w-0 w-full max-w-[56rem]">
           <p className="mb-sm inline-flex items-center gap-2xs rounded-full border border-primary-foreground/30 bg-background/10 px-sm py-2xs text-label font-semibold backdrop-blur">
             <Compass aria-hidden="true" className="size-sm" />
             Jelajahi gunung Indonesia
           </p>
           <h1
-            className="max-w-3xl text-balance font-heading text-display font-semibold text-primary-foreground"
+            className="w-full max-w-[48rem] text-balance font-heading text-display font-semibold text-primary-foreground"
             id="home-hero-heading"
           >
             Temukan puncak yang cocok dengan ceritamu.
           </h1>
-          <p className="mt-md max-w-reading text-pretty text-body-lg text-primary-foreground/85">
+          <p className="mt-md w-full max-w-reading text-pretty text-body-lg text-primary-foreground/85">
             Bandingkan karakter jalur, waktu, dan kesiapanmu sebelum mengambil
             langkah pertama.
           </p>
