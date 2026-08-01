@@ -25,13 +25,19 @@ import type { ReactNode } from "react";
 
 type MountainCardProps = {
   actions?: ReactNode;
+  footerActions?: ReactNode;
+  metadata?: ReactNode;
   mountain: MountainCardData;
+  onDetailClick?: () => void;
   priority?: boolean;
 };
 
 export function MountainCard({
   actions,
+  footerActions,
+  metadata,
   mountain,
+  onDetailClick,
   priority = false,
 }: MountainCardProps) {
   const detailHref = `/mountains/${mountain.slug}`;
@@ -78,6 +84,11 @@ export function MountainCard({
         <p className="line-clamp-2 text-body-sm text-text-secondary">
           {mountain.summary}
         </p>
+        {metadata ? (
+          <div className="relative z-10 text-body-sm text-text-secondary">
+            {metadata}
+          </div>
+        ) : null}
         <dl className="grid grid-cols-2 gap-xs border-t border-divider pt-sm text-caption text-text-muted">
           <div>
             <dt className="inline-flex items-center gap-3xs">
@@ -99,9 +110,22 @@ export function MountainCard({
           </div>
         </dl>
       </CardContent>
-      <CardFooter className="justify-between text-label font-semibold text-primary">
-        Lihat detail
-        <ArrowUpRight aria-hidden="true" className="size-sm" />
+      <CardFooter
+        className={footerActions ? "flex-col items-stretch gap-xs" : undefined}
+      >
+        <Link
+          className="relative z-10 flex items-center justify-between rounded-sm text-label font-semibold text-primary focus-visible:ring-2 focus-visible:ring-ring"
+          href={detailHref}
+          onClick={onDetailClick}
+        >
+          Lihat detail
+          <ArrowUpRight aria-hidden="true" className="size-sm" />
+        </Link>
+        {footerActions ? (
+          <div className="relative z-10 flex flex-wrap gap-xs">
+            {footerActions}
+          </div>
+        ) : null}
       </CardFooter>
     </Card>
   );

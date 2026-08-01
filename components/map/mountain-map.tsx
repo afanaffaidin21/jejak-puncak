@@ -30,7 +30,10 @@ import { cn } from "@/lib/utils";
 import type { MapMountain } from "@/types/map";
 import { DIFFICULTY_LABELS } from "@/types/compare";
 
-type MountainMapProps = { mountains: MapMountain[] };
+type MountainMapProps = {
+  mountains: MapMountain[];
+  variant?: "explore" | "progress";
+};
 
 const DEFAULT_CENTER: [number, number] = [117, -2];
 const DEFAULT_ZOOM = 4.2;
@@ -41,7 +44,13 @@ function uniqueValues(mountains: MapMountain[], key: "island" | "province") {
   );
 }
 
-function MountainPreview({ mountain }: { mountain: MapMountain }) {
+function MountainPreview({
+  mountain,
+  showWishlist = true,
+}: {
+  mountain: MapMountain;
+  showWishlist?: boolean;
+}) {
   return (
     <Card className="overflow-hidden">
       <div className="relative aspect-[16/8] bg-muted">
@@ -85,19 +94,24 @@ function MountainPreview({ mountain }: { mountain: MapMountain }) {
             Lihat detail{" "}
             <ExternalLink aria-hidden="true" data-icon="inline-end" />
           </Link>
-          <WishlistButton
-            mountainId={mountain.id}
-            name={mountain.name}
-            size="sm"
-            slug={mountain.slug}
-          />
+          {showWishlist ? (
+            <WishlistButton
+              mountainId={mountain.id}
+              name={mountain.name}
+              size="sm"
+              slug={mountain.slug}
+            />
+          ) : null}
         </div>
       </CardContent>
     </Card>
   );
 }
 
-export function MountainMap({ mountains }: MountainMapProps) {
+export function MountainMap({
+  mountains,
+  variant = "explore",
+}: MountainMapProps) {
   const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapboxMap | null>(null);
@@ -112,16 +126,19 @@ export function MountainMap({ mountains }: MountainMapProps) {
   const [island, setIsland] = useState("all");
   const [province, setProvince] = useState("all");
   const [difficulty, setDifficulty] = useState("all");
+  const isProgress = variant === "progress";
 
   const visibleMountains = useMemo(
     () =>
-      mountains.filter(
-        (mountain) =>
-          (island === "all" || mountain.island === island) &&
-          (province === "all" || mountain.province === province) &&
-          (difficulty === "all" || mountain.difficulty === difficulty),
-      ),
-    [difficulty, island, mountains, province],
+      isProgress
+        ? mountains
+        : mountains.filter(
+            (mountain) =>
+              (island === "all" || mountain.island === island) &&
+              (province === "all" || mountain.province === province) &&
+              (difficulty === "all" || mountain.difficulty === difficulty),
+          ),
+    [difficulty, island, isProgress, mountains, province],
   );
   const selectedMountain =
     mountains.find((mountain) => mountain.slug === selectedSlug) ?? null;
@@ -132,8 +149,8 @@ export function MountainMap({ mountains }: MountainMapProps) {
   );
 
   useEffect(() => {
-    trackEvent("map_view", { count: mountains.length });
-  }, [mountains.length]);
+    if (!isProgress) trackEvent("map_view", { count: mountains.length });
+  }, [isProgress, mountains.length]);
 
   useEffect(() => {
     if (!token || !mapContainerRef.current || mapRef.current) return;
@@ -177,7 +194,9 @@ export function MountainMap({ mountains }: MountainMapProps) {
     markersRef.current = visibleMountains.map((mountain) => {
       const element = document.createElement("button");
       element.type = "button";
-      element.className = "map-mountain-marker";
+      element.className = isProgress
+        ? "map-progress-marker"
+        : "map-mountain-marker";
       element.setAttribute("aria-label", `Buka preview ${mountain.name}`);
       element.title = mountain.name;
       element.addEventListener("click", () => {
@@ -185,6 +204,9 @@ export function MountainMap({ mountains }: MountainMapProps) {
         setMobilePreviewOpen(true);
         trackEvent("marker_click", { mountain: mountain.slug });
         trackEvent("preview_open", { mountain: mountain.slug });
+        if (isProgress) {
+          trackEvent("progress_map_interaction", { mountain: mountain.slug });
+        }
       });
       return new mapboxgl.Marker({ element, anchor: "bottom" })
         .setLngLat([mountain.longitude, mountain.latitude])
@@ -206,15 +228,21 @@ export function MountainMap({ mountains }: MountainMapProps) {
           [bounds.getEast(), bounds.getNorth()],
         ];
       }
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
       mapRef.current.fitBounds(bounds, {
         padding: 56,
         maxZoom: 8,
-        duration: 450,
+        duration: reduceMotion ? 0 : 450,
       });
     }
-    if (island !== "all" || province !== "all" || difficulty !== "all")
+    if (
+      !isProgress &&
+      (island !== "all" || province !== "all" || difficulty !== "all")
+    )
       trackEvent("filter_region", { island, province, difficulty });
-  }, [difficulty, island, mapReady, province, visibleMountains]);
+  }, [difficulty, island, isProgress, mapReady, province, visibleMountains]);
 
   const resetMap = () => {
     setIsland("all");
@@ -236,58 +264,60 @@ export function MountainMap({ mountains }: MountainMapProps) {
 
   return (
     <div className="space-y-md">
-      <div className="grid gap-xs rounded-xl border border-divider bg-surface p-sm sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]">
-        <label className="text-body-sm text-text-secondary">
-          Pulau
-          <select
-            className={filterClass}
-            onChange={(event) => setIsland(event.target.value)}
-            value={island}
+      {!isProgress ? (
+        <div className="grid gap-xs rounded-xl border border-divider bg-surface p-sm sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]">
+          <label className="text-body-sm text-text-secondary">
+            Pulau
+            <select
+              className={filterClass}
+              onChange={(event) => setIsland(event.target.value)}
+              value={island}
+            >
+              <option value="all">Semua pulau</option>
+              {islands.map((value) => (
+                <option key={value}>{value}</option>
+              ))}
+            </select>
+          </label>
+          <label className="text-body-sm text-text-secondary">
+            Provinsi
+            <select
+              className={filterClass}
+              onChange={(event) => setProvince(event.target.value)}
+              value={province}
+            >
+              <option value="all">Semua provinsi</option>
+              {provinces.map((value) => (
+                <option key={value}>{value}</option>
+              ))}
+            </select>
+          </label>
+          <label className="text-body-sm text-text-secondary">
+            Kesulitan
+            <select
+              className={filterClass}
+              onChange={(event) => setDifficulty(event.target.value)}
+              value={difficulty}
+            >
+              <option value="all">Semua tingkat</option>
+              {Object.entries(DIFFICULTY_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <Button
+            className="self-end"
+            onClick={resetMap}
+            size="sm"
+            type="button"
+            variant="outline"
           >
-            <option value="all">Semua pulau</option>
-            {islands.map((value) => (
-              <option key={value}>{value}</option>
-            ))}
-          </select>
-        </label>
-        <label className="text-body-sm text-text-secondary">
-          Provinsi
-          <select
-            className={filterClass}
-            onChange={(event) => setProvince(event.target.value)}
-            value={province}
-          >
-            <option value="all">Semua provinsi</option>
-            {provinces.map((value) => (
-              <option key={value}>{value}</option>
-            ))}
-          </select>
-        </label>
-        <label className="text-body-sm text-text-secondary">
-          Kesulitan
-          <select
-            className={filterClass}
-            onChange={(event) => setDifficulty(event.target.value)}
-            value={difficulty}
-          >
-            <option value="all">Semua tingkat</option>
-            {Object.entries(DIFFICULTY_LABELS).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <Button
-          className="self-end"
-          onClick={resetMap}
-          size="sm"
-          type="button"
-          variant="outline"
-        >
-          <RotateCcw aria-hidden="true" /> Reset
-        </Button>
-      </div>
+            <RotateCcw aria-hidden="true" /> Reset
+          </Button>
+        </div>
+      ) : null}
 
       {!token ? (
         <Empty className="min-h-96 border-divider bg-surface">
@@ -303,16 +333,33 @@ export function MountainMap({ mountains }: MountainMapProps) {
           </EmptyHeader>
         </Empty>
       ) : (
-        <div className="grid gap-md lg:grid-cols-[minmax(0,1fr)_minmax(18rem,24rem)]">
-          <div className="relative h-[28rem] overflow-hidden rounded-xl border border-divider bg-accent lg:h-[36rem]">
+        <div
+          className={cn(
+            "grid gap-md",
+            !isProgress && "lg:grid-cols-[minmax(0,1fr)_minmax(18rem,24rem)]",
+          )}
+        >
+          <div
+            className={cn(
+              "relative overflow-hidden rounded-xl border border-divider bg-accent",
+              isProgress ? "h-[24rem] lg:h-[30rem]" : "h-[28rem] lg:h-[36rem]",
+            )}
+          >
             <div
-              aria-label="Peta gunung Indonesia"
+              aria-label={
+                isProgress
+                  ? "Peta progres gunung yang sudah diselesaikan"
+                  : "Peta gunung Indonesia"
+              }
               className="h-full w-full"
               ref={mapContainerRef}
               role="application"
             />
             {mapError ? (
-              <div className="absolute inset-x-sm top-sm rounded-md bg-destructive/10 p-sm text-body-sm text-destructive">
+              <div
+                className="absolute inset-x-sm top-sm rounded-md bg-destructive/10 p-sm text-body-sm text-destructive"
+                role="alert"
+              >
                 Peta belum dapat dimuat. Periksa token Mapbox dan koneksi
                 jaringan.
               </div>
@@ -320,94 +367,108 @@ export function MountainMap({ mountains }: MountainMapProps) {
             <div className="absolute bottom-sm left-sm rounded-md bg-surface-elevated/95 px-sm py-xs text-caption text-text-secondary shadow-surface">
               <span className="inline-block size-2 rounded-full bg-primary align-middle" />{" "}
               <span className="ml-2xs">
-                Lokasi gunung · {visibleMountains.length} tampil
+                {isProgress ? "Puncak selesai" : "Lokasi gunung"} ·{" "}
+                {visibleMountains.length} tampil
               </span>
             </div>
           </div>
-          <aside
-            className="hidden space-y-sm lg:block"
-            aria-label="Daftar gunung di peta"
-          >
-            <div className="flex items-center gap-xs">
-              <List aria-hidden="true" className="size-4 text-primary" />
-              <h2 className="font-heading text-h4 font-semibold text-text-primary">
-                Daftar gunung
-              </h2>
-            </div>
-            {selectedMountain ? (
-              <MountainPreview mountain={selectedMountain} />
-            ) : (
-              <p className="rounded-lg border border-dashed border-divider p-md text-body-sm text-text-secondary">
-                Pilih marker untuk melihat preview.
-              </p>
-            )}
-            {visibleMountains.map((mountain) => (
-              <button
-                className={cn(
-                  "w-full rounded-md border border-divider bg-surface p-sm text-left text-body-sm transition-colors hover:border-primary/40",
-                  selectedSlug === mountain.slug &&
-                    "border-primary bg-primary/5",
-                )}
-                key={mountain.slug}
-                onClick={() => {
-                  setSelectedSlug(mountain.slug);
-                  trackEvent("preview_open", { mountain: mountain.slug });
-                }}
-                type="button"
-              >
-                <span className="font-medium text-text-primary">
-                  {mountain.name}
-                </span>
-                <span className="mt-2xs block text-caption text-text-secondary">
-                  {mountain.province} · {DIFFICULTY_LABELS[mountain.difficulty]}
-                </span>
-              </button>
-            ))}
-          </aside>
+          {!isProgress ? (
+            <aside
+              className="hidden space-y-sm lg:block"
+              aria-label="Daftar gunung di peta"
+            >
+              <div className="flex items-center gap-xs">
+                <List aria-hidden="true" className="size-4 text-primary" />
+                <h2 className="font-heading text-h4 font-semibold text-text-primary">
+                  Daftar gunung
+                </h2>
+              </div>
+              {selectedMountain ? (
+                <MountainPreview mountain={selectedMountain} />
+              ) : (
+                <p className="rounded-lg border border-dashed border-divider p-md text-body-sm text-text-secondary">
+                  Pilih marker untuk melihat preview.
+                </p>
+              )}
+              {visibleMountains.map((mountain) => (
+                <button
+                  className={cn(
+                    "w-full rounded-md border border-divider bg-surface p-sm text-left text-body-sm transition-colors hover:border-primary/40",
+                    selectedSlug === mountain.slug &&
+                      "border-primary bg-primary/5",
+                  )}
+                  key={mountain.slug}
+                  onClick={() => {
+                    setSelectedSlug(mountain.slug);
+                    trackEvent("preview_open", { mountain: mountain.slug });
+                  }}
+                  type="button"
+                >
+                  <span className="font-medium text-text-primary">
+                    {mountain.name}
+                  </span>
+                  <span className="mt-2xs block text-caption text-text-secondary">
+                    {mountain.province} ·{" "}
+                    {DIFFICULTY_LABELS[mountain.difficulty]}
+                  </span>
+                </button>
+              ))}
+            </aside>
+          ) : null}
         </div>
       )}
 
-      <section
-        aria-labelledby="map-list-heading"
-        className="space-y-sm lg:hidden"
-      >
-        <h2
-          className="flex items-center gap-xs font-heading text-h4 font-semibold text-text-primary"
-          id="map-list-heading"
+      {!isProgress ? (
+        <section
+          aria-labelledby="map-list-heading"
+          className="space-y-sm lg:hidden"
         >
-          <List aria-hidden="true" className="size-4 text-primary" />
-          Daftar gunung
-        </h2>
-        <ol className="grid gap-xs sm:grid-cols-2">
-          {visibleMountains.map((mountain) => (
-            <li key={mountain.slug}>
-              <button
-                aria-current={
-                  selectedSlug === mountain.slug ? "true" : undefined
-                }
-                className={cn(
-                  "w-full rounded-md border border-divider bg-surface p-sm text-left text-body-sm",
-                  selectedSlug === mountain.slug &&
-                    "border-primary bg-primary/5",
-                )}
-                onClick={() => {
-                  setSelectedSlug(mountain.slug);
-                  setMobilePreviewOpen(true);
-                  trackEvent("preview_open", { mountain: mountain.slug });
-                }}
-                type="button"
-              >
-                <span className="font-medium text-text-primary">
-                  {mountain.name}
-                </span>
-                <span className="mt-2xs block text-caption text-text-secondary">
-                  {mountain.province} · {DIFFICULTY_LABELS[mountain.difficulty]}
-                </span>
-              </button>
-            </li>
-          ))}
-        </ol>
-      </section>
+          <h2
+            className="flex items-center gap-xs font-heading text-h4 font-semibold text-text-primary"
+            id="map-list-heading"
+          >
+            <List aria-hidden="true" className="size-4 text-primary" />
+            Daftar gunung
+          </h2>
+          <ol className="grid gap-xs sm:grid-cols-2">
+            {visibleMountains.map((mountain) => (
+              <li key={mountain.slug}>
+                <button
+                  aria-current={
+                    selectedSlug === mountain.slug ? "true" : undefined
+                  }
+                  className={cn(
+                    "w-full rounded-md border border-divider bg-surface p-sm text-left text-body-sm",
+                    selectedSlug === mountain.slug &&
+                      "border-primary bg-primary/5",
+                  )}
+                  onClick={() => {
+                    setSelectedSlug(mountain.slug);
+                    setMobilePreviewOpen(true);
+                    trackEvent("preview_open", { mountain: mountain.slug });
+                  }}
+                  type="button"
+                >
+                  <span className="font-medium text-text-primary">
+                    {mountain.name}
+                  </span>
+                  <span className="mt-2xs block text-caption text-text-secondary">
+                    {mountain.province} ·{" "}
+                    {DIFFICULTY_LABELS[mountain.difficulty]}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ) : (
+        <p className="text-body-sm text-text-secondary">
+          <span className="font-semibold text-text-primary">
+            Puncak selesai:
+          </span>{" "}
+          {mountains.map((mountain) => mountain.name).join(", ")}.
+        </p>
+      )}
       <Sheet
         onOpenChange={setMobilePreviewOpen}
         open={mobilePreviewOpen && Boolean(selectedMountain)}
@@ -421,7 +482,10 @@ export function MountainMap({ mountains }: MountainMapProps) {
           </SheetHeader>
           {selectedMountain ? (
             <div className="p-md">
-              <MountainPreview mountain={selectedMountain} />
+              <MountainPreview
+                mountain={selectedMountain}
+                showWishlist={!isProgress}
+              />
             </div>
           ) : null}
         </SheetContent>

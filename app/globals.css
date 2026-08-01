@@ -36,6 +36,45 @@
   transform: rotate(-45deg) scale(1.12);
 }
 
+.map-progress-marker {
+  display: grid;
+  width: var(--spacing-xl);
+  height: var(--spacing-xl);
+  place-items: center;
+  border: var(--spacing-3xs) solid var(--accent);
+  border-radius: var(--radius-full);
+  background: var(--primary);
+  box-shadow: var(--elevation-surface);
+  color: var(--primary-foreground);
+  cursor: pointer;
+  transition:
+    transform var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+.map-progress-marker::after {
+  font-size: var(--text-body);
+  font-weight: 700;
+  line-height: 1;
+  content: "✓";
+}
+
+.map-progress-marker:hover,
+.map-progress-marker:focus-visible {
+  box-shadow:
+    0 0 0 var(--spacing-3xs) var(--ring),
+    var(--elevation-floating);
+  outline: none;
+  transform: scale(1.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-mountain-marker,
+  .map-progress-marker {
+    transition: none;
+  }
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

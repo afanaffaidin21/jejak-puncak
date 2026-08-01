@@ -35,7 +35,13 @@ export type AnalyticsEventName =
   | "marker_click"
   | "preview_open"
   | "filter_region"
-  | "reset_map";
+  | "reset_map"
+  | "passport_view"
+  | "completed_tab_view"
+  | "wishlist_tab_view"
+  | "mountain_detail_click"
+  | "wishlist_remove"
+  | "progress_map_interaction";
 
 export function trackEvent(
   name: AnalyticsEventName,
