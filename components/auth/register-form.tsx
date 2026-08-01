@@ -35,31 +35,47 @@ export function RegisterForm({ nextPath }: RegisterFormProps) {
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = handleSubmit(async (values) => {
-    setStatus(null);
-    setStatusMessage("");
-    trackEvent("register_started");
-    const result = await registerAction(values);
+  const onSubmit = handleSubmit(
+    async (values) => {
+      setStatus(null);
+      setStatusMessage("");
+      trackEvent("register_started");
 
-    if (!result.success) {
+      try {
+        const result = await registerAction(values);
+
+        if (!result.success) {
+          setStatus("error");
+          setStatusMessage(result.message);
+          return;
+        }
+
+        setStatus("success");
+        trackEvent("register_completed");
+
+        if (result.status === "confirmation-required") {
+          setStatusMessage(
+            "Pendaftaran diterima. Periksa email untuk menyelesaikan konfirmasi akun.",
+          );
+          return;
+        }
+
+        setStatusMessage(
+          "Akun berhasil dibuat. Mengarahkan ke halaman tujuan.",
+        );
+        window.location.replace(nextPath);
+      } catch {
+        setStatus("error");
+        setStatusMessage(
+          "Pendaftaran belum dapat diproses. Periksa koneksi lalu coba lagi.",
+        );
+      }
+    },
+    () => {
       setStatus("error");
-      setStatusMessage(result.message);
-      return;
-    }
-
-    setStatus("success");
-    trackEvent("register_completed");
-
-    if (result.status === "confirmation-required") {
-      setStatusMessage(
-        "Pendaftaran diterima. Periksa email untuk menyelesaikan konfirmasi akun.",
-      );
-      return;
-    }
-
-    setStatusMessage("Akun berhasil dibuat. Mengarahkan ke halaman tujuan.");
-    window.location.replace(nextPath);
-  });
+      setStatusMessage("Periksa kembali data pendaftaran yang kamu isi.");
+    },
+  );
 
   return (
     <form className="flex flex-col gap-md" noValidate onSubmit={onSubmit}>

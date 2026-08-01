@@ -32,20 +32,33 @@ export function LoginForm({ nextPath, onForgotPassword }: LoginFormProps) {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = handleSubmit(async (values) => {
-    setStatusMessage("");
-    const result = await loginAction(values);
+  const onSubmit = handleSubmit(
+    async (values) => {
+      setStatusMessage("");
 
-    if (!result.success) {
-      setStatusMessage(result.message);
-      trackEvent("login_failed");
-      return;
-    }
+      try {
+        const result = await loginAction(values);
 
-    setStatusMessage("Login berhasil. Mengarahkan ke halaman tujuan.");
-    trackEvent("login_success");
-    window.location.replace(nextPath);
-  });
+        if (!result.success) {
+          setStatusMessage(result.message);
+          trackEvent("login_failed");
+          return;
+        }
+
+        setStatusMessage("Login berhasil. Mengarahkan ke halaman tujuan.");
+        trackEvent("login_success");
+        window.location.replace(nextPath);
+      } catch {
+        setStatusMessage(
+          "Login belum dapat diproses. Periksa koneksi lalu coba lagi.",
+        );
+        trackEvent("login_failed");
+      }
+    },
+    () => {
+      setStatusMessage("Periksa kembali email dan password yang kamu isi.");
+    },
+  );
 
   return (
     <form className="flex flex-col gap-md" noValidate onSubmit={onSubmit}>

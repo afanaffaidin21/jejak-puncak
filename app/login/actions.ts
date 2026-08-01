@@ -117,5 +117,3 @@ export async function logoutAction() {
       }
     : { success: true as const };
 }
-
-export type { AuthActionResult };
