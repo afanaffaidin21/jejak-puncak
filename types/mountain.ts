@@ -41,11 +41,15 @@ export type Mountain = {
   waterSource: boolean;
   popularityScore: number;
   heroImage: string;
+  photoCreditAuthor?: string | null;
+  photoCreditUrl?: string | null;
+  photoLicense?: string | null;
   status: string;
   createdAt: string;
   updatedAt: string;
   routes: MountainRoute[];
 };
+
 
 export type MountainCardData = Pick<
   Mountain,

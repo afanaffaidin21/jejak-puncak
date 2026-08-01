@@ -45,6 +45,9 @@ type MountainRow = {
   water_source: boolean;
   popularity_score: number;
   hero_image: string;
+  photo_credit_author?: string | null;
+  photo_credit_url?: string | null;
+  photo_license?: string | null;
   status: string;
   created_at: string;
   updated_at: string;
@@ -72,6 +75,9 @@ const MOUNTAIN_COLUMNS = `
   water_source,
   popularity_score,
   hero_image,
+  photo_credit_author,
+  photo_credit_url,
+  photo_license,
   status,
   created_at,
   updated_at
@@ -133,6 +139,9 @@ function toMountain(row: MountainRow): Mountain {
     waterSource: row.water_source,
     popularityScore: row.popularity_score,
     heroImage: row.hero_image,
+    photoCreditAuthor: row.photo_credit_author,
+    photoCreditUrl: row.photo_credit_url,
+    photoLicense: row.photo_license,
     status: row.status,
     createdAt: row.created_at,
     updatedAt: row.updated_at,

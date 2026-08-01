@@ -1,5 +1,6 @@
 import {
   CalendarDays,
+  Camera,
   MapPin,
   Mountain as MountainIcon,
   Sparkles,
@@ -18,7 +19,7 @@ export function DetailHero({ mountain }: { mountain: Mountain }) {
   return (
     <section className="relative min-h-[72svh] overflow-hidden bg-primary text-primary-foreground">
       <Image
-        alt={`Ilustrasi sementara lanskap ${mountain.name}`}
+        alt={`Foto lanskap ${mountain.name}`}
         className="object-cover"
         fill
         priority
@@ -99,8 +100,33 @@ export function DetailHero({ mountain }: { mountain: Mountain }) {
             name={mountain.name}
             slug={mountain.slug}
           />
+
+          {mountain.photoCreditAuthor ? (
+            <p className="mt-lg flex items-center gap-3xs text-caption text-primary-foreground/75">
+              <Camera aria-hidden="true" className="size-xs shrink-0" />
+              <span>Foto: </span>
+              {mountain.photoCreditUrl ? (
+                <a
+                  className="font-medium underline underline-offset-2 hover:text-primary-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
+                  href={mountain.photoCreditUrl}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {mountain.photoCreditAuthor}
+                </a>
+              ) : (
+                <span className="font-medium">
+                  {mountain.photoCreditAuthor}
+                </span>
+              )}
+              {mountain.photoLicense ? (
+                <span> ({mountain.photoLicense})</span>
+              ) : null}
+            </p>
+          ) : null}
         </div>
       </Container>
     </section>
   );
 }
+
