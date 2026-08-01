@@ -1,22 +1,16 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { loginAction } from "@/app/login/actions";
 import { PasswordField } from "@/components/auth/password-field";
+import { TextField } from "@/components/common/text-field";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { trackEvent } from "@/lib/analytics";
 import { loginSchema, type LoginValues } from "@/lib/auth/validation";
 
@@ -26,10 +20,9 @@ type LoginFormProps = {
 };
 
 export function LoginForm({ nextPath, onForgotPassword }: LoginFormProps) {
-  const router = useRouter();
   const [statusMessage, setStatusMessage] = useState("");
   const {
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting },
     handleSubmit,
     control,
     register,
@@ -51,29 +44,24 @@ export function LoginForm({ nextPath, onForgotPassword }: LoginFormProps) {
 
     setStatusMessage("Login berhasil. Mengarahkan ke halaman tujuan.");
     trackEvent("login_success");
-    router.replace(nextPath);
-    router.refresh();
+    window.location.replace(nextPath);
   });
 
   return (
     <form className="flex flex-col gap-md" noValidate onSubmit={onSubmit}>
       <FieldGroup>
-        <Field data-invalid={errors.email ? "true" : undefined}>
-          <FieldLabel htmlFor="login-email">Email</FieldLabel>
-          <Input
-            {...register("email")}
-            aria-invalid={errors.email ? true : undefined}
-            autoComplete="email"
-            id="login-email"
-            inputMode="email"
-            placeholder="nama@email.com"
-            required
-            type="email"
-          />
-          {errors.email ? (
-            <FieldError>{errors.email.message}</FieldError>
-          ) : null}
-        </Field>
+        <TextField
+          {...register("email")}
+          autoComplete="email"
+          error={errors.email?.message}
+          id="login-email"
+          inputMode="email"
+          label="Email"
+          placeholder="nama@email.com"
+          required
+          spellCheck={false}
+          type="email"
+        />
 
         <PasswordField
           {...register("password")}
@@ -126,7 +114,6 @@ export function LoginForm({ nextPath, onForgotPassword }: LoginFormProps) {
 
       <Button
         className="w-full"
-        disabled={!isValid}
         isLoading={isSubmitting}
         loadingLabel="Sedang masuk…"
         size="lg"

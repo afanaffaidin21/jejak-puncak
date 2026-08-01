@@ -5,15 +5,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { forgotPasswordAction } from "@/app/login/actions";
+import { TextField } from "@/components/common/text-field";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { FieldGroup } from "@/components/ui/field";
 import { trackEvent } from "@/lib/analytics";
 import {
   forgotPasswordSchema,
@@ -30,7 +25,7 @@ export function ForgotPasswordForm({ initialError }: ForgotPasswordFormProps) {
   );
   const [statusMessage, setStatusMessage] = useState(initialError ?? "");
   const {
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting },
     handleSubmit,
     register,
   } = useForm<ForgotPasswordValues>({
@@ -61,22 +56,18 @@ export function ForgotPasswordForm({ initialError }: ForgotPasswordFormProps) {
   return (
     <form className="flex flex-col gap-md" noValidate onSubmit={onSubmit}>
       <FieldGroup>
-        <Field data-invalid={errors.email ? "true" : undefined}>
-          <FieldLabel htmlFor="forgot-email">Email</FieldLabel>
-          <Input
-            {...register("email")}
-            aria-invalid={errors.email ? true : undefined}
-            autoComplete="email"
-            id="forgot-email"
-            inputMode="email"
-            placeholder="nama@email.com"
-            required
-            type="email"
-          />
-          {errors.email ? (
-            <FieldError>{errors.email.message}</FieldError>
-          ) : null}
-        </Field>
+        <TextField
+          {...register("email")}
+          autoComplete="email"
+          error={errors.email?.message}
+          id="forgot-email"
+          inputMode="email"
+          label="Email"
+          placeholder="nama@email.com"
+          required
+          spellCheck={false}
+          type="email"
+        />
       </FieldGroup>
 
       {statusMessage ? (
@@ -87,7 +78,7 @@ export function ForgotPasswordForm({ initialError }: ForgotPasswordFormProps) {
 
       <Button
         className="w-full"
-        disabled={!isValid || status === "success"}
+        disabled={status === "success"}
         isLoading={isSubmitting}
         loadingLabel="Mengirim tautan…"
         size="lg"

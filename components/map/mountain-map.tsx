@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import type { Map as MapboxMap, Marker } from "mapbox-gl";
@@ -18,6 +17,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { WishlistButton } from "@/components/wishlist/wishlist-button";
 import {
   Sheet,
   SheetContent,
@@ -42,8 +42,6 @@ function uniqueValues(mountains: MapMountain[], key: "island" | "province") {
 }
 
 function MountainPreview({ mountain }: { mountain: MapMountain }) {
-  const pathname = usePathname();
-  const router = useRouter();
   return (
     <Card className="overflow-hidden">
       <div className="relative aspect-[16/8] bg-muted">
@@ -87,17 +85,12 @@ function MountainPreview({ mountain }: { mountain: MapMountain }) {
             Lihat detail{" "}
             <ExternalLink aria-hidden="true" data-icon="inline-end" />
           </Link>
-          <Button
-            onClick={() => {
-              trackEvent("wishlist_click", { mountain: mountain.slug });
-              router.push(`/login?next=${encodeURIComponent(pathname)}`);
-            }}
+          <WishlistButton
+            mountainId={mountain.id}
+            name={mountain.name}
             size="sm"
-            type="button"
-            variant="outline"
-          >
-            Simpan
-          </Button>
+            slug={mountain.slug}
+          />
         </div>
       </CardContent>
     </Card>

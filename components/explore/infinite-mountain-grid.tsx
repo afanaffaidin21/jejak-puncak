@@ -136,6 +136,7 @@ export function InfiniteMountainGrid({
             <MountainCard
               actions={
                 <MountainCardActions
+                  id={mountain.id}
                   name={mountain.name}
                   slug={mountain.slug}
                 />

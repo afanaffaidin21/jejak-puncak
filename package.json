@@ -15,7 +15,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "node --test lib/auth/redirect.test.ts lib/auth/validation.test.ts lib/finder-validation.test.ts lib/format.test.ts lib/mountain-search.test.ts lib/rate-limit.test.ts lib/utils.test.ts services/finder-explanation.test.ts services/finder-scoring.test.ts"
+    "test": "node --test features/wishlist/validation.test.ts lib/auth/redirect.test.ts lib/auth/route-protection.test.ts lib/auth/validation.test.ts lib/finder-validation.test.ts lib/format.test.ts lib/mountain-search.test.ts lib/rate-limit.test.ts lib/utils.test.ts services/finder-explanation.test.ts services/finder-scoring.test.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

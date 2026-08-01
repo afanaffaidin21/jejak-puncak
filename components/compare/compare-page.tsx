@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { GitCompareArrows, Heart, X } from "lucide-react";
+import { GitCompareArrows, X } from "lucide-react";
 
 import { Container } from "@/components/common/container";
 import {
@@ -19,6 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { WishlistButton } from "@/components/wishlist/wishlist-button";
 import { trackEvent } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import {
@@ -316,8 +317,6 @@ function ComparisonTable({ mountains }: { mountains: CompareMountain[] }) {
 }
 
 function CompareCtas({ mountains }: { mountains: CompareMountain[] }) {
-  const pathname = usePathname();
-  const router = useRouter();
   return (
     <div className="grid gap-sm md:grid-cols-3">
       {mountains.map((mountain) => (
@@ -335,17 +334,12 @@ function CompareCtas({ mountains }: { mountains: CompareMountain[] }) {
             >
               Lihat detail
             </Link>
-            <Button
-              onClick={() => {
-                trackEvent("wishlist_click", { mountain: mountain.slug });
-                router.push(`/login?next=${encodeURIComponent(pathname)}`);
-              }}
+            <WishlistButton
+              mountainId={mountain.id}
+              name={mountain.name}
               size="sm"
-              type="button"
-              variant="outline"
-            >
-              <Heart aria-hidden="true" data-icon="inline-start" /> Simpan
-            </Button>
+              slug={mountain.slug}
+            />
           </CardContent>
         </Card>
       ))}

@@ -123,7 +123,11 @@ export default async function MountainDetailPage({
       <DetailHero mountain={mountain} />
       <DecisionSummary mountain={mountain} />
       <DetailContent mountain={mountain} />
-      <MobileDetailCta name={mountain.name} slug={mountain.slug} />
+      <MobileDetailCta
+        id={mountain.id}
+        name={mountain.name}
+        slug={mountain.slug}
+      />
     </>
   );
 }

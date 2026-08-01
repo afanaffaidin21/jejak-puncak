@@ -20,7 +20,7 @@ export function UpdatePasswordForm() {
   const [status, setStatus] = useState<"error" | "success" | null>(null);
   const [statusMessage, setStatusMessage] = useState("");
   const {
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting },
     handleSubmit,
     register,
   } = useForm<UpdatePasswordValues>({
@@ -90,7 +90,6 @@ export function UpdatePasswordForm() {
 
       <Button
         className="w-full"
-        disabled={!isValid}
         isLoading={isSubmitting}
         loadingLabel="Memperbarui password…"
         size="lg"

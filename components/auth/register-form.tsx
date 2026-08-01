@@ -1,21 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { registerAction } from "@/app/login/actions";
 import { PasswordField } from "@/components/auth/password-field";
+import { TextField } from "@/components/common/text-field";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { FieldGroup } from "@/components/ui/field";
 import { trackEvent } from "@/lib/analytics";
 import { registerSchema, type RegisterValues } from "@/lib/auth/validation";
 
@@ -24,11 +18,10 @@ type RegisterFormProps = {
 };
 
 export function RegisterForm({ nextPath }: RegisterFormProps) {
-  const router = useRouter();
   const [status, setStatus] = useState<"error" | "success" | null>(null);
   const [statusMessage, setStatusMessage] = useState("");
   const {
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting },
     handleSubmit,
     register,
   } = useForm<RegisterValues>({
@@ -65,44 +58,34 @@ export function RegisterForm({ nextPath }: RegisterFormProps) {
     }
 
     setStatusMessage("Akun berhasil dibuat. Mengarahkan ke halaman tujuan.");
-    router.replace(nextPath);
-    router.refresh();
+    window.location.replace(nextPath);
   });
 
   return (
     <form className="flex flex-col gap-md" noValidate onSubmit={onSubmit}>
       <FieldGroup>
-        <Field data-invalid={errors.displayName ? "true" : undefined}>
-          <FieldLabel htmlFor="register-name">Nama tampilan</FieldLabel>
-          <Input
-            {...register("displayName")}
-            aria-invalid={errors.displayName ? true : undefined}
-            autoComplete="name"
-            id="register-name"
-            placeholder="Nama yang akan tampil"
-            required
-          />
-          {errors.displayName ? (
-            <FieldError>{errors.displayName.message}</FieldError>
-          ) : null}
-        </Field>
+        <TextField
+          {...register("displayName")}
+          autoComplete="name"
+          error={errors.displayName?.message}
+          id="register-name"
+          label="Nama tampilan"
+          placeholder="Nama yang akan tampil"
+          required
+        />
 
-        <Field data-invalid={errors.email ? "true" : undefined}>
-          <FieldLabel htmlFor="register-email">Email</FieldLabel>
-          <Input
-            {...register("email")}
-            aria-invalid={errors.email ? true : undefined}
-            autoComplete="email"
-            id="register-email"
-            inputMode="email"
-            placeholder="nama@email.com"
-            required
-            type="email"
-          />
-          {errors.email ? (
-            <FieldError>{errors.email.message}</FieldError>
-          ) : null}
-        </Field>
+        <TextField
+          {...register("email")}
+          autoComplete="email"
+          error={errors.email?.message}
+          id="register-email"
+          inputMode="email"
+          label="Email"
+          placeholder="nama@email.com"
+          required
+          spellCheck={false}
+          type="email"
+        />
 
         <PasswordField
           {...register("password")}
@@ -132,7 +115,7 @@ export function RegisterForm({ nextPath }: RegisterFormProps) {
 
       <Button
         className="w-full"
-        disabled={!isValid || status === "success"}
+        disabled={status === "success"}
         isLoading={isSubmitting}
         loadingLabel="Membuat akun…"
         size="lg"

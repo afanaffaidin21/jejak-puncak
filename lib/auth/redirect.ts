@@ -1,4 +1,4 @@
-const DEFAULT_AUTH_REDIRECT = "/explore";
+const DEFAULT_AUTH_REDIRECT = "/";
 
 export type AuthAnalyticsEvent = "google_failed" | "google_success";
 

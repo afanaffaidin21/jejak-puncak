@@ -106,4 +106,16 @@ export async function forgotPasswordAction(
   return { success: true, status: "confirmation-required" };
 }
 
+export async function logoutAction() {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signOut();
+
+  return error
+    ? {
+        success: false as const,
+        message: "Logout belum berhasil. Silakan coba lagi.",
+      }
+    : { success: true as const };
+}
+
 export type { AuthActionResult };

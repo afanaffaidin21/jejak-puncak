@@ -1,10 +1,11 @@
 "use client";
 
-import { GitCompareArrows, Heart } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { GitCompareArrows } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { WishlistButton } from "@/components/wishlist/wishlist-button";
 import { trackEvent } from "@/lib/analytics";
 
 const MAX_COMPARE_ITEMS = 3;
@@ -23,20 +24,19 @@ function readCompareSelection() {
 }
 
 type MountainCardActionsProps = {
+  id: string;
   name: string;
   slug: string;
 };
 
-export function MountainCardActions({ name, slug }: MountainCardActionsProps) {
-  const pathname = usePathname();
+export function MountainCardActions({
+  id,
+  name,
+  slug,
+}: MountainCardActionsProps) {
   const router = useRouter();
   const [isCompared, setIsCompared] = useState(false);
   const [compareMessage, setCompareMessage] = useState("");
-
-  const handleWishlist = () => {
-    trackEvent("wishlist_redirect", { mountain: slug });
-    router.push(`/login?next=${encodeURIComponent(`${pathname}#${slug}`)}`);
-  };
 
   const handleCompare = () => {
     const selection = new Set(readCompareSelection());
@@ -75,15 +75,13 @@ export function MountainCardActions({ name, slug }: MountainCardActionsProps) {
   return (
     <>
       <div className="flex items-center gap-3xs">
-        <Button
-          aria-label={`Simpan ${name} ke wishlist — perlu login`}
-          onClick={handleWishlist}
+        <WishlistButton
+          mountainId={id}
+          name={name}
+          showLabel={false}
           size="icon-sm"
-          title="Simpan ke wishlist (perlu login)"
-          variant="outline"
-        >
-          <Heart aria-hidden="true" />
-        </Button>
+          slug={slug}
+        />
         <Button
           aria-label={`${isCompared ? "Hapus" : "Tambahkan"} ${name} ${
             isCompared ? "dari" : "ke"

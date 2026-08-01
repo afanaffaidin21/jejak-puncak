@@ -11,8 +11,8 @@ test("accepts local paths including query strings and hashes", () => {
 });
 
 test("rejects absolute and protocol-relative redirect targets", () => {
-  assert.equal(getSafeRedirectPath("https://evil.example"), "/explore");
-  assert.equal(getSafeRedirectPath("//evil.example/path"), "/explore");
+  assert.equal(getSafeRedirectPath("https://evil.example"), "/");
+  assert.equal(getSafeRedirectPath("//evil.example/path"), "/");
 });
 
 test("uses the caller fallback for missing and invalid values", () => {

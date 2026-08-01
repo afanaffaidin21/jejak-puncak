@@ -11,11 +11,16 @@ export const metadata: Metadata = {
 };
 
 type LoginPageProps = {
-  searchParams: Promise<{ error?: string; mode?: string; next?: string }>;
+  searchParams: Promise<{
+    error?: string;
+    mode?: string;
+    next?: string;
+    redirect?: string;
+  }>;
 };
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
-  const { error, mode, next } = await searchParams;
+  const { error, mode, next, redirect } = await searchParams;
   const initialView = mode === "register" || mode === "forgot" ? mode : "login";
 
   return (
@@ -31,7 +36,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
                 : undefined
           }
           initialView={initialView}
-          nextPath={getSafeRedirectPath(next)}
+          nextPath={getSafeRedirectPath(redirect ?? next)}
         />
       </Container>
     </section>

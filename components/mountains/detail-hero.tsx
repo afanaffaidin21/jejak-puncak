@@ -95,6 +95,7 @@ export function DetailHero({ mountain }: { mountain: Mountain }) {
 
           <DetailActions
             className="mt-xl [&_a]:border-primary-foreground/20 [&_button]:border-primary-foreground/30 [&_button]:bg-background/10 [&_button]:text-primary-foreground [&_button]:hover:bg-background/20"
+            id={mountain.id}
             name={mountain.name}
             slug={mountain.slug}
           />

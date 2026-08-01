@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
   }
 
   const loginUrl = new URL("/login", request.nextUrl.origin);
-  loginUrl.searchParams.set("next", nextPath);
+  loginUrl.searchParams.set("redirect", nextPath);
   loginUrl.searchParams.set(
     "error",
     isRecoveryFlow ? "recovery_callback" : "oauth_callback",

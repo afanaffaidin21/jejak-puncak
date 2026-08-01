@@ -1,14 +1,16 @@
 "use client";
 
 import { Bookmark, GitCompareArrows, Route } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { Button, buttonVariants } from "@/components/ui/button";
+import { WishlistButton } from "@/components/wishlist/wishlist-button";
 import { trackEvent } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 type DetailActionsProps = {
   className?: string;
+  id: string;
   name: string;
   slug: string;
 };
@@ -28,8 +30,12 @@ function readCompareSelection() {
   }
 }
 
-export function DetailActions({ className, name, slug }: DetailActionsProps) {
-  const pathname = usePathname();
+export function DetailActions({
+  className,
+  id,
+  name,
+  slug,
+}: DetailActionsProps) {
   const router = useRouter();
 
   return (
@@ -42,18 +48,13 @@ export function DetailActions({ className, name, slug }: DetailActionsProps) {
         <Route aria-hidden="true" data-icon="inline-start" />
         Lihat rute
       </a>
-      <Button
-        aria-label={`Simpan ${name} ke wishlist — perlu login`}
-        onClick={() => {
-          trackEvent("wishlist_redirect", { mountain: slug });
-          router.push(`/login?next=${encodeURIComponent(pathname)}`);
-        }}
+      <WishlistButton
+        icon={Bookmark}
+        mountainId={id}
+        name={name}
         size="lg"
-        variant="outline"
-      >
-        <Bookmark aria-hidden="true" data-icon="inline-start" />
-        Simpan
-      </Button>
+        slug={slug}
+      />
       <Button
         onClick={() => {
           const selection = new Set(readCompareSelection());
