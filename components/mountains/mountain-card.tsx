@@ -46,7 +46,7 @@ export function MountainCard({
     <Card className="relative h-full" interactive>
       <CardMedia className="relative">
         <Image
-          alt={`Ilustrasi sementara lanskap ${mountain.name}`}
+          alt={`Foto lanskap ${mountain.name}`}
           className="object-cover transition-transform duration-slow ease-emphasized group-hover/card:scale-[1.03]"
           fill
           priority={priority}
