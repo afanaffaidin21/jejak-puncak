@@ -166,6 +166,10 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-hover: var(--primary-hover);
   --color-primary: var(--primary);
+  --color-button-primary-disabled: var(--button-primary-disabled);
+  --color-button-primary-foreground: var(--button-primary-foreground);
+  --color-button-primary-hover: var(--button-primary-hover);
+  --color-button-primary: var(--button-primary);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
@@ -271,6 +275,10 @@
   --primary: var(--palette-forest-700);
   --primary-hover: oklch(0.32 0.075 148);
   --primary-foreground: oklch(0.985 0.006 100);
+  --button-primary: var(--palette-forest-700);
+  --button-primary-hover: oklch(0.32 0.075 148);
+  --button-primary-disabled: oklch(0.52 0.065 148);
+  --button-primary-foreground: var(--palette-snow);
   --secondary: var(--palette-sand-200);
   --secondary-foreground: var(--palette-forest-950);
   --muted: oklch(0.955 0.012 90);
