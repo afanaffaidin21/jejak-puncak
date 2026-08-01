@@ -3,11 +3,17 @@ import { cookies } from "next/headers";
 
 import { getSupabaseEnvironment } from "@/lib/supabase/env";
 
-export async function createClient() {
+type ServerClientOptions = {
+  remember?: boolean;
+};
+
+export async function createClient(options: ServerClientOptions = {}) {
   const cookieStore = await cookies();
   const { url, publishableKey } = getSupabaseEnvironment();
 
   return createServerClient(url, publishableKey, {
+    cookieOptions:
+      options.remember === false ? { maxAge: undefined } : undefined,
     cookies: {
       getAll() {
         return cookieStore.getAll();

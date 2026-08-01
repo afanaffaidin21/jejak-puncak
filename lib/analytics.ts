@@ -1,4 +1,9 @@
 export type AnalyticsEventName =
+  | "login_page_view"
+  | "login_success"
+  | "login_failed"
+  | "register_started"
+  | "register_completed"
   | "explore_search"
   | "explore_filter"
   | "explore_sort"

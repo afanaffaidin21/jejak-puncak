@@ -1,41 +1,31 @@
-import { LockKeyhole } from "lucide-react";
-import Link from "next/link";
+import type { Metadata } from "next";
 
+import { AuthenticationCard } from "@/components/auth/authentication-card";
 import { Container } from "@/components/common/container";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { getSafeRedirectPath } from "@/lib/auth/redirect";
 
-type LoginPlaceholderPageProps = {
-  searchParams: Promise<{ next?: string }>;
+export const metadata: Metadata = {
+  title: "Login | Jejak Puncak",
+  description:
+    "Masuk ke akun Jejak Puncak untuk mengelola Wishlist, Passport, dan progres pendakian.",
 };
 
-export default async function LoginPlaceholderPage({
-  searchParams,
-}: LoginPlaceholderPageProps) {
-  const { next } = await searchParams;
+type LoginPageProps = {
+  searchParams: Promise<{ mode?: string; next?: string }>;
+};
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const { mode, next } = await searchParams;
+  const initialView = mode === "register" || mode === "forgot" ? mode : "login";
 
   return (
-    <section className="bg-surface py-4xl md:py-5xl">
-      <Container className="max-w-2xl text-center">
-        <span className="mx-auto flex size-2xl items-center justify-center rounded-full bg-accent text-accent-foreground">
-          <LockKeyhole aria-hidden="true" className="size-md" />
-        </span>
-        <p className="mt-lg text-label font-semibold text-primary">
-          Placeholder autentikasi
-        </p>
-        <h1 className="mt-xs text-balance font-heading text-h1 font-semibold text-text-primary">
-          Login hadir pada fase berikutnya.
-        </h1>
-        <p className="mt-md text-pretty text-body-lg text-text-secondary">
-          Wishlist dan Passport membutuhkan akun. Halaman ini sengaja tidak
-          mengimplementasikan autentikasi pada Phase 2.
-        </p>
-        <Link
-          className={cn(buttonVariants({ variant: "outline" }), "mt-lg")}
-          href={next?.startsWith("/") ? next : "/explore"}
-        >
-          Kembali menjelajah
-        </Link>
+    <section className="bg-surface py-xl md:py-3xl">
+      <Container className="flex justify-center">
+        <h1 className="sr-only">Login Jejak Puncak</h1>
+        <AuthenticationCard
+          initialView={initialView}
+          nextPath={getSafeRedirectPath(next)}
+        />
       </Container>
     </section>
   );
