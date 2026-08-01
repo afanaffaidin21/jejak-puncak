@@ -15,6 +15,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,6 +24,7 @@ import { cn } from "@/lib/utils";
 import {
   DIFFICULTY_LABELS,
   type CompareMountain,
+  type CompareSummary,
 } from "@/types/compare";
 
 const MAX_COMPARE_ITEMS = 3;
@@ -234,10 +236,35 @@ function CompareCtas({ mountains }: { mountains: CompareMountain[] }) {
   );
 }
 
+function CompareAiSummary({ summary, isLoading }: { summary: CompareSummary | null; isLoading: boolean }) {
+  if (isLoading) {
+    return <Card aria-label="Memuat ringkasan AI"><CardContent className="space-y-xs p-md"><Skeleton className="h-5 w-48" /><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-4/5" /></CardContent></Card>;
+  }
+  if (!summary) {
+    return <Card className="border-dashed"><CardContent className="p-md"><p className="font-semibold text-text-primary">Ringkasan belum tersedia</p><p className="mt-2xs text-body-sm text-text-secondary">Perbandingan data di bawah tetap dapat digunakan. Ringkasan AI akan muncul saat layanan tersedia.</p></CardContent></Card>;
+  }
+  return (
+    <Card className="border-primary/20 bg-primary/5">
+      <CardHeader><CardTitle className="text-h3">Ringkasan perbandingan</CardTitle></CardHeader>
+      <CardContent className="space-y-md text-body-sm text-text-secondary">
+        <p className="text-body-md text-text-primary">{summary.summary}</p>
+        <div className="grid gap-md md:grid-cols-2">
+          <div><h3 className="font-semibold text-text-primary">Perbedaan utama</h3><ul className="mt-xs list-disc space-y-2xs pl-md">{summary.differences.map((item) => <li key={item}>{item}</li>)}</ul></div>
+          <div><h3 className="font-semibold text-text-primary">Trade-off tiap gunung</h3><ul className="mt-xs space-y-xs">{summary.tradeOffs.map((item) => <li key={item.mountainId}><span className="font-medium text-text-primary">{item.mountainName}:</span> {item.tradeoffs.join("; ")}</li>)}</ul></div>
+        </div>
+        <div><h3 className="font-semibold text-text-primary">Kelebihan berdasarkan data</h3><ul className="mt-xs grid gap-xs md:grid-cols-2">{summary.strengths.map((item) => <li className="rounded-md border border-divider bg-background p-xs" key={item.mountainId}><span className="font-medium text-text-primary">{item.mountainName}</span><ul className="mt-2xs list-disc pl-md">{item.advantages.map((advantage) => <li key={advantage}>{advantage}</li>)}</ul></li>)}</ul></div>
+        <p className="border-t border-divider pt-sm text-text-primary">{summary.cta}</p>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function ComparePage({ mountains }: ComparePageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [selectedSlugs, setSelectedSlugs] = useState(() => readSlugs(searchParams.get("mountains")).slice(0, MAX_COMPARE_ITEMS));
+  const [aiSummary, setAiSummary] = useState<CompareSummary | null>(null);
+  const [isAiLoading, setIsAiLoading] = useState(false);
   const completedKey = useRef("");
   const selectedMountains = useMemo(() => selectedSlugs.flatMap((slug) => {
     const mountain = mountains.find((item) => item.slug === slug);
@@ -261,6 +288,32 @@ export function ComparePage({ mountains }: ComparePageProps) {
         trackEvent("compare_completed", { count: selectedMountains.length });
       }
     }
+  }, [selectedMountains]);
+
+  useEffect(() => {
+    if (selectedMountains.length < 2) {
+      setAiSummary(null);
+      setIsAiLoading(false);
+      return;
+    }
+    const controller = new AbortController();
+    setIsAiLoading(true);
+    fetch("/api/compare/summary", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slugs: selectedMountains.map((mountain) => mountain.slug) }),
+      signal: controller.signal,
+    })
+      .then(async (response) => response.ok ? (await response.json() as { summary?: CompareSummary | null }) : { summary: null })
+      .then((result) => {
+        if (!controller.signal.aborted) {
+          setAiSummary(result.summary ?? null);
+          if (result.summary) trackEvent("ai_summary_view", { count: selectedMountains.length });
+        }
+      })
+      .catch(() => { if (!controller.signal.aborted) setAiSummary(null); })
+      .finally(() => { if (!controller.signal.aborted) setIsAiLoading(false); });
+    return () => controller.abort();
   }, [selectedMountains]);
 
   const updateSelection = (next: string[]) => {
@@ -290,6 +343,7 @@ export function ComparePage({ mountains }: ComparePageProps) {
         {selectedMountains.length >= 2 ? (
           <section aria-labelledby="comparison-heading" className="space-y-md">
             <div><h2 className="font-heading text-h2 font-semibold text-text-primary" id="comparison-heading">Perbandingan gunung</h2><p className="mt-2xs text-body-sm text-text-secondary">Sel yang diberi penanda menunjukkan nilai paling menonjol pada baris tersebut.</p></div>
+            <CompareAiSummary isLoading={isAiLoading} summary={aiSummary} />
             <ComparisonTable mountains={selectedMountains} />
             <CompareCtas mountains={selectedMountains} />
           </section>

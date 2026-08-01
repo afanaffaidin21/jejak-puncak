@@ -2,10 +2,13 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  createCompareSummary,
   createFinderExplanation,
   FINDER_AI_SYSTEM_PROMPT,
+  parseCompareSummary,
   parseFinderAiExplanation,
 } from "./finder-explanation.ts";
+import type { CompareMountain } from "../types/compare.ts";
 import type { FinderAnswers, FinderRecommendation } from "../types/finder.ts";
 
 const answers: FinderAnswers = {
@@ -185,4 +188,42 @@ test("supports the Anthropic Messages response shape", async () => {
   assert.equal(body.system, FINDER_AI_SYSTEM_PROMPT);
   assert.equal(body.messages[0]?.role, "user");
   assert.equal(result?.summary, "Gunung Tes cocok dengan jawabanmu.");
+});
+
+const compareMountains: CompareMountain[] = [
+  { id: "m1", slug: "tes-satu", name: "Gunung Satu", province: "Jawa Tengah", island: "Jawa", elevation: 2500, difficulty: "moderate", beginnerScore: 80, durationDays: 2, campingAvailable: true, waterSource: true, bestSeason: "April–Oktober", popularityScore: 75, sunriseRating: 5, heroImage: "/one.jpg", latitude: -7, longitude: 110 },
+  { id: "m2", slug: "tes-dua", name: "Gunung Dua", province: "Jawa Barat", island: "Jawa", elevation: 3000, difficulty: "hard", beginnerScore: 60, durationDays: 3, campingAvailable: true, waterSource: false, bestSeason: "Mei–September", popularityScore: 82, sunriseRating: 4, heroImage: "/two.jpg", latitude: -6, longitude: 107 },
+];
+
+test("validates a neutral structured comparison summary", () => {
+  const result = parseCompareSummary({
+    summary: "Keduanya menawarkan pengalaman berbeda.",
+    differences: ["Gunung Dua lebih tinggi."],
+    strengths: compareMountains.map((mountain) => ({ mountainId: mountain.id, mountainName: mountain.name, advantages: ["Data tersedia."] })),
+    tradeOffs: compareMountains.map((mountain) => ({ mountainId: mountain.id, mountainName: mountain.name, tradeoffs: ["Perlu menyesuaikan rencana."] })),
+    cta: "Lihat detail sebelum memutuskan.",
+  });
+  assert.equal(result?.strengths.length, 2);
+  assert.equal(parseCompareSummary({ summary: "Tidak lengkap" }), null);
+});
+
+test("sends comparison data without applying a new ranking", async () => {
+  let requestBody = "";
+  const result = await createCompareSummary(compareMountains, {
+    config: { provider: "openai", apiKey: "test-key", model: "test-model" },
+    fetcher: async (_input, init) => {
+      requestBody = String(init?.body);
+      return new Response(JSON.stringify({ output_text: JSON.stringify({
+        summary: "Dua pilihan dengan trade-off berbeda.",
+        differences: ["Elevasi dan durasinya berbeda."],
+        strengths: compareMountains.map((mountain) => ({ mountainId: mountain.id, mountainName: mountain.name, advantages: ["Fakta tersedia."] })),
+        tradeOffs: compareMountains.map((mountain) => ({ mountainId: mountain.id, mountainName: mountain.name, tradeoffs: ["Sesuaikan kesiapan."] })),
+        cta: "Buka detail gunung.",
+      }) }), { status: 200 });
+    },
+  });
+  const body = JSON.parse(requestBody) as { input: string };
+  assert.match(body.input, /"id":"m1"/);
+  assert.doesNotMatch(body.input, /"rank":/);
+  assert.equal(result?.differences.length, 1);
 });

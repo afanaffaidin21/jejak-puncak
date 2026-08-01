@@ -3,6 +3,10 @@ import type {
   FinderAnswers,
   FinderRecommendation,
 } from "@/types/finder";
+import type {
+  CompareMountain,
+  CompareSummary,
+} from "@/types/compare";
 
 export const FINDER_AI_SYSTEM_PROMPT =
   "Anda adalah asisten Jejak Puncak. Jelaskan hasil rekomendasi berdasarkan data yang diberikan. Jangan mengubah skor, jangan menambahkan fakta baru, dan jangan memberikan jaminan keselamatan.";
@@ -27,6 +31,47 @@ const OUTPUT_SCHEMA = {
     cta: { type: "string" },
   },
   required: ["summary", "mainReasons", "tradeOffs", "cta"],
+} as const;
+
+const COMPARE_OUTPUT_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    summary: { type: "string" },
+    differences: { type: "array", items: { type: "string" }, minItems: 1, maxItems: 5 },
+    strengths: {
+      type: "array",
+      minItems: 2,
+      maxItems: 3,
+      items: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          mountainId: { type: "string" },
+          mountainName: { type: "string" },
+          advantages: { type: "array", items: { type: "string" }, minItems: 1, maxItems: 3 },
+        },
+        required: ["mountainId", "mountainName", "advantages"],
+      },
+    },
+    tradeOffs: {
+      type: "array",
+      minItems: 2,
+      maxItems: 3,
+      items: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          mountainId: { type: "string" },
+          mountainName: { type: "string" },
+          tradeoffs: { type: "array", items: { type: "string" }, minItems: 1, maxItems: 3 },
+        },
+        required: ["mountainId", "mountainName", "tradeoffs"],
+      },
+    },
+    cta: { type: "string" },
+  },
+  required: ["summary", "differences", "strengths", "tradeOffs", "cta"],
 } as const;
 
 type AiProviderConfig =
@@ -162,6 +207,62 @@ function parseJsonText(text: string) {
   }
 }
 
+function buildComparePrompt(mountains: readonly CompareMountain[]) {
+  const structuredInput = mountains.map((mountain) => ({
+    id: mountain.id,
+    slug: mountain.slug,
+    name: mountain.name,
+    province: mountain.province,
+    island: mountain.island,
+    elevation: mountain.elevation,
+    difficulty: mountain.difficulty,
+    beginnerScore: mountain.beginnerScore,
+    durationDays: mountain.durationDays,
+    campingAvailable: mountain.campingAvailable,
+    waterSource: mountain.waterSource,
+    bestSeason: mountain.bestSeason,
+    popularityScore: mountain.popularityScore,
+    sunriseRating: mountain.sunriseRating,
+  }));
+
+  return [
+    "Tulis ringkasan perbandingan dalam Bahasa Indonesia yang ramah, informatif, tenang, dan profesional.",
+    "Bandingkan hanya 2–3 gunung yang diberikan. Jelaskan perbedaan, keunggulan masing-masing, dan trade-off secara netral; jangan memilih pemenang, membuat ranking, mengubah data, atau menambahkan fakta baru.",
+    "Gunakan hanya fakta di JSON. Jangan mengarang kondisi jalur, cuaca, biaya nominal, izin, akses, kesehatan, atau keselamatan.",
+    'Keluarkan hanya JSON valid dengan bentuk: {"summary": string, "differences": string[], "strengths": [{"mountainId": string, "mountainName": string, "advantages": string[]}], "tradeOffs": [{"mountainId": string, "mountainName": string, "tradeoffs": string[]}], "cta": string}.',
+    `INPUT_JSON:\n${JSON.stringify(structuredInput)}`,
+  ].join("\n\n");
+}
+
+function isStringRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value && typeof value === "object" && !Array.isArray(value));
+}
+
+export function parseCompareSummary(value: unknown): CompareSummary | null {
+  if (!isStringRecord(value)) return null;
+  const strengths = value.strengths;
+  const tradeOffs = value.tradeOffs;
+  if (!isNonEmptyString(value.summary) || !isNonEmptyStringArray(value.differences) || !isNonEmptyString(value.cta) || !Array.isArray(strengths) || !Array.isArray(tradeOffs)) return null;
+
+  const parsedStrengths: CompareSummary["strengths"] = strengths.flatMap((item) => {
+    if (!isStringRecord(item) || !isNonEmptyString(item.mountainId) || !isNonEmptyString(item.mountainName) || !isNonEmptyStringArray(item.advantages)) return [];
+    return [{ mountainId: item.mountainId.trim(), mountainName: item.mountainName.trim(), advantages: item.advantages.map((text) => text.trim()) }];
+  });
+  const parsedTradeOffs: CompareSummary["tradeOffs"] = tradeOffs.flatMap((item) => {
+    if (!isStringRecord(item) || !isNonEmptyString(item.mountainId) || !isNonEmptyString(item.mountainName) || !isNonEmptyStringArray(item.tradeoffs)) return [];
+    return [{ mountainId: item.mountainId.trim(), mountainName: item.mountainName.trim(), tradeoffs: item.tradeoffs.map((text) => text.trim()) }];
+  });
+  if (parsedStrengths.length !== strengths.length || parsedTradeOffs.length !== tradeOffs.length) return null;
+
+  return {
+    summary: value.summary.trim(),
+    differences: value.differences.map((text) => text.trim()),
+    strengths: parsedStrengths,
+    tradeOffs: parsedTradeOffs,
+    cta: value.cta.trim(),
+  };
+}
+
 function getOpenAiText(value: unknown) {
   if (!value || typeof value !== "object") return null;
   const response = value as Record<string, unknown>;
@@ -260,6 +361,42 @@ async function requestAnthropic(
   return getAnthropicText((await response.json()) as unknown);
 }
 
+async function requestCompareOpenAi(
+  config: Extract<AiProviderConfig, { provider: "openai" }>,
+  prompt: string,
+  fetcher: typeof fetch,
+) {
+  const response = await fetcher("https://api.openai.com/v1/responses", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${config.apiKey}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: config.model,
+      instructions: FINDER_AI_SYSTEM_PROMPT,
+      input: prompt,
+      max_output_tokens: 900,
+      text: { format: { type: "json_schema", name: "mountain_comparison_summary", strict: true, schema: COMPARE_OUTPUT_SCHEMA } },
+    }),
+    signal: AbortSignal.timeout(10_000),
+  });
+  if (!response.ok) return null;
+  return getOpenAiText((await response.json()) as unknown);
+}
+
+async function requestCompareAnthropic(
+  config: Extract<AiProviderConfig, { provider: "anthropic" }>,
+  prompt: string,
+  fetcher: typeof fetch,
+) {
+  const response = await fetcher("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "anthropic-version": "2023-06-01", "Content-Type": "application/json", "x-api-key": config.apiKey },
+    body: JSON.stringify({ model: config.model, max_tokens: 900, system: FINDER_AI_SYSTEM_PROMPT, messages: [{ role: "user", content: prompt }] }),
+    signal: AbortSignal.timeout(10_000),
+  });
+  if (!response.ok) return null;
+  return getAnthropicText((await response.json()) as unknown);
+}
+
 export async function createFinderExplanation(
   answers: FinderAnswers,
   recommendations: readonly FinderRecommendation[],
@@ -280,6 +417,25 @@ export async function createFinderExplanation(
         : await requestAnthropic(config, prompt, fetcher);
 
     return text ? parseFinderAiExplanation(parseJsonText(text)) : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function createCompareSummary(
+  mountains: readonly CompareMountain[],
+  options: ExplanationOptions = {},
+): Promise<CompareSummary | null> {
+  const config = options.config === undefined ? getProviderConfig() : options.config;
+  if (!config || mountains.length < 2 || mountains.length > 3) return null;
+
+  try {
+    const prompt = buildComparePrompt(mountains);
+    const fetcher = options.fetcher ?? fetch;
+    const text = config.provider === "openai"
+      ? await requestCompareOpenAi(config, prompt, fetcher)
+      : await requestCompareAnthropic(config, prompt, fetcher);
+    return text ? parseCompareSummary(parseJsonText(text)) : null;
   } catch {
     return null;
   }
