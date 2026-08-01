@@ -108,7 +108,7 @@ export async function forgotPasswordAction(
 
 export async function logoutAction() {
   const supabase = await createClient();
-  const { error } = await supabase.auth.signOut();
+  const { error } = await supabase.auth.signOut({ scope: "local" });
 
   return error
     ? {

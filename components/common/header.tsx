@@ -77,6 +77,8 @@ function AccountControl({
   pathname,
   user,
 }: AccountControlProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   if (isLoading) {
     return <Skeleton className={compact ? "size-touch" : "h-touch w-28"} />;
   }
@@ -99,12 +101,14 @@ function AccountControl({
   }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
       <DropdownMenuTrigger
         render={
           <Button
             aria-label={compact ? `Menu akun ${user.displayName}` : undefined}
             className={cn(accountButtonClassName, compact && "size-touch px-0")}
+            isLoading={isLoggingOut}
+            loadingLabel="Keluarâ€¦"
             size={compact ? "icon" : "default"}
             variant="outline"
           />
@@ -142,7 +146,10 @@ function AccountControl({
         <DropdownMenuGroup>
           <DropdownMenuItem
             disabled={isLoggingOut}
-            onClick={onLogout}
+            onClick={() => {
+              setIsMenuOpen(false);
+              onLogout();
+            }}
             variant="destructive"
           >
             <LogOut aria-hidden="true" />
@@ -158,22 +165,35 @@ export function Header({ className, variant }: HeaderProps) {
   const pathname = usePathname();
   const { isLoading, user } = useUser();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [logoutError, setLogoutError] = useState("");
   const resolvedVariant =
     variant ?? (pathname === "/" ? "transparent" : "solid");
 
   const handleLogout = async () => {
+    setLogoutError("");
     setIsLoggingOut(true);
-    const result = await logoutAction();
-    setIsLoggingOut(false);
 
-    if (result.success) {
+    try {
+      const result = await logoutAction();
+
+      if (!result.success) {
+        setLogoutError(result.message);
+        return;
+      }
+
       window.location.replace("/");
+    } catch {
+      setLogoutError(
+        "Logout belum dapat diproses. Periksa koneksi lalu coba lagi.",
+      );
+    } finally {
+      setIsLoggingOut(false);
     }
   };
 
   return (
     <StickyHeader className={className} variant={resolvedVariant}>
-      <Container className="flex min-h-mobile-nav items-center justify-between gap-md">
+      <Container className="relative flex min-h-mobile-nav items-center justify-between gap-md">
         <Link
           aria-label="Jejak Puncak — Beranda"
           className="inline-flex min-h-touch items-center gap-2xs rounded-md font-heading text-h4 font-semibold tracking-tight text-text-primary group-data-[appearance=transparent]/site-header:text-primary-foreground"
@@ -221,6 +241,15 @@ export function Header({ className, variant }: HeaderProps) {
             user={user}
           />
         </div>
+
+        {logoutError ? (
+          <p
+            className="absolute top-full right-sm mt-2 max-w-xs rounded-md border border-destructive/20 bg-popover px-xs py-2xs text-body-sm text-destructive shadow-surface sm:right-md lg:right-lg"
+            role="alert"
+          >
+            {logoutError}
+          </p>
+        ) : null}
       </Container>
     </StickyHeader>
   );
