@@ -55,26 +55,34 @@ export function WishlistButton({
     const previousState = wishlisted;
     setWishlisted(mountainId, !previousState);
     setIsPending(true);
-    const result = await toggleWishlistAction({ mountainId });
-    setIsPending(false);
+    try {
+      const result = await toggleWishlistAction({ mountainId });
 
-    if (!result.success) {
+      if (!result.success) {
+        setWishlisted(mountainId, previousState);
+        setMessage(result.message);
+        if (result.status === "unauthenticated") redirectToLogin();
+        return;
+      }
+
+      setWishlisted(mountainId, result.wishlisted);
+      setMessage(
+        result.wishlisted
+          ? `${name} disimpan ke wishlist.`
+          : `${name} dihapus dari wishlist.`,
+      );
+      trackEvent("wishlist_click", {
+        active: result.wishlisted,
+        mountain: slug,
+      });
+    } catch {
       setWishlisted(mountainId, previousState);
-      setMessage(result.message);
-      if (result.status === "unauthenticated") redirectToLogin();
-      return;
+      setMessage(
+        "Wishlist belum dapat diperbarui. Periksa koneksi lalu coba lagi.",
+      );
+    } finally {
+      setIsPending(false);
     }
-
-    setWishlisted(mountainId, result.wishlisted);
-    setMessage(
-      result.wishlisted
-        ? `${name} disimpan ke wishlist.`
-        : `${name} dihapus dari wishlist.`,
-    );
-    trackEvent("wishlist_click", {
-      active: result.wishlisted,
-      mountain: slug,
-    });
   };
 
   const accessibleLabel = wishlisted
