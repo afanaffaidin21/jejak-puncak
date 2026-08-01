@@ -24,9 +24,11 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         <h1 className="sr-only">Login Jejak Puncak</h1>
         <AuthenticationCard
           initialError={
-            error === "oauth_callback"
-              ? "Login Google belum berhasil atau dibatalkan. Silakan coba lagi."
-              : undefined
+            error === "recovery_callback"
+              ? "Tautan reset tidak valid atau sudah kedaluwarsa. Minta tautan baru untuk melanjutkan."
+              : error === "oauth_callback"
+                ? "Login Google belum berhasil atau dibatalkan. Silakan coba lagi."
+                : undefined
           }
           initialView={initialView}
           nextPath={getSafeRedirectPath(next)}

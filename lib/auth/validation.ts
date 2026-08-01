@@ -40,5 +40,19 @@ export const registerSchema = z
     path: ["confirmPassword"],
   });
 
+export const forgotPasswordSchema = z.object({ email: emailSchema });
+
+export const updatePasswordSchema = z
+  .object({
+    password: passwordSchema,
+    confirmPassword: z.string().min(1, "Konfirmasi password wajib diisi."),
+  })
+  .refine((values) => values.password === values.confirmPassword, {
+    message: "Konfirmasi password belum sama.",
+    path: ["confirmPassword"],
+  });
+
+export type ForgotPasswordValues = z.input<typeof forgotPasswordSchema>;
 export type LoginValues = z.input<typeof loginSchema>;
 export type RegisterValues = z.input<typeof registerSchema>;
+export type UpdatePasswordValues = z.input<typeof updatePasswordSchema>;

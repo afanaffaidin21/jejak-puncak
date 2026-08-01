@@ -1,7 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { loginSchema, registerSchema } from "./validation.ts";
+import {
+  forgotPasswordSchema,
+  loginSchema,
+  registerSchema,
+  updatePasswordSchema,
+} from "./validation.ts";
 
 test("normalizes a valid login email", () => {
   const result = loginSchema.parse({
@@ -36,4 +41,30 @@ test("rejects a mismatched password confirmation", () => {
   if (!result.success) {
     assert.deepEqual(result.error.issues[0]?.path, ["confirmPassword"]);
   }
+});
+
+test("validates forgot-password email without exposing account state", () => {
+  assert.deepEqual(
+    forgotPasswordSchema.parse({ email: " HIKER@example.com " }),
+    {
+      email: "hiker@example.com",
+    },
+  );
+});
+
+test("applies password strength and confirmation rules to recovery", () => {
+  assert.equal(
+    updatePasswordSchema.safeParse({
+      password: "password",
+      confirmPassword: "password",
+    }).success,
+    false,
+  );
+  assert.equal(
+    updatePasswordSchema.safeParse({
+      password: "puncak123",
+      confirmPassword: "berbeda123",
+    }).success,
+    false,
+  );
 });

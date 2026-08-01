@@ -1,7 +1,12 @@
 "use server";
 
+import { getSiteUrl } from "@/lib/auth/site-url";
+import {
+  forgotPasswordSchema,
+  loginSchema,
+  registerSchema,
+} from "@/lib/auth/validation";
 import { createClient } from "@/lib/supabase/server";
-import { loginSchema, registerSchema } from "@/lib/auth/validation";
 
 type AuthActionResult =
   | { success: true; status: "confirmation-required" | "signed-in" }
@@ -51,6 +56,7 @@ export async function registerAction(
     password: parsed.data.password,
     options: {
       data: { display_name: parsed.data.displayName },
+      emailRedirectTo: `${getSiteUrl()}/auth/callback?next=/profile`,
     },
   });
 
@@ -65,6 +71,39 @@ export async function registerAction(
     success: true,
     status: data.session ? "signed-in" : "confirmation-required",
   };
+}
+
+export async function forgotPasswordAction(
+  input: unknown,
+): Promise<AuthActionResult> {
+  const parsed = forgotPasswordSchema.safeParse(input);
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: "Masukkan alamat email yang valid.",
+    };
+  }
+
+  const supabase = await createClient();
+  const redirectUrl = new URL("/auth/callback", getSiteUrl());
+  redirectUrl.searchParams.set("flow", "recovery");
+  redirectUrl.searchParams.set("next", "/auth/update-password");
+
+  const { error } = await supabase.auth.resetPasswordForEmail(
+    parsed.data.email,
+    { redirectTo: redirectUrl.toString() },
+  );
+
+  if (error) {
+    return {
+      success: false,
+      message:
+        "Permintaan belum dapat diproses. Tunggu beberapa saat lalu coba lagi.",
+    };
+  }
+
+  return { success: true, status: "confirmation-required" };
 }
 
 export type { AuthActionResult };

@@ -5,6 +5,8 @@ export type AnalyticsEventName =
   | "register_started"
   | "register_completed"
   | "google_login_click"
+  | "forgot_password_started"
+  | "forgot_password_completed"
   | "explore_search"
   | "explore_filter"
   | "explore_sort"

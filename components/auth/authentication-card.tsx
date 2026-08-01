@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import { LoginForm } from "@/components/auth/login-form";
 import { RegisterForm } from "@/components/auth/register-form";
+import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
 import { GoogleLoginButton } from "@/components/auth/google-login-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -52,10 +53,13 @@ export function AuthenticationCard({
           </Button>
           <CardTitle className="text-h3">Lupa password?</CardTitle>
           <CardDescription>
-            Form pemulihan akun sedang disiapkan. Kembali ke login untuk
-            melanjutkan.
+            Masukkan email akunmu. Kami akan mengirim tautan untuk membuat
+            password baru.
           </CardDescription>
         </CardHeader>
+        <CardContent>
+          <ForgotPasswordForm initialError={initialError} />
+        </CardContent>
       </Card>
     );
   }
