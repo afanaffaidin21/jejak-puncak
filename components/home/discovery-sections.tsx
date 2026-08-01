@@ -146,14 +146,14 @@ export function MapIntroductionSection() {
               Lihat perjalanan dalam konteks wilayah.
             </h2>
             <p className="mt-md text-pretty text-body-lg text-text-secondary">
-              Peta interaktif penuh hadir pada fase berikutnya. Sekarang,
-              gunakan katalog wilayah untuk memahami sebaran pilihan.
+              Gunakan peta interaktif untuk melihat sebaran pilihan, lalu buka
+              detail gunung yang paling menarik perhatianmu.
             </p>
             <Link
               className={cn(buttonVariants({ variant: "outline" }), "mt-lg")}
-              href="/explore"
+              href="/map"
             >
-              Jelajahi berdasarkan pulau
+              Buka peta gunung
               <ArrowRight aria-hidden="true" data-icon="inline-end" />
             </Link>
           </div>

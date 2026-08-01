@@ -9,6 +9,7 @@ import type {
   MountainRoute,
   MountainSort,
 } from "@/types/mountain";
+import type { MapMountain } from "@/types/map";
 
 type MountainRouteRow = {
   id: string;
@@ -293,6 +294,15 @@ export const getPopularMountains = cache(
     return result.mountains;
   },
 );
+
+export const getMapMountains = cache(async (): Promise<MapMountain[]> => {
+  const result = await getAllMountains({ pageSize: MAX_PAGE_SIZE, sort: "name-asc" });
+  return result.mountains
+    .filter((mountain) => Number.isFinite(mountain.latitude) && Number.isFinite(mountain.longitude))
+    .map(({ id, slug, name, province, island, latitude, longitude, elevation, difficulty, durationDays, beginnerScore, heroImage, summary }) => ({
+      id, slug, name, province, island, latitude, longitude, elevation, difficulty, durationDays, beginnerScore, heroImage, summary,
+    }));
+});
 
 export async function getFinderMountains(): Promise<Mountain[]> {
   const supabase = await createClient();
