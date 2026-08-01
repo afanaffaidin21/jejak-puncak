@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
+import mapboxgl from "mapbox-gl";
 import type { Map as MapboxMap, Marker } from "mapbox-gl";
 import { ExternalLink, List, MapPinned, RotateCcw } from "lucide-react";
 
@@ -143,47 +144,33 @@ export function MountainMap({ mountains }: MountainMapProps) {
 
   useEffect(() => {
     if (!token || !mapContainerRef.current || mapRef.current) return;
-    let disposed = false;
-    void Promise.all([
-      // Use the CSP bundle so the worker is bundled by Next/Turbopack instead
-      // of relying on a blob worker that can be blocked by browser policy.
-      // @ts-expect-error mapbox-gl exposes this runtime bundle without a TS entry.
-      import("mapbox-gl/dist/mapbox-gl-csp.js"),
-      // @ts-expect-error mapbox-gl exposes this worker bundle without a TS entry.
-      import("mapbox-gl/dist/mapbox-gl-csp-worker.js"),
-    ])
-      .then(([{ default: mapboxgl }, { default: MapboxWorker }]) => {
-        if (disposed || !mapContainerRef.current) return;
-        mapboxgl.workerClass = MapboxWorker;
-        mapboxgl.accessToken = token;
-        const map = new mapboxgl.Map({
-          accessToken: token,
-          container: mapContainerRef.current,
-          style: "mapbox://styles/mapbox/streets-v12",
-          center: DEFAULT_CENTER,
-          zoom: DEFAULT_ZOOM,
-          attributionControl: true,
-        });
-        map.on("error", (event: { error?: unknown }) => {
-          if (process.env.NODE_ENV !== "production") {
-            console.error("Mapbox error:", event.error ?? event);
-          }
-          setMapError(true);
-        });
-        map.addControl(
-          new mapboxgl.NavigationControl({ showCompass: true }),
-          "top-right",
-        );
-        map.on("load", () => {
-          map.resize();
-          requestAnimationFrame(() => map.resize());
-          setMapReady(true);
-        });
-        mapRef.current = map;
-      })
-      .catch(() => setMapError(true));
+    mapboxgl.accessToken = token;
+    const map = new mapboxgl.Map({
+      accessToken: token,
+      container: mapContainerRef.current,
+      style: "mapbox://styles/mapbox/streets-v12",
+      center: DEFAULT_CENTER,
+      zoom: DEFAULT_ZOOM,
+      projection: "mercator",
+      attributionControl: true,
+    });
+    map.on("error", (event: { error?: unknown }) => {
+      if (process.env.NODE_ENV !== "production") {
+        console.error("Mapbox error:", event.error ?? event);
+      }
+      setMapError(true);
+    });
+    map.addControl(
+      new mapboxgl.NavigationControl({ showCompass: true }),
+      "top-right",
+    );
+    map.on("load", () => {
+      map.resize();
+      requestAnimationFrame(() => map.resize());
+      setMapReady(true);
+    });
+    mapRef.current = map;
     return () => {
-      disposed = true;
       markersRef.current.forEach((marker) => marker.remove());
       markersRef.current = [];
       mapRef.current?.remove();
@@ -193,48 +180,45 @@ export function MountainMap({ mountains }: MountainMapProps) {
 
   useEffect(() => {
     if (!mapReady || !mapRef.current) return;
-    void import("mapbox-gl").then(({ default: mapboxgl }) => {
-      if (!mapRef.current) return;
-      markersRef.current.forEach((marker) => marker.remove());
-      markersRef.current = visibleMountains.map((mountain) => {
-        const element = document.createElement("button");
-        element.type = "button";
-        element.className = "map-mountain-marker";
-        element.setAttribute("aria-label", `Buka preview ${mountain.name}`);
-        element.title = mountain.name;
-        element.addEventListener("click", () => {
-          setSelectedSlug(mountain.slug);
-          setMobilePreviewOpen(true);
-          trackEvent("marker_click", { mountain: mountain.slug });
-          trackEvent("preview_open", { mountain: mountain.slug });
-        });
-        return new mapboxgl.Marker({ element, anchor: "bottom" })
-          .setLngLat([mountain.longitude, mountain.latitude])
-          .addTo(mapRef.current!);
+    markersRef.current.forEach((marker) => marker.remove());
+    markersRef.current = visibleMountains.map((mountain) => {
+      const element = document.createElement("button");
+      element.type = "button";
+      element.className = "map-mountain-marker";
+      element.setAttribute("aria-label", `Buka preview ${mountain.name}`);
+      element.title = mountain.name;
+      element.addEventListener("click", () => {
+        setSelectedSlug(mountain.slug);
+        setMobilePreviewOpen(true);
+        trackEvent("marker_click", { mountain: mountain.slug });
+        trackEvent("preview_open", { mountain: mountain.slug });
       });
-
-      if (visibleMountains.length) {
-        const bounds = visibleMountains.reduce(
-          (bounds, mountain) =>
-            bounds.extend([mountain.longitude, mountain.latitude]),
-          new mapboxgl.LngLatBounds(
-            [visibleMountains[0].longitude, visibleMountains[0].latitude],
-            [visibleMountains[0].longitude, visibleMountains[0].latitude],
-          ),
-        );
-        if (island === "all" && province === "all" && difficulty === "all") {
-          allBoundsRef.current = [
-            [bounds.getWest(), bounds.getSouth()],
-            [bounds.getEast(), bounds.getNorth()],
-          ];
-        }
-        mapRef.current.fitBounds(bounds, {
-          padding: 56,
-          maxZoom: 8,
-          duration: 450,
-        });
-      }
+      return new mapboxgl.Marker({ element, anchor: "bottom" })
+        .setLngLat([mountain.longitude, mountain.latitude])
+        .addTo(mapRef.current!);
     });
+
+    if (visibleMountains.length) {
+      const bounds = visibleMountains.reduce(
+        (bounds, mountain) =>
+          bounds.extend([mountain.longitude, mountain.latitude]),
+        new mapboxgl.LngLatBounds(
+          [visibleMountains[0].longitude, visibleMountains[0].latitude],
+          [visibleMountains[0].longitude, visibleMountains[0].latitude],
+        ),
+      );
+      if (island === "all" && province === "all" && difficulty === "all") {
+        allBoundsRef.current = [
+          [bounds.getWest(), bounds.getSouth()],
+          [bounds.getEast(), bounds.getNorth()],
+        ];
+      }
+      mapRef.current.fitBounds(bounds, {
+        padding: 56,
+        maxZoom: 8,
+        duration: 450,
+      });
+    }
     if (island !== "all" || province !== "all" || difficulty !== "all")
       trackEvent("filter_region", { island, province, difficulty });
   }, [difficulty, island, mapReady, province, visibleMountains]);
