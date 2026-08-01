@@ -15,4 +15,3 @@ export type MapMountain = {
   heroImage: string;
   summary: string;
 };
-

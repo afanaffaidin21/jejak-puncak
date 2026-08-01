@@ -57,14 +57,17 @@ export function DetailActions({ className, name, slug }: DetailActionsProps) {
       <Button
         onClick={() => {
           const selection = new Set(readCompareSelection());
-          if (!selection.has(slug) && selection.size >= MAX_COMPARE_ITEMS) return;
+          if (!selection.has(slug) && selection.size >= MAX_COMPARE_ITEMS)
+            return;
           selection.add(slug);
           window.sessionStorage.setItem(
             COMPARE_STORAGE_KEY,
             JSON.stringify([...selection]),
           );
           trackEvent("mountain_added", { mountain: slug });
-          router.push(`/compare?mountains=${encodeURIComponent([...selection].join(","))}`);
+          router.push(
+            `/compare?mountains=${encodeURIComponent([...selection].join(","))}`,
+          );
         }}
         size="lg"
         variant="outline"

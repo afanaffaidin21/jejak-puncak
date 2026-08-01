@@ -296,12 +296,47 @@ export const getPopularMountains = cache(
 );
 
 export const getMapMountains = cache(async (): Promise<MapMountain[]> => {
-  const result = await getAllMountains({ pageSize: MAX_PAGE_SIZE, sort: "name-asc" });
+  const result = await getAllMountains({
+    pageSize: MAX_PAGE_SIZE,
+    sort: "name-asc",
+  });
   return result.mountains
-    .filter((mountain) => Number.isFinite(mountain.latitude) && Number.isFinite(mountain.longitude))
-    .map(({ id, slug, name, province, island, latitude, longitude, elevation, difficulty, durationDays, beginnerScore, heroImage, summary }) => ({
-      id, slug, name, province, island, latitude, longitude, elevation, difficulty, durationDays, beginnerScore, heroImage, summary,
-    }));
+    .filter(
+      (mountain) =>
+        Number.isFinite(mountain.latitude) &&
+        Number.isFinite(mountain.longitude),
+    )
+    .map(
+      ({
+        id,
+        slug,
+        name,
+        province,
+        island,
+        latitude,
+        longitude,
+        elevation,
+        difficulty,
+        durationDays,
+        beginnerScore,
+        heroImage,
+        summary,
+      }) => ({
+        id,
+        slug,
+        name,
+        province,
+        island,
+        latitude,
+        longitude,
+        elevation,
+        difficulty,
+        durationDays,
+        beginnerScore,
+        heroImage,
+        summary,
+      }),
+    );
 });
 
 export async function getFinderMountains(): Promise<Mountain[]> {
@@ -322,9 +357,9 @@ export async function getFinderMountains(): Promise<Mountain[]> {
 /** Fetch published mountains in the same order as the requested slugs. */
 export const getMountainsBySlugs = cache(
   async (slugs: string[]): Promise<Mountain[]> => {
-    const normalizedSlugs = [...new Set(slugs.map((slug) => slug.trim()))].filter(
-      Boolean,
-    );
+    const normalizedSlugs = [
+      ...new Set(slugs.map((slug) => slug.trim())),
+    ].filter(Boolean);
 
     if (!normalizedSlugs.length) {
       return [];
@@ -338,7 +373,9 @@ export const getMountainsBySlugs = cache(
       .in("slug", normalizedSlugs);
 
     if (error) {
-      throw new Error(`Gagal memuat gunung untuk perbandingan: ${error.message}`);
+      throw new Error(
+        `Gagal memuat gunung untuk perbandingan: ${error.message}`,
+      );
     }
 
     const bySlug = new Map(

@@ -11,7 +11,9 @@ import type { CompareMountain, CompareSummaryResponse } from "@/types/compare";
 const AI_RATE_LIMIT = 5;
 const AI_RATE_LIMIT_WINDOW_MS = 60_000;
 
-function toCompareMountain(mountain: Awaited<ReturnType<typeof getMountainsBySlugs>>[number]): CompareMountain {
+function toCompareMountain(
+  mountain: Awaited<ReturnType<typeof getMountainsBySlugs>>[number],
+): CompareMountain {
   return {
     id: mountain.id,
     slug: mountain.slug,
@@ -38,37 +40,63 @@ export async function POST(request: Request) {
   try {
     body = (await request.json()) as unknown;
   } catch {
-    return NextResponse.json({ error: "Request harus berupa JSON yang valid." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Request harus berupa JSON yang valid." },
+      { status: 400 },
+    );
   }
 
-  const rawSlugs = body && typeof body === "object" && !Array.isArray(body)
-    ? (body as Record<string, unknown>).slugs
-    : null;
+  const rawSlugs =
+    body && typeof body === "object" && !Array.isArray(body)
+      ? (body as Record<string, unknown>).slugs
+      : null;
   const slugs = Array.isArray(rawSlugs)
-    ? [...new Set(rawSlugs.filter((slug): slug is string => typeof slug === "string").map((slug) => slug.trim()))].filter(Boolean).slice(0, 3)
+    ? [
+        ...new Set(
+          rawSlugs
+            .filter((slug): slug is string => typeof slug === "string")
+            .map((slug) => slug.trim()),
+        ),
+      ]
+        .filter(Boolean)
+        .slice(0, 3)
     : [];
 
   if (slugs.length < 2) {
-    return NextResponse.json({ error: "Pilih 2–3 gunung untuk membuat ringkasan." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Pilih 2–3 gunung untuk membuat ringkasan." },
+      { status: 400 },
+    );
   }
 
   try {
     const mountains = await getMountainsBySlugs(slugs);
     if (mountains.length !== slugs.length) {
-      return NextResponse.json({ error: "Sebagian gunung tidak ditemukan." }, { status: 404 });
+      return NextResponse.json(
+        { error: "Sebagian gunung tidak ditemukan." },
+        { status: 404 },
+      );
     }
 
-    const rateLimit = consumeRateLimit(`compare-ai:${getRequestRateLimitKey(request)}`, {
-      limit: AI_RATE_LIMIT,
-      windowMs: AI_RATE_LIMIT_WINDOW_MS,
-    });
+    const rateLimit = consumeRateLimit(
+      `compare-ai:${getRequestRateLimitKey(request)}`,
+      {
+        limit: AI_RATE_LIMIT,
+        windowMs: AI_RATE_LIMIT_WINDOW_MS,
+      },
+    );
     const configured = isFinderAiConfigured();
-    const summary = rateLimit.allowed && configured
-      ? await createCompareSummary(mountains.map(toCompareMountain))
-      : null;
+    const summary =
+      rateLimit.allowed && configured
+        ? await createCompareSummary(mountains.map(toCompareMountain))
+        : null;
     const responseBody: CompareSummaryResponse = {
       summary,
-      aiStatus: summary ? "ready" : configured && rateLimit.allowed ? "fallback" : "unavailable",
+      aiStatus: summary
+        ? "ready"
+        : configured && rateLimit.allowed
+          ? "fallback"
+          : "unavailable",
     };
     const response = NextResponse.json(responseBody);
     response.headers.set("X-RateLimit-Limit", String(rateLimit.limit));
@@ -76,7 +104,9 @@ export async function POST(request: Request) {
     response.headers.set("X-RateLimit-Reset", String(rateLimit.resetAt));
     return response;
   } catch {
-    return NextResponse.json({ error: "Ringkasan perbandingan belum dapat diproses." }, { status: 503 });
+    return NextResponse.json(
+      { error: "Ringkasan perbandingan belum dapat diproses." },
+      { status: 503 },
+    );
   }
 }
-

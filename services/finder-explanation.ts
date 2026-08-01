@@ -3,10 +3,7 @@ import type {
   FinderAnswers,
   FinderRecommendation,
 } from "@/types/finder";
-import type {
-  CompareMountain,
-  CompareSummary,
-} from "@/types/compare";
+import type { CompareMountain, CompareSummary } from "@/types/compare";
 
 export const FINDER_AI_SYSTEM_PROMPT =
   "Anda adalah asisten Jejak Puncak. Jelaskan hasil rekomendasi berdasarkan data yang diberikan. Jangan mengubah skor, jangan menambahkan fakta baru, dan jangan memberikan jaminan keselamatan.";
@@ -38,7 +35,12 @@ const COMPARE_OUTPUT_SCHEMA = {
   additionalProperties: false,
   properties: {
     summary: { type: "string" },
-    differences: { type: "array", items: { type: "string" }, minItems: 1, maxItems: 5 },
+    differences: {
+      type: "array",
+      items: { type: "string" },
+      minItems: 1,
+      maxItems: 5,
+    },
     strengths: {
       type: "array",
       minItems: 2,
@@ -49,7 +51,12 @@ const COMPARE_OUTPUT_SCHEMA = {
         properties: {
           mountainId: { type: "string" },
           mountainName: { type: "string" },
-          advantages: { type: "array", items: { type: "string" }, minItems: 1, maxItems: 3 },
+          advantages: {
+            type: "array",
+            items: { type: "string" },
+            minItems: 1,
+            maxItems: 3,
+          },
         },
         required: ["mountainId", "mountainName", "advantages"],
       },
@@ -64,7 +71,12 @@ const COMPARE_OUTPUT_SCHEMA = {
         properties: {
           mountainId: { type: "string" },
           mountainName: { type: "string" },
-          tradeoffs: { type: "array", items: { type: "string" }, minItems: 1, maxItems: 3 },
+          tradeoffs: {
+            type: "array",
+            items: { type: "string" },
+            minItems: 1,
+            maxItems: 3,
+          },
         },
         required: ["mountainId", "mountainName", "tradeoffs"],
       },
@@ -242,17 +254,56 @@ export function parseCompareSummary(value: unknown): CompareSummary | null {
   if (!isStringRecord(value)) return null;
   const strengths = value.strengths;
   const tradeOffs = value.tradeOffs;
-  if (!isNonEmptyString(value.summary) || !isNonEmptyStringArray(value.differences) || !isNonEmptyString(value.cta) || !Array.isArray(strengths) || !Array.isArray(tradeOffs)) return null;
+  if (
+    !isNonEmptyString(value.summary) ||
+    !isNonEmptyStringArray(value.differences) ||
+    !isNonEmptyString(value.cta) ||
+    !Array.isArray(strengths) ||
+    !Array.isArray(tradeOffs)
+  )
+    return null;
 
-  const parsedStrengths: CompareSummary["strengths"] = strengths.flatMap((item) => {
-    if (!isStringRecord(item) || !isNonEmptyString(item.mountainId) || !isNonEmptyString(item.mountainName) || !isNonEmptyStringArray(item.advantages)) return [];
-    return [{ mountainId: item.mountainId.trim(), mountainName: item.mountainName.trim(), advantages: item.advantages.map((text) => text.trim()) }];
-  });
-  const parsedTradeOffs: CompareSummary["tradeOffs"] = tradeOffs.flatMap((item) => {
-    if (!isStringRecord(item) || !isNonEmptyString(item.mountainId) || !isNonEmptyString(item.mountainName) || !isNonEmptyStringArray(item.tradeoffs)) return [];
-    return [{ mountainId: item.mountainId.trim(), mountainName: item.mountainName.trim(), tradeoffs: item.tradeoffs.map((text) => text.trim()) }];
-  });
-  if (parsedStrengths.length !== strengths.length || parsedTradeOffs.length !== tradeOffs.length) return null;
+  const parsedStrengths: CompareSummary["strengths"] = strengths.flatMap(
+    (item) => {
+      if (
+        !isStringRecord(item) ||
+        !isNonEmptyString(item.mountainId) ||
+        !isNonEmptyString(item.mountainName) ||
+        !isNonEmptyStringArray(item.advantages)
+      )
+        return [];
+      return [
+        {
+          mountainId: item.mountainId.trim(),
+          mountainName: item.mountainName.trim(),
+          advantages: item.advantages.map((text) => text.trim()),
+        },
+      ];
+    },
+  );
+  const parsedTradeOffs: CompareSummary["tradeOffs"] = tradeOffs.flatMap(
+    (item) => {
+      if (
+        !isStringRecord(item) ||
+        !isNonEmptyString(item.mountainId) ||
+        !isNonEmptyString(item.mountainName) ||
+        !isNonEmptyStringArray(item.tradeoffs)
+      )
+        return [];
+      return [
+        {
+          mountainId: item.mountainId.trim(),
+          mountainName: item.mountainName.trim(),
+          tradeoffs: item.tradeoffs.map((text) => text.trim()),
+        },
+      ];
+    },
+  );
+  if (
+    parsedStrengths.length !== strengths.length ||
+    parsedTradeOffs.length !== tradeOffs.length
+  )
+    return null;
 
   return {
     summary: value.summary.trim(),
@@ -368,13 +419,23 @@ async function requestCompareOpenAi(
 ) {
   const response = await fetcher("https://api.openai.com/v1/responses", {
     method: "POST",
-    headers: { Authorization: `Bearer ${config.apiKey}`, "Content-Type": "application/json" },
+    headers: {
+      Authorization: `Bearer ${config.apiKey}`,
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({
       model: config.model,
       instructions: FINDER_AI_SYSTEM_PROMPT,
       input: prompt,
       max_output_tokens: 900,
-      text: { format: { type: "json_schema", name: "mountain_comparison_summary", strict: true, schema: COMPARE_OUTPUT_SCHEMA } },
+      text: {
+        format: {
+          type: "json_schema",
+          name: "mountain_comparison_summary",
+          strict: true,
+          schema: COMPARE_OUTPUT_SCHEMA,
+        },
+      },
     }),
     signal: AbortSignal.timeout(10_000),
   });
@@ -389,8 +450,17 @@ async function requestCompareAnthropic(
 ) {
   const response = await fetcher("https://api.anthropic.com/v1/messages", {
     method: "POST",
-    headers: { "anthropic-version": "2023-06-01", "Content-Type": "application/json", "x-api-key": config.apiKey },
-    body: JSON.stringify({ model: config.model, max_tokens: 900, system: FINDER_AI_SYSTEM_PROMPT, messages: [{ role: "user", content: prompt }] }),
+    headers: {
+      "anthropic-version": "2023-06-01",
+      "Content-Type": "application/json",
+      "x-api-key": config.apiKey,
+    },
+    body: JSON.stringify({
+      model: config.model,
+      max_tokens: 900,
+      system: FINDER_AI_SYSTEM_PROMPT,
+      messages: [{ role: "user", content: prompt }],
+    }),
     signal: AbortSignal.timeout(10_000),
   });
   if (!response.ok) return null;
@@ -426,15 +496,17 @@ export async function createCompareSummary(
   mountains: readonly CompareMountain[],
   options: ExplanationOptions = {},
 ): Promise<CompareSummary | null> {
-  const config = options.config === undefined ? getProviderConfig() : options.config;
+  const config =
+    options.config === undefined ? getProviderConfig() : options.config;
   if (!config || mountains.length < 2 || mountains.length > 3) return null;
 
   try {
     const prompt = buildComparePrompt(mountains);
     const fetcher = options.fetcher ?? fetch;
-    const text = config.provider === "openai"
-      ? await requestCompareOpenAi(config, prompt, fetcher)
-      : await requestCompareAnthropic(config, prompt, fetcher);
+    const text =
+      config.provider === "openai"
+        ? await requestCompareOpenAi(config, prompt, fetcher)
+        : await requestCompareAnthropic(config, prompt, fetcher);
     return text ? parseCompareSummary(parseJsonText(text)) : null;
   } catch {
     return null;

@@ -59,7 +59,9 @@ export function MountainCardActions({ name, slug }: MountainCardActionsProps) {
       JSON.stringify([...selection]),
     );
     if (selection.has(slug)) {
-      router.push(`/compare?mountains=${encodeURIComponent([...selection].join(","))}`);
+      router.push(
+        `/compare?mountains=${encodeURIComponent([...selection].join(","))}`,
+      );
     }
     trackEvent("compare_toggle", {
       active: selection.has(slug),
