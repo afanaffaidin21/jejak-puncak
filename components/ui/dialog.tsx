@@ -63,7 +63,7 @@ function DialogContent({
           <DialogPrimitive.Close
             render={
               <Button
-                aria-label="Tutup galeri"
+                aria-label="Tutup dialog"
                 className="absolute top-sm right-sm z-10 bg-background/85"
                 size="icon-sm"
                 variant="ghost"

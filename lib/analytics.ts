@@ -29,6 +29,7 @@ export type AnalyticsEventName =
   | "ai_summary_view"
   | "detail_click"
   | "wishlist_click"
+  | "mountain_marked_completed"
   | "finder_click"
   | "map_view"
   | "marker_click"

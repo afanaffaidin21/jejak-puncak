@@ -27,4 +27,22 @@ test("rejects client user IDs and invalid mountain statuses", () => {
     }).success,
     false,
   );
+  assert.equal(
+    mountainStatusMutationSchema.safeParse({
+      mountainId,
+      status: "completed",
+      userId: "attacker",
+    }).success,
+    false,
+  );
+});
+
+test("accepts the completed transition without a client user ID", () => {
+  assert.deepEqual(
+    mountainStatusMutationSchema.parse({
+      mountainId,
+      status: "completed",
+    }),
+    { mountainId, status: "completed" },
+  );
 });

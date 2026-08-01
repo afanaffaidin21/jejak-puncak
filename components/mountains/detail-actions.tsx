@@ -4,6 +4,7 @@ import { Bookmark, GitCompareArrows, Route } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Button, buttonVariants } from "@/components/ui/button";
+import { MarkCompletedButton } from "@/components/wishlist/mark-completed-button";
 import { WishlistButton } from "@/components/wishlist/wishlist-button";
 import { trackEvent } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
@@ -55,6 +56,7 @@ export function DetailActions({
         size="lg"
         slug={slug}
       />
+      <MarkCompletedButton mountainId={id} name={name} size="lg" slug={slug} />
       <Button
         onClick={() => {
           const selection = new Set(readCompareSelection());

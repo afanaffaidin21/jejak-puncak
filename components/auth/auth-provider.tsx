@@ -13,7 +13,9 @@ export type AuthUserSummary = {
 };
 
 export type AuthContextValue = {
+  completedIds: ReadonlySet<string>;
   isLoading: boolean;
+  setCompleted: (mountainId: string, completed: boolean) => void;
   setWishlisted: (mountainId: string, wishlisted: boolean) => void;
   user: AuthUserSummary | null;
   wishlistIds: ReadonlySet<string>;
@@ -49,6 +51,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [wishlistIds, setWishlistIds] = useState<ReadonlySet<string>>(
     () => new Set(),
   );
+  const [completedIds, setCompletedIds] = useState<ReadonlySet<string>>(
+    () => new Set(),
+  );
   const [wishlistReady, setWishlistReady] = useState(false);
   const authVersionRef = useRef(0);
 
@@ -56,19 +61,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let isActive = true;
     const supabase = createClient();
 
-    const loadWishlist = async (version: number) => {
+    const loadUserMountains = async (version: number) => {
       setWishlistReady(false);
       const { data } = await supabase
         .from("user_mountains")
-        .select("mountain_id")
-        .eq("status", "wishlist");
+        .select("mountain_id,status");
 
       if (!isActive || version !== authVersionRef.current) return;
 
       setWishlistIds(
         new Set(
           (data ?? []).flatMap((item) =>
-            typeof item.mountain_id === "string" ? [item.mountain_id] : [],
+            item.status === "wishlist" && typeof item.mountain_id === "string"
+              ? [item.mountain_id]
+              : [],
+          ),
+        ),
+      );
+      setCompletedIds(
+        new Set(
+          (data ?? []).flatMap((item) =>
+            item.status === "completed" && typeof item.mountain_id === "string"
+              ? [item.mountain_id]
+              : [],
           ),
         ),
       );
@@ -79,11 +94,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const version = ++authVersionRef.current;
       setUser(nextUser ? toUserSummary(nextUser) : null);
       setWishlistIds(new Set());
+      setCompletedIds(new Set());
       setWishlistReady(!nextUser);
       setIsLoading(false);
 
       if (nextUser) {
-        window.setTimeout(() => void loadWishlist(version), 0);
+        window.setTimeout(() => void loadUserMountains(version), 0);
       }
     };
 
@@ -109,7 +125,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const value = useMemo<AuthContextValue>(
     () => ({
+      completedIds,
       isLoading,
+      setCompleted: (mountainId, completed) => {
+        setCompletedIds((current) => {
+          const next = new Set(current);
+          if (completed) next.add(mountainId);
+          else next.delete(mountainId);
+          return next;
+        });
+      },
       setWishlisted: (mountainId, wishlisted) => {
         setWishlistIds((current) => {
           const next = new Set(current);
@@ -122,7 +147,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       wishlistIds,
       wishlistReady,
     }),
-    [isLoading, user, wishlistIds, wishlistReady],
+    [completedIds, isLoading, user, wishlistIds, wishlistReady],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

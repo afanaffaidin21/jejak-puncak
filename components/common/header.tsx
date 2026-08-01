@@ -108,7 +108,7 @@ function AccountControl({
             aria-label={compact ? `Menu akun ${user.displayName}` : undefined}
             className={cn(accountButtonClassName, compact && "size-touch px-0")}
             isLoading={isLoggingOut}
-            loadingLabel="Keluarâ€¦"
+            loadingLabel="Keluar…"
             size={compact ? "icon" : "default"}
             variant="outline"
           />
