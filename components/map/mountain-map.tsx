@@ -314,7 +314,7 @@ export function MountainMap({ mountains }: MountainMapProps) {
           <div className="relative h-[28rem] overflow-hidden rounded-xl border border-divider bg-accent lg:h-[36rem]">
             <div
               aria-label="Peta gunung Indonesia"
-              className="absolute inset-0"
+              className="h-full w-full"
               ref={mapContainerRef}
               role="application"
             />
