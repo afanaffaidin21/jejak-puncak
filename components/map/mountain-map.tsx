@@ -144,9 +144,17 @@ export function MountainMap({ mountains }: MountainMapProps) {
   useEffect(() => {
     if (!token || !mapContainerRef.current || mapRef.current) return;
     let disposed = false;
-    void import("mapbox-gl")
-      .then(({ default: mapboxgl }) => {
+    void Promise.all([
+      // Use the CSP bundle so the worker is bundled by Next/Turbopack instead
+      // of relying on a blob worker that can be blocked by browser policy.
+      // @ts-expect-error mapbox-gl exposes this runtime bundle without a TS entry.
+      import("mapbox-gl/dist/mapbox-gl-csp.js"),
+      // @ts-expect-error mapbox-gl exposes this worker bundle without a TS entry.
+      import("mapbox-gl/dist/mapbox-gl-csp-worker.js"),
+    ])
+      .then(([{ default: mapboxgl }, { default: MapboxWorker }]) => {
         if (disposed || !mapContainerRef.current) return;
+        mapboxgl.workerClass = MapboxWorker;
         mapboxgl.accessToken = token;
         const map = new mapboxgl.Map({
           accessToken: token,
@@ -156,16 +164,16 @@ export function MountainMap({ mountains }: MountainMapProps) {
           zoom: DEFAULT_ZOOM,
           attributionControl: true,
         });
-        map.addControl(
-          new mapboxgl.NavigationControl({ showCompass: true }),
-          "top-right",
-        );
-        map.on("error", (event) => {
+        map.on("error", (event: { error?: unknown }) => {
           if (process.env.NODE_ENV !== "production") {
             console.error("Mapbox error:", event.error ?? event);
           }
           setMapError(true);
         });
+        map.addControl(
+          new mapboxgl.NavigationControl({ showCompass: true }),
+          "top-right",
+        );
         map.on("load", () => {
           map.resize();
           requestAnimationFrame(() => map.resize());
