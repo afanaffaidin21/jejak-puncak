@@ -44,7 +44,6 @@ function toUserSummary(user: User): AuthUserSummary {
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [supabase] = useState(() => createClient());
   const [user, setUser] = useState<AuthUserSummary | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [wishlistIds, setWishlistIds] = useState<ReadonlySet<string>>(
@@ -55,6 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let isActive = true;
+    const supabase = createClient();
 
     const loadWishlist = async (version: number) => {
       setWishlistReady(false);
@@ -105,7 +105,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isActive = false;
       data.subscription.unsubscribe();
     };
-  }, [supabase]);
+  }, []);
 
   const value = useMemo<AuthContextValue>(
     () => ({
