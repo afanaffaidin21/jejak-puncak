@@ -206,10 +206,12 @@ export function MountainMap({ mountains }: MountainMapProps) {
             [visibleMountains[0].longitude, visibleMountains[0].latitude],
           ),
         );
-        allBoundsRef.current = [
-          [bounds.getWest(), bounds.getSouth()],
-          [bounds.getEast(), bounds.getNorth()],
-        ];
+        if (island === "all" && province === "all" && difficulty === "all") {
+          allBoundsRef.current = [
+            [bounds.getWest(), bounds.getSouth()],
+            [bounds.getEast(), bounds.getNorth()],
+          ];
+        }
         mapRef.current.fitBounds(bounds, {
           padding: 56,
           maxZoom: 8,
