@@ -56,40 +56,36 @@ export function ProfilePage({ profile }: { profile: ProfileData }) {
     >
       <TabsList
         aria-label="Bagian profil"
-        className="grid h-auto w-full grid-cols-4 overflow-x-auto lg:sticky lg:top-[calc(var(--spacing-mobile-nav)+var(--spacing-sm))] lg:flex lg:flex-col lg:items-stretch lg:gap-2xs lg:bg-surface-elevated lg:p-xs lg:shadow-surface"
+        className="grid w-full grid-cols-4 group-data-horizontal/tabs:h-auto lg:sticky lg:top-[calc(var(--spacing-mobile-nav)+var(--spacing-sm))] lg:flex lg:flex-col lg:items-stretch lg:gap-2xs lg:bg-surface-elevated lg:p-xs lg:shadow-surface"
         variant="default"
       >
         <TabsTrigger
-          className="min-h-touch px-2xs lg:justify-start lg:px-xs"
+          className="min-h-touch min-w-0 touch-manipulation px-3xs text-caption sm:px-xs sm:text-body-sm lg:justify-start"
           value="personal"
         >
-          <UserRound aria-hidden="true" />
-          <span className="hidden sm:inline">Informasi</span>
-          <span className="sm:hidden">Profil</span>
+          <UserRound aria-hidden="true" className="hidden sm:block" />
+          <span>Informasi</span>
         </TabsTrigger>
         <TabsTrigger
-          className="min-h-touch px-2xs lg:justify-start lg:px-xs"
+          className="min-h-touch min-w-0 touch-manipulation px-3xs text-caption sm:px-xs sm:text-body-sm lg:justify-start"
           value="preferences"
         >
-          <SlidersHorizontal aria-hidden="true" />
-          <span className="hidden sm:inline">Preferensi</span>
-          <span className="text-caption sm:hidden">Tujuan</span>
+          <SlidersHorizontal aria-hidden="true" className="hidden sm:block" />
+          <span>Preferensi</span>
         </TabsTrigger>
         <TabsTrigger
-          className="min-h-touch px-2xs lg:justify-start lg:px-xs"
+          className="min-h-touch min-w-0 touch-manipulation px-3xs text-caption sm:px-xs sm:text-body-sm lg:justify-start"
           value="security"
         >
-          <ShieldCheck aria-hidden="true" />
-          <span className="hidden sm:inline">Keamanan</span>
-          <span className="text-caption sm:hidden">Aman</span>
+          <ShieldCheck aria-hidden="true" className="hidden sm:block" />
+          <span>Keamanan</span>
         </TabsTrigger>
         <TabsTrigger
-          className="min-h-touch px-2xs lg:justify-start lg:px-xs"
+          className="min-h-touch min-w-0 touch-manipulation px-3xs text-caption sm:px-xs sm:text-body-sm lg:justify-start"
           value="account"
         >
-          <Trash2 aria-hidden="true" />
-          <span className="hidden sm:inline">Akun</span>
-          <span className="text-caption sm:hidden">Akun</span>
+          <Trash2 aria-hidden="true" className="hidden sm:block" />
+          <span>Akun</span>
         </TabsTrigger>
       </TabsList>
 
