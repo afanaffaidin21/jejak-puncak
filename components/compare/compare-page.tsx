@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, GitCompareArrows, Heart, X } from "lucide-react";
+import { GitCompareArrows, Heart, X } from "lucide-react";
 
 import { Container } from "@/components/common/container";
 import {
@@ -262,7 +262,12 @@ function CompareAiSummary({ summary, isLoading }: { summary: CompareSummary | nu
 export function ComparePage({ mountains }: ComparePageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [selectedSlugs, setSelectedSlugs] = useState(() => readSlugs(searchParams.get("mountains")).slice(0, MAX_COMPARE_ITEMS));
+  const selectedSlugs = useMemo(
+    () => readSlugs(searchParams.get("mountains"))
+      .filter((slug) => mountains.some((mountain) => mountain.slug === slug))
+      .slice(0, MAX_COMPARE_ITEMS),
+    [mountains, searchParams],
+  );
   const [aiSummary, setAiSummary] = useState<CompareSummary | null>(null);
   const [isAiLoading, setIsAiLoading] = useState(false);
   const completedKey = useRef("");
@@ -270,11 +275,6 @@ export function ComparePage({ mountains }: ComparePageProps) {
     const mountain = mountains.find((item) => item.slug === slug);
     return mountain ? [mountain] : [];
   }), [mountains, selectedSlugs]);
-
-  useEffect(() => {
-    const next = readSlugs(searchParams.get("mountains")).filter((slug) => mountains.some((mountain) => mountain.slug === slug)).slice(0, MAX_COMPARE_ITEMS);
-    setSelectedSlugs(next);
-  }, [mountains, searchParams]);
 
   useEffect(() => {
     trackEvent("compare_view", { selected: selectedMountains.length });
@@ -292,12 +292,12 @@ export function ComparePage({ mountains }: ComparePageProps) {
 
   useEffect(() => {
     if (selectedMountains.length < 2) {
-      setAiSummary(null);
-      setIsAiLoading(false);
       return;
     }
     const controller = new AbortController();
-    setIsAiLoading(true);
+    queueMicrotask(() => {
+      if (!controller.signal.aborted) setIsAiLoading(true);
+    });
     fetch("/api/compare/summary", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -318,7 +318,6 @@ export function ComparePage({ mountains }: ComparePageProps) {
 
   const updateSelection = (next: string[]) => {
     const normalized = [...new Set(next)].slice(0, MAX_COMPARE_ITEMS);
-    setSelectedSlugs(normalized);
     const query = normalized.join(",");
     router.replace(query ? `/compare?mountains=${encodeURIComponent(query)}` : "/compare", { scroll: false });
   };
