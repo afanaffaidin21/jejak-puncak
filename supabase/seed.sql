@@ -65,7 +65,7 @@ values
     true,
     true,
     100,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://upload.wikimedia.org/wikipedia/commons/0/0d/Rinjani_Mountain_Segara_Anak_Lake.jpg',
     'published'
   ),
   (
@@ -88,7 +88,7 @@ values
     true,
     true,
     92,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://upload.wikimedia.org/wikipedia/commons/3/31/SummitOfMountKerinci.jpg',
     'published'
   ),
   (
@@ -111,7 +111,7 @@ values
     true,
     false,
     94,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://upload.wikimedia.org/wikipedia/commons/1/1a/Great_nature_green_at_Merbabu_Mount_-_2.jpg',
     'published'
   ),
   (
@@ -157,7 +157,7 @@ values
     true,
     true,
     86,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://upload.wikimedia.org/wikipedia/commons/b/b3/Dead_Forest_of_Papandayan_Volcano.jpg',
     'published'
   ),
   (
@@ -249,7 +249,7 @@ values
     false,
     false,
     83,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://upload.wikimedia.org/wikipedia/commons/d/d2/Kelimutu_crater_lakes.jpg',
     'published'
   ),
   (
@@ -272,7 +272,7 @@ values
     true,
     true,
     79,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://upload.wikimedia.org/wikipedia/commons/1/1d/Panorama_Mount_Tambora_caldera.jpg',
     'published'
   ),
   (
