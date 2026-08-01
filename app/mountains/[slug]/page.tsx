@@ -7,17 +7,13 @@ import { DetailHero } from "@/components/mountains/detail-hero";
 import { MobileDetailCta } from "@/components/mountains/mobile-detail-cta";
 import { MountainViewTracker } from "@/components/mountains/mountain-view-tracker";
 import { getMountainFaqs } from "@/lib/mountains";
-import { getAllMountains, getMountainBySlug } from "@/services/mountains";
+import { getMountainBySlug } from "@/services/mountains";
 
 type MountainDetailPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export async function generateStaticParams() {
-  const result = await getAllMountains({ pageSize: 48 }).catch(() => null);
-
-  return result?.mountains.map((mountain) => ({ slug: mountain.slug })) ?? [];
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
