@@ -13,7 +13,20 @@ export type AnalyticsEventName =
   | "finder_completed"
   | "recommendation_clicked"
   | "wishlist_clicked"
-  | "restart_finder";
+  | "restart_finder"
+  | "compare_view"
+  | "mountain_added"
+  | "mountain_removed"
+  | "compare_completed"
+  | "ai_summary_view"
+  | "detail_click"
+  | "wishlist_click"
+  | "finder_click"
+  | "map_view"
+  | "marker_click"
+  | "preview_open"
+  | "filter_region"
+  | "reset_map";
 
 export function trackEvent(
   name: AnalyticsEventName,

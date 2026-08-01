@@ -309,6 +309,39 @@ export async function getFinderMountains(): Promise<Mountain[]> {
   return ((data ?? []) as MountainRow[]).map(toMountain);
 }
 
+/** Fetch published mountains in the same order as the requested slugs. */
+export const getMountainsBySlugs = cache(
+  async (slugs: string[]): Promise<Mountain[]> => {
+    const normalizedSlugs = [...new Set(slugs.map((slug) => slug.trim()))].filter(
+      Boolean,
+    );
+
+    if (!normalizedSlugs.length) {
+      return [];
+    }
+
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("mountains")
+      .select(MOUNTAIN_COLUMNS)
+      .eq("status", "published")
+      .in("slug", normalizedSlugs);
+
+    if (error) {
+      throw new Error(`Gagal memuat gunung untuk perbandingan: ${error.message}`);
+    }
+
+    const bySlug = new Map(
+      ((data ?? []) as MountainRow[]).map((row) => [row.slug, toMountain(row)]),
+    );
+
+    return normalizedSlugs.flatMap((slug) => {
+      const mountain = bySlug.get(slug);
+      return mountain ? [mountain] : [];
+    });
+  },
+);
+
 export const getSimilarMountains = cache(
   async (
     mountainId: string,

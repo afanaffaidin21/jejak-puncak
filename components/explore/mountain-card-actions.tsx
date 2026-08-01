@@ -58,8 +58,14 @@ export function MountainCardActions({ name, slug }: MountainCardActionsProps) {
       COMPARE_STORAGE_KEY,
       JSON.stringify([...selection]),
     );
+    if (selection.has(slug)) {
+      router.push(`/compare?mountains=${encodeURIComponent([...selection].join(","))}`);
+    }
     trackEvent("compare_toggle", {
       active: selection.has(slug),
+      mountain: slug,
+    });
+    trackEvent(selection.has(slug) ? "mountain_added" : "mountain_removed", {
       mountain: slug,
     });
   };
