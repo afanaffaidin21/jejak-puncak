@@ -60,8 +60,8 @@ editorial discovery attributes, not measurements issued by the cited
 authorities. They are intentionally conservative and should be reviewed with
 real product research before launch.
 
-All image paths are local placeholders. The hero, trail, and camp illustrations
-are intentionally generic and must not be interpreted as a depiction of a
-specific mountain. Replace them with licensed, mountain-specific photography
-and record the photographer, licence, source URL, and alt text before
-production launch.
+Hero image URLs for 11 mountains have been updated with location-verified
+Unsplash photography. Detailed photographer credits, photo IDs, and direct URLs
+are documented in `supabase/PHOTO_SOURCES.md`. Gunung Tambora remains on the
+placeholder illustration until a location-verified photo is confirmed.
+

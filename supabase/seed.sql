@@ -42,7 +42,7 @@ values
     true,
     true,
     98,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80',
     'published'
   ),
   (
@@ -65,7 +65,7 @@ values
     true,
     true,
     100,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://images.unsplash.com/photo-1570784400755-d4d5e0327f3d?auto=format&fit=crop&w=1200&q=80',
     'published'
   ),
   (
@@ -88,7 +88,7 @@ values
     true,
     true,
     92,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://images.unsplash.com/photo-1609825595781-80d507b993c8?auto=format&fit=crop&w=1200&q=80',
     'published'
   ),
   (
@@ -111,7 +111,7 @@ values
     true,
     false,
     94,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://images.unsplash.com/photo-1627448839088-219500c5c36f?auto=format&fit=crop&w=1200&q=80',
     'published'
   ),
   (
@@ -134,7 +134,7 @@ values
     true,
     true,
     91,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=1200&q=80',
     'published'
   ),
   (
@@ -157,7 +157,7 @@ values
     true,
     true,
     86,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://images.unsplash.com/photo-1626248316271-9568910b5030?auto=format&fit=crop&w=1200&q=80',
     'published'
   ),
   (
@@ -180,7 +180,7 @@ values
     false,
     false,
     99,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=1200&q=80',
     'published'
   ),
   (
@@ -203,7 +203,7 @@ values
     false,
     false,
     95,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80',
     'published'
   ),
   (
@@ -226,7 +226,7 @@ values
     false,
     false,
     97,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80',
     'published'
   ),
   (
@@ -249,7 +249,7 @@ values
     false,
     false,
     83,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&w=1200&q=80',
     'published'
   ),
   (
@@ -295,7 +295,7 @@ values
     true,
     false,
     90,
-    '/images/mountains/placeholder-mountain.svg',
+    'https://images.unsplash.com/photo-1605649487212-47bdab064df7?auto=format&fit=crop&w=1200&q=80',
     'published'
   )
 on conflict (slug) do update
