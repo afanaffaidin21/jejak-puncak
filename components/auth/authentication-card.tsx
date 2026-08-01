@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import { LoginForm } from "@/components/auth/login-form";
 import { RegisterForm } from "@/components/auth/register-form";
+import { GoogleLoginButton } from "@/components/auth/google-login-button";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,16 +15,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FieldSeparator } from "@/components/ui/field";
 import { trackEvent } from "@/lib/analytics";
 
 type AuthView = "forgot" | "login" | "register";
 
 type AuthenticationCardProps = {
+  initialError?: string;
   initialView: AuthView;
   nextPath: string;
 };
 
 export function AuthenticationCard({
+  initialError,
   initialView,
   nextPath,
 }: AuthenticationCardProps) {
@@ -88,6 +92,10 @@ export function AuthenticationCard({
             <RegisterForm nextPath={nextPath} />
           </TabsContent>
         </Tabs>
+        <div className="mt-md flex flex-col gap-md">
+          <FieldSeparator>atau</FieldSeparator>
+          <GoogleLoginButton initialError={initialError} nextPath={nextPath} />
+        </div>
       </CardContent>
     </Card>
   );

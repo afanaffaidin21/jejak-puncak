@@ -11,11 +11,11 @@ export const metadata: Metadata = {
 };
 
 type LoginPageProps = {
-  searchParams: Promise<{ mode?: string; next?: string }>;
+  searchParams: Promise<{ error?: string; mode?: string; next?: string }>;
 };
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
-  const { mode, next } = await searchParams;
+  const { error, mode, next } = await searchParams;
   const initialView = mode === "register" || mode === "forgot" ? mode : "login";
 
   return (
@@ -23,6 +23,11 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       <Container className="flex justify-center">
         <h1 className="sr-only">Login Jejak Puncak</h1>
         <AuthenticationCard
+          initialError={
+            error === "oauth_callback"
+              ? "Login Google belum berhasil atau dibatalkan. Silakan coba lagi."
+              : undefined
+          }
           initialView={initialView}
           nextPath={getSafeRedirectPath(next)}
         />

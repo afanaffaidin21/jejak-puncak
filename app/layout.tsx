@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import { AuthEventTracker } from "@/components/auth/auth-event-tracker";
 import { BottomNavigation } from "@/components/common/bottom-navigation";
 import { Footer } from "@/components/common/footer";
 import { Header } from "@/components/common/header";
@@ -53,6 +54,7 @@ export default function RootLayout({
           <Footer />
         </div>
         <BottomNavigation />
+        <AuthEventTracker />
       </body>
     </html>
   );

@@ -1,5 +1,7 @@
 const DEFAULT_AUTH_REDIRECT = "/explore";
 
+export type AuthAnalyticsEvent = "google_failed" | "google_success";
+
 export function getSafeRedirectPath(
   value: string | null | undefined,
   fallback = DEFAULT_AUTH_REDIRECT,
@@ -19,4 +21,12 @@ export function getSafeRedirectPath(
   } catch {
     return fallback;
   }
+}
+
+export function addAuthAnalyticsEvent(path: string, event: AuthAnalyticsEvent) {
+  const safePath = getSafeRedirectPath(path);
+  const url = new URL(safePath, "https://jejak-puncak.local");
+  url.searchParams.set("_auth_event", event);
+
+  return `${url.pathname}${url.search}${url.hash}`;
 }
