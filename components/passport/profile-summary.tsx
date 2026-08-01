@@ -1,8 +1,11 @@
-import { CalendarDays, MountainSnow } from "lucide-react";
+import { CalendarDays, MountainSnow, Settings } from "lucide-react";
+import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
+import { buttonVariants } from "@/components/ui/button";
 import { formatDate, formatNumber } from "@/lib/format";
+import { cn } from "@/lib/utils";
 import type { PassportProfile } from "@/types/passport";
 
 function getInitials(displayName: string) {
@@ -55,6 +58,16 @@ export function ProfileSummary({
             </span>
           </div>
         </div>
+        <Link
+          className={cn(
+            buttonVariants({ variant: "outline" }),
+            "w-full sm:w-auto",
+          )}
+          href="/profile"
+        >
+          <Settings aria-hidden="true" />
+          Kelola profile
+        </Link>
       </CardContent>
     </Card>
   );

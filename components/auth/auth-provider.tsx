@@ -17,6 +17,9 @@ export type AuthContextValue = {
   isLoading: boolean;
   setCompleted: (mountainId: string, completed: boolean) => void;
   setWishlisted: (mountainId: string, wishlisted: boolean) => void;
+  updateUserSummary: (
+    updates: Partial<Pick<AuthUserSummary, "avatarUrl" | "displayName">>,
+  ) => void;
   user: AuthUserSummary | null;
   wishlistIds: ReadonlySet<string>;
   wishlistReady: boolean;
@@ -142,6 +145,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           else next.delete(mountainId);
           return next;
         });
+      },
+      updateUserSummary: (updates) => {
+        setUser((current) => (current ? { ...current, ...updates } : current));
       },
       user,
       wishlistIds,

@@ -41,7 +41,13 @@ export type AnalyticsEventName =
   | "wishlist_tab_view"
   | "mountain_detail_click"
   | "wishlist_remove"
-  | "progress_map_interaction";
+  | "progress_map_interaction"
+  | "profile_view"
+  | "profile_updated"
+  | "preference_updated"
+  | "password_change_started"
+  | "logout_click"
+  | "delete_account_started";
 
 export function trackEvent(
   name: AnalyticsEventName,

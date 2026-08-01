@@ -8,5 +8,9 @@ export function useUser() {
   const context = useContext(AuthContext);
   if (!context) throw new Error("useUser must be used inside AuthProvider.");
 
-  return { isLoading: context.isLoading, user: context.user };
+  return {
+    isLoading: context.isLoading,
+    updateUserSummary: context.updateUserSummary,
+    user: context.user,
+  };
 }
