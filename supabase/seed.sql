@@ -65,7 +65,7 @@ values
     true,
     true,
     100,
-    'https://images.unsplash.com/photo-1570784400755-d4d5e0327f3d?auto=format&fit=crop&w=1200&q=80',
+    '/images/mountains/placeholder-mountain.svg',
     'published'
   ),
   (
@@ -88,7 +88,7 @@ values
     true,
     true,
     92,
-    'https://images.unsplash.com/photo-1609825595781-80d507b993c8?auto=format&fit=crop&w=1200&q=80',
+    '/images/mountains/placeholder-mountain.svg',
     'published'
   ),
   (
@@ -111,7 +111,7 @@ values
     true,
     false,
     94,
-    'https://images.unsplash.com/photo-1627448839088-219500c5c36f?auto=format&fit=crop&w=1200&q=80',
+    '/images/mountains/placeholder-mountain.svg',
     'published'
   ),
   (
@@ -157,7 +157,7 @@ values
     true,
     true,
     86,
-    'https://images.unsplash.com/photo-1626248316271-9568910b5030?auto=format&fit=crop&w=1200&q=80',
+    '/images/mountains/placeholder-mountain.svg',
     'published'
   ),
   (
@@ -249,7 +249,7 @@ values
     false,
     false,
     83,
-    'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&w=1200&q=80',
+    '/images/mountains/placeholder-mountain.svg',
     'published'
   ),
   (
