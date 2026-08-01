@@ -5,6 +5,7 @@ import { BottomNavigation } from "@/components/common/bottom-navigation";
 import { Footer } from "@/components/common/footer";
 import { Header } from "@/components/common/header";
 
+import "mapbox-gl/dist/mapbox-gl.css";
 import "./globals.css";
 
 const geistSans = Geist({

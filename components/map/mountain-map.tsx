@@ -1,7 +1,5 @@
 "use client";
 
-import "mapbox-gl/dist/mapbox-gl.css";
-
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -151,8 +149,9 @@ export function MountainMap({ mountains }: MountainMapProps) {
         if (disposed || !mapContainerRef.current) return;
         mapboxgl.accessToken = token;
         const map = new mapboxgl.Map({
+          accessToken: token,
           container: mapContainerRef.current,
-          style: "mapbox://styles/mapbox/outdoors-v12",
+          style: "mapbox://styles/mapbox/streets-v12",
           center: DEFAULT_CENTER,
           zoom: DEFAULT_ZOOM,
           attributionControl: true,
@@ -161,8 +160,17 @@ export function MountainMap({ mountains }: MountainMapProps) {
           new mapboxgl.NavigationControl({ showCompass: true }),
           "top-right",
         );
-        map.on("error", () => setMapError(true));
-        map.on("load", () => setMapReady(true));
+        map.on("error", (event) => {
+          if (process.env.NODE_ENV !== "production") {
+            console.error("Mapbox error:", event.error ?? event);
+          }
+          setMapError(true);
+        });
+        map.on("load", () => {
+          map.resize();
+          requestAnimationFrame(() => map.resize());
+          setMapReady(true);
+        });
         mapRef.current = map;
       })
       .catch(() => setMapError(true));
@@ -311,7 +319,7 @@ export function MountainMap({ mountains }: MountainMapProps) {
         </Empty>
       ) : (
         <div className="grid gap-md lg:grid-cols-[minmax(0,1fr)_minmax(18rem,24rem)]">
-          <div className="relative min-h-[28rem] overflow-hidden rounded-xl border border-divider bg-accent lg:min-h-[36rem]">
+          <div className="relative h-[28rem] overflow-hidden rounded-xl border border-divider bg-accent lg:h-[36rem]">
             <div
               aria-label="Peta gunung Indonesia"
               className="absolute inset-0"
