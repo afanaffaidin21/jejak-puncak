@@ -1,11 +1,4 @@
-import {
-  ArrowRight,
-  MapPinned,
-  Sparkles,
-  Stamp,
-  Sunrise,
-  TentTree,
-} from "lucide-react";
+import { ArrowRight, Sparkles, Stamp, Sunrise, TentTree } from "lucide-react";
 import { Suspense } from "react";
 
 import { Container } from "@/components/common/container";
@@ -20,10 +13,12 @@ import {
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { SectionHeading } from "@/components/common/section-heading";
 import { HomeFaqAccordion } from "@/components/home/home-faq-accordion";
+import { StaticMapPreview } from "@/components/home/static-map-preview";
 import { MountainCard } from "@/components/mountains/mountain-card";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { cn } from "@/lib/utils";
-import { getPopularMountains } from "@/services/mountains";
+import { buildMapPreviewUrl } from "@/lib/mapbox-static";
+import { getMapMountains, getPopularMountains } from "@/services/mountains";
 
 const HOME_FAQS = [
   {
@@ -120,13 +115,9 @@ export function PopularMountainsSection() {
   );
 }
 
-export function MapIntroductionSection() {
-  const markers = [
-    { className: "top-[26%] left-[17%]", label: "Sumatra" },
-    { className: "top-[58%] left-[42%]", label: "Jawa" },
-    { className: "top-[56%] left-[57%]", label: "Bali" },
-    { className: "top-[44%] left-[72%]", label: "Nusa Tenggara" },
-  ] as const;
+export async function MapIntroductionSection() {
+  const mapMountains = await getMapMountains().catch(() => []);
+  const mapImageUrl = buildMapPreviewUrl(mapMountains);
 
   return (
     <section
@@ -158,34 +149,7 @@ export function MapIntroductionSection() {
                 <ArrowRight aria-hidden="true" data-icon="inline-end" />
               </MotionLink>
             </div>
-            <div className="relative aspect-16/9 overflow-hidden rounded-xl border border-divider bg-accent shadow-surface">
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--divider)_1px,transparent_1px)] bg-size-[20px_20px] opacity-70"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-[12%] rounded-[45%_55%_50%_40%] border border-primary/15 bg-surface/65 blur-[1px]"
-              />
-              {markers.map((marker) => (
-                <span
-                  className={cn(
-                    "absolute flex items-center gap-2xs rounded-full bg-surface-elevated px-xs py-2xs text-caption font-semibold text-text-primary shadow-floating",
-                    marker.className,
-                  )}
-                  key={marker.label}
-                >
-                  <MapPinned
-                    aria-hidden="true"
-                    className="size-xs text-primary"
-                  />
-                  {marker.label}
-                </span>
-              ))}
-              <p className="absolute right-sm bottom-sm rounded-full bg-foreground/75 px-sm py-2xs text-caption text-primary-foreground">
-                Preview peta — data interaktif segera hadir
-              </p>
-            </div>
+            <StaticMapPreview imageUrl={mapImageUrl} />
           </div>
         </Container>
       </ScrollReveal>

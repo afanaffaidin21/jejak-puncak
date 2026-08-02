@@ -23,10 +23,13 @@ const nextConfig: NextConfig = {
         hostname: "upload.wikimedia.org",
         pathname: "/**",
       },
-
+      {
+        protocol: "https",
+        hostname: "api.mapbox.com",
+        pathname: "/styles/v1/**",
+      },
     ],
   },
 };
 
 export default nextConfig;
-
