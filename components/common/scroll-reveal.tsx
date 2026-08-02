@@ -26,8 +26,8 @@ export function ScrollReveal({
     <div
       ref={ref}
       className={cn(
-        "motion-safe:transition-[opacity,transform] motion-safe:duration-normal motion-safe:ease-emphasized",
-        !isVisible && "motion-safe:translate-y-sm motion-safe:opacity-0",
+        "motion-safe:transition-[opacity,transform] motion-safe:duration-500 motion-safe:ease-[cubic-bezier(0.16,1,0.3,1)]",
+        !isVisible && "motion-safe:translate-y-lg motion-safe:opacity-0",
         className,
       )}
       style={revealStyle}

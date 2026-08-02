@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const REVEAL_THRESHOLD = 0.18;
+const REVEAL_THRESHOLD = 0.12;
 
 export function useScrollReveal<T extends HTMLElement>() {
   const ref = useRef<T>(null);

@@ -135,7 +135,7 @@ export function InfiniteMountainGrid({
         {mountains.map((mountain, index) => (
           <ScrollReveal
             className="h-full"
-            delay={Math.min(index * 60, 240)}
+            delay={Math.min(index * 90, 360)}
             key={mountain.id}
           >
             <article id={mountain.slug} className="h-full">

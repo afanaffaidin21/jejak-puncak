@@ -75,7 +75,7 @@ async function PopularMountainGrid() {
       {mountains.map((mountain, index) => (
         <ScrollReveal
           className="h-full"
-          delay={Math.min(index * 60, 240)}
+          delay={Math.min(index * 90, 360)}
           key={mountain.id}
         >
           <MountainCard mountain={mountain} priority={index < 2} />
@@ -241,11 +241,11 @@ export function CollectionsSection() {
               return (
                 <ScrollReveal
                   className="h-full"
-                  delay={Math.min(index * 60, 240)}
+                  delay={Math.min(index * 90, 360)}
                   key={collection.title}
                 >
                   <Link
-                    className="group flex h-full flex-col rounded-xl border border-divider bg-surface-elevated p-lg shadow-surface transition-[border-color,box-shadow,transform] duration-fast ease-standard motion-safe:hover:-translate-y-3xs hover:border-primary/35 hover:shadow-hover"
+                    className="group flex h-full flex-col rounded-xl border border-divider bg-surface-elevated p-lg shadow-surface transition-[border-color,box-shadow,transform] duration-fast ease-standard motion-safe:hover:-translate-y-2xs hover:border-primary/45 hover:shadow-floating"
                     href={collection.href}
                   >
                     <span className="flex size-touch items-center justify-center rounded-full bg-accent text-accent-foreground">

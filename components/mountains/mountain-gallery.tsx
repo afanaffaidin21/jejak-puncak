@@ -71,7 +71,7 @@ export function MountainGallery({ mountainName, slug }: MountainGalleryProps) {
           >
             <Image
               alt={item.alt}
-              className="object-cover transition-transform duration-slow ease-emphasized group-hover:scale-[1.03]"
+              className="object-cover motion-safe:transition-transform motion-safe:duration-fast motion-safe:ease-emphasized motion-safe:group-hover:scale-[1.05]"
               fill
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               src={item.src}

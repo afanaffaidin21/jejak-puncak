@@ -29,7 +29,7 @@ export default async function PassportPage() {
       <ScrollReveal>
         <PassportTracker />
       </ScrollReveal>
-      <ScrollReveal delay={60}>
+      <ScrollReveal delay={90}>
         <ProfileSummary
           profile={data.profile}
           totalMountains={
@@ -37,13 +37,13 @@ export default async function PassportPage() {
           }
         />
       </ScrollReveal>
-      <ScrollReveal delay={120}>
+      <ScrollReveal delay={180}>
         <StatisticCards {...data.statistics} />
       </ScrollReveal>
-      <ScrollReveal delay={180}>
+      <ScrollReveal delay={270}>
         <ProgressMap completed={data.completed} />
       </ScrollReveal>
-      <ScrollReveal delay={240}>
+      <ScrollReveal delay={360}>
         <Suspense fallback={<Skeleton className="h-96 w-full" />}>
           <PassportCollections
             completed={data.completed}

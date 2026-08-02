@@ -37,24 +37,24 @@ export function HeroSection() {
 
       <Container className="relative flex min-h-[calc(100svh-var(--spacing-mobile-nav))] items-end py-2xl md:items-center md:py-4xl">
         <div className="min-w-0 w-full max-w-[56rem]">
-          <p className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-2 motion-safe:duration-normal motion-safe:ease-emphasized mb-sm inline-flex items-center gap-2xs rounded-full border border-primary-foreground/30 bg-background/10 px-sm py-2xs text-label font-semibold backdrop-blur">
+          <p className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-4 motion-safe:duration-500 motion-safe:ease-[cubic-bezier(0.16,1,0.3,1)] mb-sm inline-flex items-center gap-2xs rounded-full border border-primary-foreground/30 bg-background/10 px-sm py-2xs text-label font-semibold backdrop-blur">
             <Compass aria-hidden="true" className="size-sm" />
             Jelajahi gunung Indonesia
           </p>
           <h1
-            className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-2 motion-safe:duration-normal motion-safe:ease-emphasized motion-safe:delay-75 w-full max-w-[48rem] text-balance font-heading text-display font-semibold text-primary-foreground"
+            className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-4 motion-safe:duration-500 motion-safe:ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:delay-100 w-full max-w-[48rem] text-balance font-heading text-display font-semibold text-primary-foreground"
             id="home-hero-heading"
           >
             Temukan puncak yang cocok dengan ceritamu.
           </h1>
-          <p className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-2 motion-safe:duration-normal motion-safe:ease-emphasized motion-safe:delay-150 mt-md w-full max-w-reading text-pretty text-body-lg text-primary-foreground/85">
+          <p className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-4 motion-safe:duration-500 motion-safe:ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:delay-250 mt-md w-full max-w-reading text-pretty text-body-lg text-primary-foreground/85">
             Bandingkan karakter jalur, waktu, dan kesiapanmu sebelum mengambil
             langkah pertama.
           </p>
 
           <form
             action="/explore"
-            className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-2 motion-safe:duration-normal motion-safe:ease-emphasized motion-safe:delay-200 mt-xl grid gap-sm rounded-xl border border-primary-foreground/25 bg-foreground/35 p-sm shadow-floating backdrop-blur-md sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]"
+            className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-4 motion-safe:duration-500 motion-safe:ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:delay-400 mt-xl grid gap-sm rounded-xl border border-primary-foreground/25 bg-foreground/35 p-sm shadow-floating backdrop-blur-md sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]"
           >
             <label className="grid gap-3xs text-label font-semibold">
               Wilayah

@@ -517,7 +517,7 @@ export function FinderFlow() {
                   return (
                     <label
                       className={cn(
-                        "relative flex min-h-20 cursor-pointer items-start gap-xs rounded-lg border bg-background p-sm transition-[border-color,background-color,box-shadow,transform] duration-fast ease-standard hover:-translate-y-3xs hover:border-primary/45 hover:shadow-surface",
+                        "relative flex min-h-20 cursor-pointer items-start gap-xs rounded-lg border bg-background p-sm transition-[border-color,background-color,box-shadow,transform] duration-fast ease-standard motion-safe:hover:-translate-y-2xs hover:border-primary/55 hover:shadow-floating",
                         "has-focus-visible:ring-2 has-focus-visible:ring-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-background",
                         selected &&
                           "border-primary bg-primary/5 shadow-surface",

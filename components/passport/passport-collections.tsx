@@ -41,7 +41,7 @@ function CompletedCollection({ mountains }: { mountains: PassportMountain[] }) {
       {mountains.map((mountain, index) => (
         <ScrollReveal
           className="h-full"
-          delay={Math.min(index * 60, 240)}
+          delay={Math.min(index * 90, 360)}
           key={mountain.id}
         >
           <MountainCard
@@ -80,7 +80,7 @@ function WishlistCollection({ mountains }: { mountains: PassportMountain[] }) {
       {mountains.map((mountain, index) => (
         <ScrollReveal
           className="h-full"
-          delay={Math.min(index * 60, 240)}
+          delay={Math.min(index * 90, 360)}
           key={mountain.id}
         >
           <MountainCard
