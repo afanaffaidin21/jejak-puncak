@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { GoogleLogo } from "@/components/auth/google-logo";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/lib/analytics";
@@ -67,6 +68,7 @@ export function GoogleLoginButton({
         type="button"
         variant="outline"
       >
+        <GoogleLogo className="size-5" />
         Lanjutkan dengan Google
       </Button>
     </div>
