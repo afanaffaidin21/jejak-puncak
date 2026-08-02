@@ -1,9 +1,10 @@
 "use client";
 
 import type { ComponentProps, ReactNode } from "react";
-import { type MotionProps, useReducedMotion } from "framer-motion";
+import { type MotionProps, useInView, useReducedMotion } from "framer-motion";
 import * as m from "framer-motion/m";
 import Link from "next/link";
+import { useRef } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -81,15 +82,21 @@ export function MotionLink({
 }
 
 export function StaggerGrid({ children, className }: StaggerProps) {
+  const gridRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(gridRef, {
+    amount: STAGGER_VIEWPORT.amount,
+    margin: STAGGER_VIEWPORT.margin,
+    once: STAGGER_VIEWPORT.once,
+  });
   const reduceMotion = useReducedMotion();
 
   return (
     <m.div
       className={cn(className)}
+      ref={gridRef}
       initial={reduceMotion ? false : "hidden"}
+      animate={reduceMotion ? undefined : isInView ? "visible" : "hidden"}
       variants={reduceMotion ? undefined : STAGGER_CONTAINER_VARIANTS}
-      viewport={STAGGER_VIEWPORT}
-      whileInView={reduceMotion ? undefined : "visible"}
     >
       {children}
     </m.div>
