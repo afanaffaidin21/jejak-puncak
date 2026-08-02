@@ -63,50 +63,11 @@ type MountainRow = {
   mountain_routes?: MountainRouteRow[] | null;
 };
 
-const MOUNTAIN_COLUMNS = `
-  id,
-  slug,
-  name,
-  province,
-  island,
-  elevation,
-  latitude,
-  longitude,
-  summary,
-  description,
-  difficulty,
-  beginner_score,
-  duration_days,
-  budget_category,
-  best_season,
-  sunrise_rating,
-  camping_available,
-  water_source,
-  popularity_score,
-  hero_image,
-  photo_credit_author,
-  photo_credit_url,
-  photo_license,
-  status,
-  created_at,
-  updated_at,
-  gallery_images
-`;
+const MOUNTAIN_COLUMNS = `*`;
 
 const MOUNTAIN_WITH_ROUTES_COLUMNS = `
-  ${MOUNTAIN_COLUMNS},
-  mountain_routes (
-    id,
-    mountain_id,
-    name,
-    starting_point,
-    distance_km,
-    elevation_gain,
-    estimated_hours,
-    difficulty,
-    facilities,
-    description
-  )
+  *,
+  mountain_routes (*)
 `;
 
 const DEFAULT_PAGE_SIZE = 12;
