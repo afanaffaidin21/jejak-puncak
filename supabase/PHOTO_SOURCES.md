@@ -2,6 +2,14 @@
 
 Dokumen ini mencatat sumber, lisensi, fotografer, deskripsi subjek visual, dan status verifikasi 100% foto `hero_image` untuk seluruh 12 gunung di Jejak Puncak.
 
+## Homepage Hero
+
+| Penggunaan | Sumber / Fotografer | Lokasi terverifikasi | Lisensi | Sumber asli | Asset teroptimasi |
+|---|---|---|---|---|---|
+| Homepage Hero — Gunung Prau saat sunrise | Itahuljana | Gunung Prau, Jawa Tengah, Indonesia; lautan awan, sunrise, dan siluet pendaki | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | [Wikimedia Commons — Mt. Prau in the morning.png](https://commons.wikimedia.org/wiki/File:Mt._Prau_in_the_morning.png) | `public/images/home/hero-prau.webp` (2,400 × 1,601 px, 118 KB) |
+
+Sumber asli berukuran 4.496 × 3.000 px (PNG, 10,43 MB). Asset homepage dikonversi ke WebP lebar 2.400 px untuk LCP yang lebih efisien tanpa mengubah komposisi. Kredit dan tautan lisensi ditampilkan langsung di Hero Homepage.
+
 ---
 
 ## Ringkasan Status Foto (12 / 12 Gunung Terverifikasi 100%)

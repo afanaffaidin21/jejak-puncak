@@ -18,16 +18,20 @@ export function HeroSection() {
       className="relative -mt-mobile-nav min-h-[calc(100svh-var(--spacing-mobile-nav))] overflow-hidden bg-primary pt-mobile-nav text-primary-foreground"
     >
       <Image
-        alt="Ilustrasi sementara punggungan gunung saat fajar"
-        className="object-cover"
+        alt="Matahari terbit di Gunung Prau dengan lautan awan dan siluet pendaki"
+        className="object-[68%_center] object-cover lg:object-center"
         fill
         priority
         sizes="100vw"
-        src="/images/mountains/placeholder-mountain.svg"
+        src="/images/home/hero-prau.webp"
       />
       <div
         aria-hidden="true"
         className="absolute inset-0 bg-linear-to-b from-foreground/20 via-foreground/45 to-foreground/80"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-linear-to-r from-foreground/75 via-foreground/35 to-transparent"
       />
 
       <Container className="relative flex min-h-[calc(100svh-var(--spacing-mobile-nav))] items-end py-2xl md:items-center md:py-4xl">
@@ -101,6 +105,29 @@ export function HeroSection() {
           </form>
         </div>
       </Container>
+
+      <p className="absolute right-sm bottom-2xs z-10 max-w-[18rem] text-right text-caption text-primary-foreground/75 sm:right-md">
+        Foto{" "}
+        <a
+          className="rounded-sm underline decoration-primary-foreground/40 underline-offset-2 transition-colors hover:text-primary-foreground"
+          href="https://commons.wikimedia.org/wiki/File:Mt._Prau_in_the_morning.png"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Itahuljana / Wikimedia Commons
+          <span className="sr-only"> (terbuka di tab baru)</span>
+        </a>{" "}
+        ·{" "}
+        <a
+          className="rounded-sm underline decoration-primary-foreground/40 underline-offset-2 transition-colors hover:text-primary-foreground"
+          href="https://creativecommons.org/licenses/by-sa/4.0/"
+          rel="noreferrer"
+          target="_blank"
+        >
+          CC BY-SA 4.0
+          <span className="sr-only"> (terbuka di tab baru)</span>
+        </a>
+      </p>
     </section>
   );
 }
