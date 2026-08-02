@@ -48,6 +48,15 @@ export type Mountain = {
   createdAt: string;
   updatedAt: string;
   routes: MountainRoute[];
+  galleryImages?: Array<{
+    src: string;
+    alt: string;
+    caption: string;
+    credit_author?: string;
+    credit_url?: string;
+    license?: string;
+    license_url?: string;
+  }>;
 };
 
 

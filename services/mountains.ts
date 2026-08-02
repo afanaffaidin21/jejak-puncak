@@ -51,6 +51,15 @@ type MountainRow = {
   status: string;
   created_at: string;
   updated_at: string;
+  gallery_images?: Array<{
+    src: string;
+    alt: string;
+    caption: string;
+    credit_author?: string;
+    credit_url?: string;
+    license?: string;
+    license_url?: string;
+  }> | null;
   mountain_routes?: MountainRouteRow[] | null;
 };
 
@@ -80,7 +89,8 @@ const MOUNTAIN_COLUMNS = `
   photo_license,
   status,
   created_at,
-  updated_at
+  updated_at,
+  gallery_images
 `;
 
 const MOUNTAIN_WITH_ROUTES_COLUMNS = `
@@ -145,6 +155,7 @@ function toMountain(row: MountainRow): Mountain {
     status: row.status,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
+    galleryImages: row.gallery_images ?? [],
     routes: (row.mountain_routes ?? []).map(toMountainRoute),
   };
 }

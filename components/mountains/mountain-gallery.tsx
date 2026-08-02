@@ -17,19 +17,23 @@ import {
 } from "@/components/ui/dialog";
 import { trackEvent } from "@/lib/analytics";
 
-type GalleryItem = {
-  alt: string;
-  caption: string;
-  src: string;
-};
 
 type MountainGalleryProps = {
   mountainName: string;
   slug: string;
+  galleryImages?: Array<{
+    src: string;
+    alt: string;
+    caption: string;
+    credit_author?: string;
+    credit_url?: string;
+    license?: string;
+    license_url?: string;
+  }>;
 };
 
-export function MountainGallery({ mountainName, slug }: MountainGalleryProps) {
-  const galleryItems: GalleryItem[] = [
+export function MountainGallery({ mountainName, slug, galleryImages }: MountainGalleryProps) {
+  const galleryItems = galleryImages && galleryImages.length > 0 ? galleryImages : [
     {
       src: "/images/mountains/placeholder-mountain.svg",
       alt: `Ilustrasi sementara panorama ${mountainName}`,
@@ -151,12 +155,49 @@ export function MountainGallery({ mountainName, slug }: MountainGalleryProps) {
               <ChevronRight aria-hidden="true" />
             </Button>
           </div>
-          <p
+          <div
             aria-live="polite"
-            className="text-center text-body-sm text-text-secondary"
+            className="flex flex-col items-center gap-2xs text-center"
           >
-            {activeItem.caption}
-          </p>
+            <p className="text-body-sm text-text-secondary">
+              {activeItem.caption}
+            </p>
+            {activeItem.credit_author && (
+              <p className="text-caption text-text-muted">
+                Foto oleh{" "}
+                {activeItem.credit_url ? (
+                  <a
+                    className="font-medium hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                    href={activeItem.credit_url}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    {activeItem.credit_author}
+                  </a>
+                ) : (
+                  <span className="font-medium">{activeItem.credit_author}</span>
+                )}
+                {activeItem.license && (
+                  <>
+                    {" "}
+                    •{" "}
+                    {activeItem.license_url ? (
+                      <a
+                        className="hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                        href={activeItem.license_url}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        {activeItem.license}
+                      </a>
+                    ) : (
+                      <span>{activeItem.license}</span>
+                    )}
+                  </>
+                )}
+              </p>
+            )}
+          </div>
         </DialogContent>
       </Dialog>
     </>

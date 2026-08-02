@@ -311,7 +311,7 @@ export function DetailContent({ mountain }: { mountain: Mountain }) {
             id="gallery-heading"
             title={`Bayangkan perjalanan di ${mountain.name}`}
           />
-          <MountainGallery mountainName={mountain.name} slug={mountain.slug} />
+          <MountainGallery galleryImages={mountain.galleryImages} mountainName={mountain.name} slug={mountain.slug} />
         </Container>
       </section>
 
