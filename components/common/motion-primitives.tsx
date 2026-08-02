@@ -39,13 +39,15 @@ const CARD_SPRING = {
 type StaggerProps = {
   children: ReactNode;
   className?: string;
-  interactive?: boolean;
 };
 
 const MotionLinkBase = m.create(Link);
 
 type MotionAnchorProps = Omit<ComponentProps<"a">, keyof MotionProps> &
   MotionProps & { children: ReactNode };
+
+type MotionLinkProps = Omit<ComponentProps<typeof Link>, keyof MotionProps> &
+  MotionProps & { children: ReactNode; hoverShadow?: boolean };
 
 export function MotionAnchor({ children, ...props }: MotionAnchorProps) {
   const reduceMotion = useReducedMotion();
@@ -64,16 +66,23 @@ export function MotionAnchor({ children, ...props }: MotionAnchorProps) {
 
 export function MotionLink({
   children,
+  hoverShadow = false,
   ...props
-}: Omit<ComponentProps<typeof Link>, keyof MotionProps> &
-  MotionProps & { children: ReactNode }) {
+}: MotionLinkProps) {
   const reduceMotion = useReducedMotion();
 
   return (
     <MotionLinkBase
       {...props}
       transition={reduceMotion ? { duration: 0 } : CARD_SPRING}
-      whileHover={reduceMotion ? undefined : { y: -8 }}
+      whileHover={
+        reduceMotion
+          ? undefined
+          : {
+              ...(hoverShadow && { boxShadow: "var(--elevation-floating)" }),
+              y: -8,
+            }
+      }
       whileTap={reduceMotion ? undefined : { scale: 0.95 }}
     >
       {children}
@@ -103,11 +112,7 @@ export function StaggerGrid({ children, className }: StaggerProps) {
   );
 }
 
-export function StaggerItem({
-  children,
-  className,
-  interactive = false,
-}: StaggerProps) {
+export function StaggerItem({ children, className }: StaggerProps) {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -115,16 +120,6 @@ export function StaggerItem({
       className={cn(className)}
       variants={reduceMotion ? undefined : STAGGER_ITEM_VARIANTS}
       transition={reduceMotion ? { duration: 0 } : CARD_SPRING}
-      whileHover={
-        interactive && !reduceMotion
-          ? {
-              borderColor:
-                "color-mix(in oklch, var(--primary) 45%, transparent)",
-              boxShadow: "var(--elevation-floating)",
-              y: -8,
-            }
-          : undefined
-      }
     >
       {children}
     </m.div>

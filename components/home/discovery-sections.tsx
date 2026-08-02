@@ -234,14 +234,11 @@ export function CollectionsSection() {
               const Icon = collection.icon;
 
               return (
-                <StaggerItem
-                  className="h-full"
-                  interactive
-                  key={collection.title}
-                >
+                <StaggerItem className="h-full" key={collection.title}>
                   <MotionLink
                     className="flex h-full flex-col rounded-xl border border-divider bg-surface-elevated p-lg shadow-surface"
                     href={collection.href}
+                    hoverShadow
                   >
                     <span className="flex size-touch items-center justify-center rounded-full bg-accent text-accent-foreground">
                       <Icon aria-hidden="true" className="size-sm" />
