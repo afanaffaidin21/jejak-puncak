@@ -1,9 +1,8 @@
-import Link from "next/link";
-
 import { ContentCardSkeleton } from "@/components/common/content-card-skeleton";
 import { EmptyState } from "@/components/common/empty-state";
+import { MotionLink } from "@/components/common/motion-primitives";
 import { MountainCard } from "@/components/mountains/mountain-card";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { toMountainCardData } from "@/lib/mountains";
 import { getSimilarMountains } from "@/services/mountains";
 import type { Mountain } from "@/types/mountain";
@@ -30,12 +29,12 @@ export async function SimilarMountains({ mountain }: { mountain: Mountain }) {
     return (
       <EmptyState
         action={
-          <Link
+          <MotionLink
             className={buttonVariants({ variant: "outline" })}
             href="/explore"
           >
             Buka Explore
-          </Link>
+          </MotionLink>
         }
         description="Rekomendasi serupa belum dapat dijangkau dari database."
         title="Gunung serupa belum tersedia"

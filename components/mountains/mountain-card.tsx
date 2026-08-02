@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ArrowUpRight,
   CalendarDays,
@@ -6,7 +8,10 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useReducedMotion } from "framer-motion";
+import * as m from "framer-motion/m";
 
+import { CARD_SPRING } from "@/components/common/motion-primitives";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -41,18 +46,25 @@ export function MountainCard({
   priority = false,
 }: MountainCardProps) {
   const detailHref = `/mountains/${mountain.slug}`;
+  const reduceMotion = useReducedMotion();
 
   return (
     <Card className="relative h-full" interactive>
       <CardMedia className="relative">
-        <Image
-          alt={`Foto lanskap ${mountain.name}`}
-          className="object-cover motion-safe:transition-transform motion-safe:duration-fast motion-safe:ease-emphasized motion-safe:group-hover/card:scale-[1.05]"
-          fill
-          priority={priority}
-          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-          src={mountain.heroImage}
-        />
+        <m.div
+          className="absolute inset-0"
+          transition={reduceMotion ? { duration: 0 } : CARD_SPRING}
+          whileHover={reduceMotion ? undefined : { scale: 1.05 }}
+        >
+          <Image
+            alt={`Foto lanskap ${mountain.name}`}
+            className="object-cover"
+            fill
+            priority={priority}
+            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+            src={mountain.heroImage}
+          />
+        </m.div>
         <div
           aria-hidden="true"
           className="absolute inset-0 bg-linear-to-t from-foreground/45 via-transparent to-transparent"

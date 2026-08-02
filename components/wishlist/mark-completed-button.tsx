@@ -1,16 +1,13 @@
 "use client";
 
 import { CircleCheck, MountainSnow, TriangleAlert } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import {
-  Button,
-  buttonVariants,
-  type ButtonProps,
-} from "@/components/ui/button";
+import { MotionLink } from "@/components/common/motion-primitives";
+import { Button, type ButtonProps } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import {
   Dialog,
   DialogContent,
@@ -128,12 +125,12 @@ export function MarkCompletedButton({
               <Button onClick={() => setIsOpen(false)} variant="outline">
                 Tutup
               </Button>
-              <Link
+              <MotionLink
                 className={cn(buttonVariants(), "w-full sm:w-auto")}
                 href="/passport"
               >
                 Lihat Passport
-              </Link>
+              </MotionLink>
             </DialogFooter>
           </>
         ) : (

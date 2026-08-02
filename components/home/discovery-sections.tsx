@@ -6,23 +6,22 @@ import {
   Sunrise,
   TentTree,
 } from "lucide-react";
-import Link from "next/link";
 import { Suspense } from "react";
 
 import { Container } from "@/components/common/container";
 import { ContentCardSkeleton } from "@/components/common/content-card-skeleton";
 import { EmptyState } from "@/components/common/empty-state";
 import { ErrorState } from "@/components/common/error-state";
+import {
+  MotionLink,
+  StaggerGrid,
+  StaggerItem,
+} from "@/components/common/motion-primitives";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { SectionHeading } from "@/components/common/section-heading";
+import { HomeFaqAccordion } from "@/components/home/home-faq-accordion";
 import { MountainCard } from "@/components/mountains/mountain-card";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { cn } from "@/lib/utils";
 import { getPopularMountains } from "@/services/mountains";
 
@@ -71,17 +70,13 @@ async function PopularMountainGrid() {
   }
 
   return (
-    <div className="grid gap-md sm:grid-cols-2 lg:grid-cols-4">
+    <StaggerGrid className="grid gap-md sm:grid-cols-2 lg:grid-cols-4">
       {mountains.map((mountain, index) => (
-        <ScrollReveal
-          className="h-full"
-          delay={Math.min(index * 90, 360)}
-          key={mountain.id}
-        >
+        <StaggerItem className="h-full" key={mountain.id}>
           <MountainCard mountain={mountain} priority={index < 2} />
-        </ScrollReveal>
+        </StaggerItem>
       ))}
-    </div>
+    </StaggerGrid>
   );
 }
 
@@ -95,13 +90,13 @@ export function PopularMountainsSection() {
         <Container>
           <SectionHeading
             action={
-              <Link
+              <MotionLink
                 className={buttonVariants({ variant: "outline" })}
                 href="/explore"
               >
                 Lihat semua
                 <ArrowRight aria-hidden="true" data-icon="inline-end" />
-              </Link>
+              </MotionLink>
             }
             description="Mulai dari gunung yang paling sering masuk daftar perjalanan pendaki Indonesia."
             eyebrow="Pilihan populer"
@@ -155,13 +150,13 @@ export function MapIntroductionSection() {
                 Gunakan peta interaktif untuk melihat sebaran pilihan, lalu buka
                 detail gunung yang paling menarik perhatianmu.
               </p>
-              <Link
+              <MotionLink
                 className={cn(buttonVariants({ variant: "outline" }), "mt-lg")}
                 href="/map"
               >
                 Buka peta gunung
                 <ArrowRight aria-hidden="true" data-icon="inline-end" />
-              </Link>
+              </MotionLink>
             </div>
             <div className="relative aspect-16/9 overflow-hidden rounded-xl border border-divider bg-accent shadow-surface">
               <div
@@ -234,18 +229,18 @@ export function CollectionsSection() {
             id="collections-heading"
             title="Mulai dari pengalaman yang kamu cari"
           />
-          <div className="grid gap-md md:grid-cols-3">
-            {collections.map((collection, index) => {
+          <StaggerGrid className="grid gap-md md:grid-cols-3">
+            {collections.map((collection) => {
               const Icon = collection.icon;
 
               return (
-                <ScrollReveal
+                <StaggerItem
                   className="h-full"
-                  delay={Math.min(index * 90, 360)}
+                  interactive
                   key={collection.title}
                 >
-                  <Link
-                    className="group flex h-full flex-col rounded-xl border border-divider bg-surface-elevated p-lg shadow-surface transition-[border-color,box-shadow,transform] duration-fast ease-standard motion-safe:hover:-translate-y-2xs hover:border-primary/45 hover:shadow-floating"
+                  <MotionLink
+                    className="flex h-full flex-col rounded-xl border border-divider bg-surface-elevated p-lg shadow-surface"
                     href={collection.href}
                   >
                     <span className="flex size-touch items-center justify-center rounded-full bg-accent text-accent-foreground">
@@ -259,16 +254,13 @@ export function CollectionsSection() {
                     </p>
                     <span className="mt-auto pt-md inline-flex items-center gap-2xs text-label font-semibold text-primary">
                       Buka koleksi
-                      <ArrowRight
-                        aria-hidden="true"
-                        className="size-sm motion-safe:transition-transform motion-safe:duration-fast motion-safe:group-hover:translate-x-3xs"
-                      />
+                      <ArrowRight aria-hidden="true" className="size-sm" />
                     </span>
-                  </Link>
-                </ScrollReveal>
+                  </MotionLink>
+                </StaggerItem>
               );
             })}
-          </div>
+          </StaggerGrid>
         </Container>
       </ScrollReveal>
     </section>
@@ -300,13 +292,13 @@ export function PassportSection() {
                 perjalanan lengkap akan dibangun pada fase berikutnya.
               </p>
             </div>
-            <Link
+            <MotionLink
               className={buttonVariants({ variant: "secondary", size: "lg" })}
               href="/login?next=/passport"
             >
               Mulai Passport
               <ArrowRight aria-hidden="true" data-icon="inline-end" />
-            </Link>
+            </MotionLink>
           </div>
         </Container>
       </ScrollReveal>
@@ -329,18 +321,7 @@ export function HomeFaqSection() {
             id="home-faq-heading"
             title="Rencanakan dengan informasi yang tepat"
           />
-          <Accordion className="rounded-xl border border-divider bg-surface-elevated px-md shadow-surface">
-            {HOME_FAQS.map((item) => (
-              <AccordionItem key={item.question} value={item.question}>
-                <AccordionTrigger className="py-md text-body">
-                  {item.question}
-                </AccordionTrigger>
-                <AccordionContent className="pb-md text-body-sm text-text-secondary">
-                  {item.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          <HomeFaqAccordion items={HOME_FAQS} />
         </Container>
       </ScrollReveal>
     </section>

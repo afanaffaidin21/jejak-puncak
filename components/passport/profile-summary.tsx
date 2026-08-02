@@ -1,9 +1,9 @@
 import { CalendarDays, MountainSnow, Settings } from "lucide-react";
-import Link from "next/link";
 
+import { MotionLink } from "@/components/common/motion-primitives";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { formatDate, formatNumber } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { PassportProfile } from "@/types/passport";
@@ -58,7 +58,7 @@ export function ProfileSummary({
             </span>
           </div>
         </div>
-        <Link
+        <MotionLink
           className={cn(
             buttonVariants({ variant: "outline" }),
             "w-full sm:w-auto",
@@ -67,7 +67,7 @@ export function ProfileSummary({
         >
           <Settings aria-hidden="true" />
           Kelola profile
-        </Link>
+        </MotionLink>
       </CardContent>
     </Card>
   );

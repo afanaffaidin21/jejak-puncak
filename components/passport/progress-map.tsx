@@ -1,10 +1,10 @@
 import { MapPinned } from "lucide-react";
+import type { PassportMountain } from "@/types/passport";
 
 import { EmptyState } from "@/components/common/empty-state";
+import { MotionLink } from "@/components/common/motion-primitives";
 import { MountainMap } from "@/components/map/mountain-map";
-import { buttonVariants } from "@/components/ui/button";
-import Link from "next/link";
-import type { PassportMountain } from "@/types/passport";
+import { buttonVariants } from "@/components/ui/button-variants";
 
 export function ProgressMap({ completed }: { completed: PassportMountain[] }) {
   return (
@@ -28,9 +28,9 @@ export function ProgressMap({ completed }: { completed: PassportMountain[] }) {
       ) : (
         <EmptyState
           action={
-            <Link className={buttonVariants()} href="/explore">
+            <MotionLink className={buttonVariants()} href="/explore">
               Jelajahi Gunung
-            </Link>
+            </MotionLink>
           }
           description="Peta progres akan terisi setelah kamu menandai pendakian pertama sebagai selesai."
           illustration={<MapPinned aria-hidden="true" />}

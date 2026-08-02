@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import type { Map as MapboxMap, Marker } from "mapbox-gl";
@@ -15,7 +14,9 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Badge } from "@/components/ui/badge";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { MotionLink } from "@/components/common/motion-primitives";
+import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { WishlistButton } from "@/components/wishlist/wishlist-button";
 import {
@@ -84,7 +85,7 @@ function MountainPreview({
           <span>{mountain.durationDays} hari</span>
         </div>
         <div className="flex flex-wrap gap-xs">
-          <Link
+          <MotionLink
             className={buttonVariants({ size: "sm" })}
             href={`/mountains/${mountain.slug}`}
             onClick={() =>
@@ -93,7 +94,7 @@ function MountainPreview({
           >
             Lihat detail{" "}
             <ExternalLink aria-hidden="true" data-icon="inline-end" />
-          </Link>
+          </MotionLink>
           {showWishlist ? (
             <WishlistButton
               mountainId={mountain.id}

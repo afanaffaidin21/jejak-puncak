@@ -10,10 +10,13 @@ import {
   ShieldAlert,
   TentTree,
 } from "lucide-react";
-import Link from "next/link";
 import { Suspense } from "react";
 
 import { Container } from "@/components/common/container";
+import {
+  MotionAnchor,
+  MotionLink,
+} from "@/components/common/motion-primitives";
 import { SectionHeading } from "@/components/common/section-heading";
 import { MountainGallery } from "@/components/mountains/mountain-gallery";
 import {
@@ -28,7 +31,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { DIFFICULTY_LABELS, getMountainFaqs } from "@/lib/mountains";
 import { formatNumber } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -150,7 +153,7 @@ export function DetailContent({ mountain }: { mountain: Mountain }) {
                     />
                     {route.facilities}
                   </p>
-                  <Link
+                  <MotionLink
                     className={cn(
                       buttonVariants({ variant: "outline" }),
                       "mt-md",
@@ -160,7 +163,7 @@ export function DetailContent({ mountain }: { mountain: Mountain }) {
                     )}`}
                   >
                     Simpan rute
-                  </Link>
+                  </MotionLink>
                 </article>
               ))}
             </div>
@@ -270,7 +273,7 @@ export function DetailContent({ mountain }: { mountain: Mountain }) {
                   maximumFractionDigits: 6,
                 })}
               </p>
-              <a
+              <MotionAnchor
                 className={cn(buttonVariants({ variant: "outline" }), "mt-lg")}
                 href={mapHref}
                 rel="noreferrer"
@@ -279,7 +282,7 @@ export function DetailContent({ mountain }: { mountain: Mountain }) {
                 Buka peta eksternal
                 <ArrowUpRight aria-hidden="true" data-icon="inline-end" />
                 <span className="sr-only">(terbuka di tab baru)</span>
-              </a>
+              </MotionAnchor>
             </div>
             <div className="relative aspect-16/8 overflow-hidden rounded-xl border border-divider bg-accent shadow-surface">
               <div

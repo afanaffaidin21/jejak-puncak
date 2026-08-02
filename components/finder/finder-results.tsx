@@ -13,12 +13,15 @@ import {
   Sparkles,
 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useReducedMotion } from "framer-motion";
+import * as m from "framer-motion/m";
 
 import { Container } from "@/components/common/container";
+import { CARD_SPRING, MotionLink } from "@/components/common/motion-primitives";
 import { Badge } from "@/components/ui/badge";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { formatNumber } from "@/lib/format";
 import { trackEvent } from "@/lib/analytics";
 import { DIFFICULTY_LABELS, formatDuration } from "@/lib/mountains";
@@ -74,17 +77,37 @@ function RecommendationCard({
 }) {
   const { mountain } = recommendation;
   const detailHref = `/mountains/${mountain.slug}`;
+  const reduceMotion = useReducedMotion();
 
   return (
-    <article className="group/finder-card flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card shadow-surface transition-[border-color,box-shadow,transform] duration-fast ease-standard motion-safe:hover:-translate-y-2xs hover:border-primary/45 hover:shadow-floating">
+    <m.article
+      className="group/finder-card flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card shadow-surface"
+      transition={reduceMotion ? { duration: 0 } : CARD_SPRING}
+      whileHover={
+        reduceMotion
+          ? undefined
+          : {
+              borderColor:
+                "color-mix(in oklch, var(--primary) 45%, transparent)",
+              boxShadow: "var(--elevation-floating)",
+              y: -8,
+            }
+      }
+    >
       <div className="relative aspect-16/10 overflow-hidden bg-muted">
-        <Image
-          alt={`Lanskap ${mountain.name}`}
-          className="object-cover motion-safe:transition-transform motion-safe:duration-fast motion-safe:ease-emphasized motion-safe:group-hover/finder-card:scale-[1.05]"
-          fill
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          src={mountain.heroImage}
-        />
+        <m.div
+          className="absolute inset-0"
+          transition={reduceMotion ? { duration: 0 } : CARD_SPRING}
+          whileHover={reduceMotion ? undefined : { scale: 1.05 }}
+        >
+          <Image
+            alt={`Lanskap ${mountain.name}`}
+            className="object-cover"
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            src={mountain.heroImage}
+          />
+        </m.div>
         <div
           aria-hidden="true"
           className="absolute inset-0 bg-linear-to-t from-foreground/55 via-transparent to-transparent"
@@ -174,7 +197,7 @@ function RecommendationCard({
         </div>
 
         <div className="mt-auto flex flex-wrap gap-xs pt-md">
-          <Link
+          <MotionLink
             className={buttonVariants()}
             href={detailHref}
             onClick={() =>
@@ -186,11 +209,11 @@ function RecommendationCard({
           >
             Lihat detail
             <ArrowUpRight aria-hidden="true" data-icon="inline-end" />
-          </Link>
+          </MotionLink>
           <FinderWishlistButton name={mountain.name} slug={mountain.slug} />
         </div>
       </div>
-    </article>
+    </m.article>
   );
 }
 
@@ -216,9 +239,9 @@ export function FinderResults({ onRestart, result }: FinderResultsProps) {
               <RotateCcw aria-hidden="true" data-icon="inline-start" />
               Ulangi Finder
             </Button>
-            <Link className={buttonVariants()} href="/explore">
+            <MotionLink className={buttonVariants()} href="/explore">
               Kembali ke Explore
-            </Link>
+            </MotionLink>
           </div>
         </Container>
       </section>
@@ -322,7 +345,7 @@ export function FinderResults({ onRestart, result }: FinderResultsProps) {
               </ul>
             </div>
           </div>
-          <Link
+          <MotionLink
             className={cn(buttonVariants({ variant: "outline" }), "mt-md")}
             href={detailHref}
             onClick={() =>
@@ -335,7 +358,7 @@ export function FinderResults({ onRestart, result }: FinderResultsProps) {
           >
             {explanation.cta}
             <ArrowRight aria-hidden="true" data-icon="inline-end" />
-          </Link>
+          </MotionLink>
         </section>
 
         <section

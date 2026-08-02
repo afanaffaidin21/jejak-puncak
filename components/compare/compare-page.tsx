@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { GitCompareArrows, X } from "lucide-react";
 
 import { Container } from "@/components/common/container";
+import { MotionLink } from "@/components/common/motion-primitives";
 import {
   Empty,
   EmptyContent,
@@ -17,7 +17,8 @@ import {
 } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { WishlistButton } from "@/components/wishlist/wishlist-button";
 import { trackEvent } from "@/lib/analytics";
@@ -325,7 +326,7 @@ function CompareCtas({ mountains }: { mountains: CompareMountain[] }) {
             <CardTitle className="text-h4">{mountain.name}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-xs">
-            <Link
+            <MotionLink
               className={buttonVariants({ size: "sm" })}
               href={`/mountains/${mountain.slug}`}
               onClick={() =>
@@ -333,7 +334,7 @@ function CompareCtas({ mountains }: { mountains: CompareMountain[] }) {
               }
             >
               Lihat detail
-            </Link>
+            </MotionLink>
             <WishlistButton
               mountainId={mountain.id}
               name={mountain.name}
@@ -348,13 +349,13 @@ function CompareCtas({ mountains }: { mountains: CompareMountain[] }) {
           <p className="font-semibold text-text-primary">
             Masih bingung memilih?
           </p>
-          <Link
+          <MotionLink
             className={buttonVariants({ size: "sm", variant: "secondary" })}
             href="/finder"
             onClick={() => trackEvent("finder_click")}
           >
             Coba Jejak Finder
-          </Link>
+          </MotionLink>
         </CardContent>
       </Card>
     </div>
@@ -603,12 +604,12 @@ export function ComparePage({ mountains }: ComparePageProps) {
               </EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
-              <Link
+              <MotionLink
                 className={buttonVariants({ variant: "secondary" })}
                 href="/explore"
               >
                 Jelajahi gunung
-              </Link>
+              </MotionLink>
             </EmptyContent>
           </Empty>
         )}

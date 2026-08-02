@@ -1,14 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { updatePasswordAction } from "@/app/auth/update-password/actions";
 import { PasswordField } from "@/components/auth/password-field";
+import { MotionLink } from "@/components/common/motion-primitives";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { FieldGroup } from "@/components/ui/field";
 import {
   updatePasswordSchema,
@@ -50,12 +51,12 @@ export function UpdatePasswordForm() {
         <Alert>
           <AlertDescription>{statusMessage}</AlertDescription>
         </Alert>
-        <Link
+        <MotionLink
           className={cn(buttonVariants({ size: "lg" }), "w-full")}
           href="/profile"
         >
           Lanjut ke profil
-        </Link>
+        </MotionLink>
       </div>
     );
   }

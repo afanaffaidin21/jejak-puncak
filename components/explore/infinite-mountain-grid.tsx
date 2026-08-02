@@ -1,16 +1,20 @@
 "use client";
 
 import { ArrowUp } from "lucide-react";
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { ContentCardSkeleton } from "@/components/common/content-card-skeleton";
 import { EmptyState } from "@/components/common/empty-state";
 import { ErrorState } from "@/components/common/error-state";
-import { ScrollReveal } from "@/components/common/scroll-reveal";
+import {
+  MotionLink,
+  StaggerGrid,
+  StaggerItem,
+} from "@/components/common/motion-primitives";
 import { MountainCardActions } from "@/components/explore/mountain-card-actions";
 import { MountainCard } from "@/components/mountains/mountain-card";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { cn } from "@/lib/utils";
 import type { MountainCardData } from "@/types/mountain";
 
@@ -116,12 +120,12 @@ export function InfiniteMountainGrid({
     return (
       <EmptyState
         action={
-          <Link
+          <MotionLink
             className={buttonVariants({ variant: "outline" })}
             href="/explore"
           >
             Hapus semua filter
-          </Link>
+          </MotionLink>
         }
         description="Coba ubah kata pencarian atau kurangi beberapa filter."
         title="Belum ada gunung yang cocok"
@@ -131,13 +135,9 @@ export function InfiniteMountainGrid({
 
   return (
     <>
-      <div className="grid gap-md sm:grid-cols-2 xl:grid-cols-3">
+      <StaggerGrid className="grid gap-md sm:grid-cols-2 xl:grid-cols-3">
         {mountains.map((mountain, index) => (
-          <ScrollReveal
-            className="h-full"
-            delay={Math.min(index * 90, 360)}
-            key={mountain.id}
-          >
+          <StaggerItem className="h-full" key={mountain.id}>
             <article id={mountain.slug} className="h-full">
               <MountainCard
                 actions={
@@ -151,9 +151,9 @@ export function InfiniteMountainGrid({
                 priority={index < 2}
               />
             </article>
-          </ScrollReveal>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerGrid>
 
       {isLoading ? (
         <div

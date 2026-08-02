@@ -1,5 +1,10 @@
-import * as React from "react";
+"use client";
 
+import * as React from "react";
+import { type MotionProps, useReducedMotion } from "framer-motion";
+import * as m from "framer-motion/m";
+
+import { CARD_SPRING } from "@/components/common/motion-primitives";
 import { cn } from "@/lib/utils";
 
 function Card({
@@ -7,20 +12,33 @@ function Card({
   interactive = false,
   size = "default",
   ...props
-}: React.ComponentProps<"div"> & {
-  interactive?: boolean;
-  size?: "default" | "sm";
-}) {
+}: Omit<React.ComponentProps<"div">, keyof MotionProps> &
+  MotionProps & {
+    interactive?: boolean;
+    size?: "default" | "sm";
+  }) {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <div
+    <m.div
       data-slot="card"
       data-interactive={interactive ? "true" : undefined}
       data-size={size}
       className={cn(
-        "group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-lg border border-border bg-card py-(--card-spacing) text-body-sm text-card-foreground shadow-surface [--card-spacing:var(--spacing-md)] has-data-[slot=card-footer]:pb-0 data-[size=sm]:[--card-spacing:var(--spacing-sm)] data-[size=sm]:has-data-[slot=card-footer]:pb-0",
-        "transition-[border-color,box-shadow,transform] duration-fast ease-standard motion-safe:data-[interactive=true]:hover:-translate-y-2xs data-[interactive=true]:hover:border-primary/45 data-[interactive=true]:hover:shadow-floating data-[interactive=true]:focus-within:border-ring data-[interactive=true]:focus-within:ring-2 data-[interactive=true]:focus-within:ring-ring/50",
+        "group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-lg border border-border bg-card py-(--card-spacing) text-body-sm text-card-foreground shadow-surface [--card-spacing:var(--spacing-md)] has-data-[slot=card-footer]:pb-0 data-[size=sm]:[--card-spacing:var(--spacing-sm)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 data-[interactive=true]:focus-within:border-ring data-[interactive=true]:focus-within:ring-2 data-[interactive=true]:focus-within:ring-ring/50",
         className,
       )}
+      transition={reduceMotion ? { duration: 0 } : CARD_SPRING}
+      whileHover={
+        interactive && !reduceMotion
+          ? {
+              borderColor:
+                "color-mix(in oklch, var(--primary) 45%, transparent)",
+              boxShadow: "var(--elevation-floating)",
+              y: -8,
+            }
+          : undefined
+      }
       {...props}
     />
   );

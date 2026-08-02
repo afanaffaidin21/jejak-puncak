@@ -3,7 +3,10 @@
 import { ChevronLeft, ChevronRight, Images } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
+import { useReducedMotion } from "framer-motion";
+import * as m from "framer-motion/m";
 
+import { CARD_SPRING } from "@/components/common/motion-primitives";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -46,6 +49,7 @@ export function MountainGallery({ mountainName, slug }: MountainGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const touchStartX = useRef<number | null>(null);
+  const reduceMotion = useReducedMotion();
 
   const showImage = (index: number) => {
     setActiveIndex((index + galleryItems.length) % galleryItems.length);
@@ -69,13 +73,19 @@ export function MountainGallery({ mountainName, slug }: MountainGalleryProps) {
             onClick={() => openGallery(index)}
             type="button"
           >
-            <Image
-              alt={item.alt}
-              className="object-cover motion-safe:transition-transform motion-safe:duration-fast motion-safe:ease-emphasized motion-safe:group-hover:scale-[1.05]"
-              fill
-              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              src={item.src}
-            />
+            <m.div
+              className="absolute inset-0"
+              transition={reduceMotion ? { duration: 0 } : CARD_SPRING}
+              whileHover={reduceMotion ? undefined : { scale: 1.05 }}
+            >
+              <Image
+                alt={item.alt}
+                className="object-cover"
+                fill
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                src={item.src}
+              />
+            </m.div>
             <span className="absolute right-sm bottom-sm flex size-touch items-center justify-center rounded-full bg-background/90 text-text-primary shadow-floating">
               <Images aria-hidden="true" className="size-sm" />
               <span className="sr-only">Buka gambar {index + 1}</span>

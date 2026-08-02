@@ -7,7 +7,8 @@ import {
   StaticSection,
   staticLinkClassName,
 } from "@/components/common/static-page-layout";
-import { buttonVariants } from "@/components/ui/button";
+import { MotionLink } from "@/components/common/motion-primitives";
+import { buttonVariants } from "@/components/ui/button-variants";
 
 export const metadata: Metadata = {
   title: "Tentang Jejak Puncak | Platform Pendakian Indonesia",
@@ -175,16 +176,16 @@ export default function AboutPage() {
           .
         </p>
         <div className="flex flex-col gap-sm pt-xs sm:flex-row">
-          <Link className={buttonVariants()} href="/explore">
+          <MotionLink className={buttonVariants()} href="/explore">
             Jelajahi gunung
             <ArrowRight aria-hidden="true" />
-          </Link>
-          <Link
+          </MotionLink>
+          <MotionLink
             className={buttonVariants({ variant: "outline" })}
             href="/finder"
           >
             Mulai Finder
-          </Link>
+          </MotionLink>
         </div>
       </StaticSection>
     </StaticPageLayout>

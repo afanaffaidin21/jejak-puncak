@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
-
 import { Container } from "@/components/common/container";
 import { ErrorState } from "@/components/common/error-state";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { MotionLink } from "@/components/common/motion-primitives";
+import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 
 export default function MountainDetailError({
   reset,
@@ -18,12 +18,12 @@ export default function MountainDetailError({
         action={
           <div className="flex flex-wrap gap-xs">
             <Button onClick={reset}>Coba lagi</Button>
-            <Link
+            <MotionLink
               className={buttonVariants({ variant: "outline" })}
               href="/explore"
             >
               Kembali ke Explore
-            </Link>
+            </MotionLink>
           </div>
         }
         description="Data detail belum dapat dijangkau. Periksa koneksi atau coba kembali ke katalog."

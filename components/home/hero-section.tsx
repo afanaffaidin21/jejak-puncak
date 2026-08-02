@@ -1,10 +1,15 @@
+"use client";
+
 import { ArrowRight, Compass, Route, Sunrise } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { useReducedMotion } from "framer-motion";
+import * as m from "framer-motion/m";
 
 import { Container } from "@/components/common/container";
+import { MotionLink } from "@/components/common/motion-primitives";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { cn } from "@/lib/utils";
 
 const selectClassName = cn(
@@ -12,7 +17,24 @@ const selectClassName = cn(
   "focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50",
 );
 
+const HERO_ITEM_VARIANTS = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const HERO_SPRING = {
+  damping: 20,
+  mass: 0.7,
+  stiffness: 145,
+  type: "spring" as const,
+};
+
 export function HeroSection() {
+  const reduceMotion = useReducedMotion();
+  const heroInitial = reduceMotion ? false : "hidden";
+  const heroAnimate = reduceMotion ? undefined : "visible";
+  const heroTransition = reduceMotion ? { duration: 0 } : HERO_SPRING;
+
   return (
     <section
       aria-labelledby="home-hero-heading"
@@ -37,24 +59,44 @@ export function HeroSection() {
 
       <Container className="relative flex min-h-[calc(100svh-var(--spacing-mobile-nav))] items-end py-2xl md:items-center md:py-4xl">
         <div className="min-w-0 w-full max-w-[56rem]">
-          <p className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-4 motion-safe:duration-500 motion-safe:ease-[cubic-bezier(0.16,1,0.3,1)] mb-sm inline-flex items-center gap-2xs rounded-full border border-primary-foreground/30 bg-background/10 px-sm py-2xs text-label font-semibold backdrop-blur">
+          <m.p
+            animate={heroAnimate}
+            className="mb-sm inline-flex items-center gap-2xs rounded-full border border-primary-foreground/30 bg-background/10 px-sm py-2xs text-label font-semibold backdrop-blur"
+            initial={heroInitial}
+            transition={heroTransition}
+            variants={HERO_ITEM_VARIANTS}
+          >
             <Compass aria-hidden="true" className="size-sm" />
             Jelajahi gunung Indonesia
-          </p>
-          <h1
-            className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-4 motion-safe:duration-500 motion-safe:ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:delay-100 w-full max-w-[48rem] text-balance font-heading text-display font-semibold text-primary-foreground"
+          </m.p>
+          <m.h1
+            animate={heroAnimate}
+            className="w-full max-w-[48rem] text-balance font-heading text-display font-semibold text-primary-foreground"
             id="home-hero-heading"
+            initial={heroInitial}
+            transition={{ ...heroTransition, delay: 0.12 }}
+            variants={HERO_ITEM_VARIANTS}
           >
             Temukan puncak yang cocok dengan ceritamu.
-          </h1>
-          <p className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-4 motion-safe:duration-500 motion-safe:ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:delay-250 mt-md w-full max-w-reading text-pretty text-body-lg text-primary-foreground/85">
+          </m.h1>
+          <m.p
+            animate={heroAnimate}
+            className="mt-md w-full max-w-reading text-pretty text-body-lg text-primary-foreground/85"
+            initial={heroInitial}
+            transition={{ ...heroTransition, delay: 0.24 }}
+            variants={HERO_ITEM_VARIANTS}
+          >
             Bandingkan karakter jalur, waktu, dan kesiapanmu sebelum mengambil
             langkah pertama.
-          </p>
+          </m.p>
 
-          <form
+          <m.form
+            animate={heroAnimate}
             action="/explore"
-            className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-4 motion-safe:duration-500 motion-safe:ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:delay-400 mt-xl grid gap-sm rounded-xl border border-primary-foreground/25 bg-foreground/35 p-sm shadow-floating backdrop-blur-md sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]"
+            className="mt-xl grid gap-sm rounded-xl border border-primary-foreground/25 bg-foreground/35 p-sm shadow-floating backdrop-blur-md sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]"
+            initial={heroInitial}
+            transition={{ ...heroTransition, delay: 0.38 }}
+            variants={HERO_ITEM_VARIANTS}
           >
             <label className="grid gap-3xs text-label font-semibold">
               Wilayah
@@ -93,17 +135,15 @@ export function HeroSection() {
                 <option value="3">Maksimal 3 hari</option>
               </select>
             </label>
-            <button
-              className={cn(
-                buttonVariants({ size: "lg" }),
-                "self-end sm:col-span-2 lg:col-span-1",
-              )}
+            <Button
+              className="self-end sm:col-span-2 lg:col-span-1"
+              size="lg"
               type="submit"
             >
               Lihat pilihan
               <ArrowRight aria-hidden="true" data-icon="inline-end" />
-            </button>
-          </form>
+            </Button>
+          </m.form>
         </div>
       </Container>
 
@@ -156,13 +196,13 @@ export function FinderIntroduction() {
                 Ceritakan waktu, pengalaman, dan gaya perjalananmu. Finder akan
                 menyusun pilihan berdasarkan kesiapan dan tujuanmu.
               </p>
-              <Link
+              <MotionLink
                 className={cn(buttonVariants({ variant: "outline" }), "mt-lg")}
                 href="/finder"
               >
                 Mulai Jejak Finder
                 <ArrowRight aria-hidden="true" data-icon="inline-end" />
-              </Link>
+              </MotionLink>
             </div>
 
             <div className="grid gap-sm" aria-label="Pertimbangan Jejak Finder">

@@ -13,13 +13,16 @@ import {
   Timer,
   WalletCards,
 } from "lucide-react";
-import Link from "next/link";
+import { useReducedMotion } from "framer-motion";
+import * as m from "framer-motion/m";
 import { useEffect, useRef, useState } from "react";
 
 import { Container } from "@/components/common/container";
+import { CARD_SPRING, MotionLink } from "@/components/common/motion-primitives";
 import { FinderResults } from "@/components/finder/finder-results";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { Spinner } from "@/components/ui/spinner";
 import { parseFinderAnswers } from "@/lib/finder-validation";
 import { trackEvent } from "@/lib/analytics";
@@ -241,6 +244,7 @@ export function FinderFlow() {
   const [answers, setAnswers] = useState<Partial<FinderAnswers>>({});
   const [result, setResult] = useState<FinderResultPayload | null>(null);
   const hasTrackedView = useRef(false);
+  const reduceMotion = useReducedMotion();
 
   const question = QUESTIONS[stepIndex];
   const selectedValue = question ? answers[question.key] : undefined;
@@ -458,12 +462,12 @@ export function FinderFlow() {
           </Alert>
           <div className="mt-md flex flex-wrap gap-xs">
             <Button onClick={() => void goNext()}>Coba Lagi</Button>
-            <Link
+            <MotionLink
               className={buttonVariants({ variant: "outline" })}
               href="/explore"
             >
               Kembali ke Explore
-            </Link>
+            </MotionLink>
           </div>
         </Container>
       </section>
@@ -515,15 +519,18 @@ export function FinderFlow() {
                   const inputId = `finder-${question.key}-${option.value}`;
 
                   return (
-                    <label
+                    <m.label
                       className={cn(
-                        "relative flex min-h-20 cursor-pointer items-start gap-xs rounded-lg border bg-background p-sm transition-[border-color,background-color,box-shadow,transform] duration-fast ease-standard motion-safe:hover:-translate-y-2xs hover:border-primary/55 hover:shadow-floating",
+                        "relative flex min-h-20 cursor-pointer items-start gap-xs rounded-lg border bg-background p-sm hover:border-primary/55 hover:shadow-floating",
                         "has-focus-visible:ring-2 has-focus-visible:ring-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-background",
                         selected &&
                           "border-primary bg-primary/5 shadow-surface",
                       )}
                       htmlFor={inputId}
                       key={option.value}
+                      transition={reduceMotion ? { duration: 0 } : CARD_SPRING}
+                      whileHover={reduceMotion ? undefined : { y: -8 }}
+                      whileTap={reduceMotion ? undefined : { scale: 0.98 }}
                     >
                       <input
                         checked={selected}
@@ -554,7 +561,7 @@ export function FinderFlow() {
                           {option.description}
                         </span>
                       </span>
-                    </label>
+                    </m.label>
                   );
                 })}
               </div>

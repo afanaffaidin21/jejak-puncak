@@ -1,17 +1,16 @@
-import Link from "next/link";
-
 import { Container } from "@/components/common/container";
 import { EmptyState } from "@/components/common/empty-state";
-import { buttonVariants } from "@/components/ui/button";
+import { MotionLink } from "@/components/common/motion-primitives";
+import { buttonVariants } from "@/components/ui/button-variants";
 
 export default function MountainNotFound() {
   return (
     <Container className="py-4xl">
       <EmptyState
         action={
-          <Link className={buttonVariants()} href="/explore">
+          <MotionLink className={buttonVariants()} href="/explore">
             Cari gunung lain
-          </Link>
+          </MotionLink>
         }
         description="Slug ini tidak tersedia atau belum berstatus terbit."
         title="Gunung tidak ditemukan"

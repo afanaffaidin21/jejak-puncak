@@ -1,14 +1,17 @@
 "use client";
 
 import { Bookmark, MountainSnow } from "lucide-react";
-import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { EmptyState } from "@/components/common/empty-state";
-import { ScrollReveal } from "@/components/common/scroll-reveal";
+import {
+  MotionLink,
+  StaggerGrid,
+  StaggerItem,
+} from "@/components/common/motion-primitives";
 import { MountainCard } from "@/components/mountains/mountain-card";
 import { RemoveWishlistButton } from "@/components/passport/remove-wishlist-button";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MarkCompletedButton } from "@/components/wishlist/mark-completed-button";
 import { formatDate } from "@/lib/format";
@@ -25,9 +28,9 @@ function CompletedCollection({ mountains }: { mountains: PassportMountain[] }) {
     return (
       <EmptyState
         action={
-          <Link className={buttonVariants()} href="/explore">
+          <MotionLink className={buttonVariants()} href="/explore">
             Jelajahi Gunung
-          </Link>
+          </MotionLink>
         }
         description="Tandai pendakian yang sudah selesai untuk mulai membangun riwayat perjalananmu."
         illustration={<MountainSnow aria-hidden="true" />}
@@ -37,13 +40,9 @@ function CompletedCollection({ mountains }: { mountains: PassportMountain[] }) {
   }
 
   return (
-    <div className="grid gap-md sm:grid-cols-2 xl:grid-cols-3">
-      {mountains.map((mountain, index) => (
-        <ScrollReveal
-          className="h-full"
-          delay={Math.min(index * 90, 360)}
-          key={mountain.id}
-        >
+    <StaggerGrid className="grid gap-md sm:grid-cols-2 xl:grid-cols-3">
+      {mountains.map((mountain) => (
+        <StaggerItem className="h-full" key={mountain.id}>
           <MountainCard
             metadata={
               <span>Diselesaikan {formatDate(mountain.completedAt)}</span>
@@ -53,9 +52,9 @@ function CompletedCollection({ mountains }: { mountains: PassportMountain[] }) {
               trackEvent("mountain_detail_click", { mountain: mountain.slug })
             }
           />
-        </ScrollReveal>
+        </StaggerItem>
       ))}
-    </div>
+    </StaggerGrid>
   );
 }
 
@@ -64,9 +63,9 @@ function WishlistCollection({ mountains }: { mountains: PassportMountain[] }) {
     return (
       <EmptyState
         action={
-          <Link className={buttonVariants()} href="/finder">
+          <MotionLink className={buttonVariants()} href="/finder">
             Coba Jejak Finder
-          </Link>
+          </MotionLink>
         }
         description="Simpan gunung dari Explore atau hasil Jejak Finder untuk melihatnya kembali di sini."
         illustration={<Bookmark aria-hidden="true" />}
@@ -76,13 +75,9 @@ function WishlistCollection({ mountains }: { mountains: PassportMountain[] }) {
   }
 
   return (
-    <div className="grid gap-md sm:grid-cols-2 xl:grid-cols-3">
-      {mountains.map((mountain, index) => (
-        <ScrollReveal
-          className="h-full"
-          delay={Math.min(index * 90, 360)}
-          key={mountain.id}
-        >
+    <StaggerGrid className="grid gap-md sm:grid-cols-2 xl:grid-cols-3">
+      {mountains.map((mountain) => (
+        <StaggerItem className="h-full" key={mountain.id}>
           <MountainCard
             footerActions={
               <>
@@ -105,9 +100,9 @@ function WishlistCollection({ mountains }: { mountains: PassportMountain[] }) {
               trackEvent("mountain_detail_click", { mountain: mountain.slug })
             }
           />
-        </ScrollReveal>
+        </StaggerItem>
       ))}
-    </div>
+    </StaggerGrid>
   );
 }
 

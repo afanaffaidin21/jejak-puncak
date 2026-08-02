@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { UpdatePasswordForm } from "@/components/auth/update-password-form";
 import { Container } from "@/components/common/container";
-import { buttonVariants } from "@/components/ui/button";
+import { MotionLink } from "@/components/common/motion-primitives";
+import { buttonVariants } from "@/components/ui/button-variants";
 import {
   Card,
   CardContent,
@@ -44,12 +44,12 @@ export default async function UpdatePasswordPage() {
             {user ? (
               <UpdatePasswordForm />
             ) : (
-              <Link
+              <MotionLink
                 className={cn(buttonVariants({ size: "lg" }), "w-full")}
                 href="/login?mode=forgot"
               >
                 Minta tautan baru
-              </Link>
+              </MotionLink>
             )}
           </CardContent>
         </Card>

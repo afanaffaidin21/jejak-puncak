@@ -3,7 +3,9 @@
 import { Bookmark, GitCompareArrows, Route } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { MotionAnchor } from "@/components/common/motion-primitives";
+import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { MarkCompletedButton } from "@/components/wishlist/mark-completed-button";
 import { WishlistButton } from "@/components/wishlist/wishlist-button";
 import { trackEvent } from "@/lib/analytics";
@@ -41,14 +43,14 @@ export function DetailActions({
 
   return (
     <div className={cn("flex flex-wrap gap-xs", className)}>
-      <a
+      <MotionAnchor
         className={buttonVariants({ size: "lg" })}
         href="#routes"
         onClick={() => trackEvent("route_select", { mountain: slug })}
       >
         <Route aria-hidden="true" data-icon="inline-start" />
         Lihat rute
-      </a>
+      </MotionAnchor>
       <WishlistButton
         icon={Bookmark}
         mountainId={id}
