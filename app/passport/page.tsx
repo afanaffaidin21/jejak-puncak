@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 import { Container } from "@/components/common/container";
+import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { PassportCollections } from "@/components/passport/passport-collections";
 import { PassportTracker } from "@/components/passport/passport-tracker";
 import { ProfileSummary } from "@/components/passport/profile-summary";
@@ -25,21 +26,31 @@ export default async function PassportPage() {
 
   return (
     <Container className="flex flex-col gap-xl py-lg lg:py-xl">
-      <PassportTracker />
-      <ProfileSummary
-        profile={data.profile}
-        totalMountains={
-          data.statistics.completedCount + data.statistics.wishlistCount
-        }
-      />
-      <StatisticCards {...data.statistics} />
-      <ProgressMap completed={data.completed} />
-      <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-        <PassportCollections
-          completed={data.completed}
-          wishlist={data.wishlist}
+      <ScrollReveal>
+        <PassportTracker />
+      </ScrollReveal>
+      <ScrollReveal delay={60}>
+        <ProfileSummary
+          profile={data.profile}
+          totalMountains={
+            data.statistics.completedCount + data.statistics.wishlistCount
+          }
         />
-      </Suspense>
+      </ScrollReveal>
+      <ScrollReveal delay={120}>
+        <StatisticCards {...data.statistics} />
+      </ScrollReveal>
+      <ScrollReveal delay={180}>
+        <ProgressMap completed={data.completed} />
+      </ScrollReveal>
+      <ScrollReveal delay={240}>
+        <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+          <PassportCollections
+            completed={data.completed}
+            wishlist={data.wishlist}
+          />
+        </Suspense>
+      </ScrollReveal>
     </Container>
   );
 }

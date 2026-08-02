@@ -47,7 +47,7 @@ export function MountainCard({
       <CardMedia className="relative">
         <Image
           alt={`Foto lanskap ${mountain.name}`}
-          className="object-cover transition-transform duration-slow ease-emphasized group-hover/card:scale-[1.03]"
+          className="object-cover motion-safe:transition-transform motion-safe:duration-fast motion-safe:ease-emphasized motion-safe:group-hover/card:scale-[1.03]"
           fill
           priority={priority}
           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"

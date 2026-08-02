@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Container } from "@/components/common/container";
+import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -36,24 +37,24 @@ export function HeroSection() {
 
       <Container className="relative flex min-h-[calc(100svh-var(--spacing-mobile-nav))] items-end py-2xl md:items-center md:py-4xl">
         <div className="min-w-0 w-full max-w-[56rem]">
-          <p className="mb-sm inline-flex items-center gap-2xs rounded-full border border-primary-foreground/30 bg-background/10 px-sm py-2xs text-label font-semibold backdrop-blur">
+          <p className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-2 motion-safe:duration-normal motion-safe:ease-emphasized mb-sm inline-flex items-center gap-2xs rounded-full border border-primary-foreground/30 bg-background/10 px-sm py-2xs text-label font-semibold backdrop-blur">
             <Compass aria-hidden="true" className="size-sm" />
             Jelajahi gunung Indonesia
           </p>
           <h1
-            className="w-full max-w-[48rem] text-balance font-heading text-display font-semibold text-primary-foreground"
+            className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-2 motion-safe:duration-normal motion-safe:ease-emphasized motion-safe:delay-75 w-full max-w-[48rem] text-balance font-heading text-display font-semibold text-primary-foreground"
             id="home-hero-heading"
           >
             Temukan puncak yang cocok dengan ceritamu.
           </h1>
-          <p className="mt-md w-full max-w-reading text-pretty text-body-lg text-primary-foreground/85">
+          <p className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-2 motion-safe:duration-normal motion-safe:ease-emphasized motion-safe:delay-150 mt-md w-full max-w-reading text-pretty text-body-lg text-primary-foreground/85">
             Bandingkan karakter jalur, waktu, dan kesiapanmu sebelum mengambil
             langkah pertama.
           </p>
 
           <form
             action="/explore"
-            className="mt-xl grid gap-sm rounded-xl border border-primary-foreground/25 bg-foreground/35 p-sm shadow-floating backdrop-blur-md sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]"
+            className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-2 motion-safe:duration-normal motion-safe:ease-emphasized motion-safe:delay-200 mt-xl grid gap-sm rounded-xl border border-primary-foreground/25 bg-foreground/35 p-sm shadow-floating backdrop-blur-md sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]"
           >
             <label className="grid gap-3xs text-label font-semibold">
               Wilayah
@@ -138,74 +139,78 @@ export function FinderIntroduction() {
       aria-labelledby="finder-introduction-heading"
       className="bg-surface py-3xl md:py-4xl"
     >
-      <Container>
-        <div className="grid items-center gap-2xl lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.75fr)]">
-          <div>
-            <p className="text-label font-semibold text-primary">
-              Jejak Finder
-            </p>
-            <h2
-              className="mt-xs max-w-2xl text-balance font-heading text-h2 font-semibold text-text-primary"
-              id="finder-introduction-heading"
-            >
-              Mulai dari kesiapanmu, bukan sekadar nama gunung.
-            </h2>
-            <p className="mt-md max-w-reading text-pretty text-body-lg text-text-secondary">
-              Ceritakan waktu, pengalaman, dan gaya perjalananmu. Finder akan
-              menyusun pilihan berdasarkan kesiapan dan tujuanmu.
-            </p>
-            <Link
-              className={cn(buttonVariants({ variant: "outline" }), "mt-lg")}
-              href="/finder"
-            >
-              Mulai Jejak Finder
-              <ArrowRight aria-hidden="true" data-icon="inline-end" />
-            </Link>
-          </div>
+      <ScrollReveal>
+        <Container>
+          <div className="grid items-center gap-2xl lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.75fr)]">
+            <div>
+              <p className="text-label font-semibold text-primary">
+                Jejak Finder
+              </p>
+              <h2
+                className="mt-xs max-w-2xl text-balance font-heading text-h2 font-semibold text-text-primary"
+                id="finder-introduction-heading"
+              >
+                Mulai dari kesiapanmu, bukan sekadar nama gunung.
+              </h2>
+              <p className="mt-md max-w-reading text-pretty text-body-lg text-text-secondary">
+                Ceritakan waktu, pengalaman, dan gaya perjalananmu. Finder akan
+                menyusun pilihan berdasarkan kesiapan dan tujuanmu.
+              </p>
+              <Link
+                className={cn(buttonVariants({ variant: "outline" }), "mt-lg")}
+                href="/finder"
+              >
+                Mulai Jejak Finder
+                <ArrowRight aria-hidden="true" data-icon="inline-end" />
+              </Link>
+            </div>
 
-          <div className="grid gap-sm" aria-label="Pertimbangan Jejak Finder">
-            {[
-              {
-                icon: Route,
-                title: "Waktu perjalanan",
-                description: "Pilih dari perjalanan sehari hingga multi-hari.",
-              },
-              {
-                icon: Compass,
-                title: "Tingkat pengalaman",
-                description: "Sesuaikan medan dengan kemampuan dan persiapan.",
-              },
-              {
-                icon: Sunrise,
-                title: "Momen yang dicari",
-                description:
-                  "Temukan sabana, kawah, kemah, atau matahari terbit.",
-              },
-            ].map((item) => {
-              const Icon = item.icon;
+            <div className="grid gap-sm" aria-label="Pertimbangan Jejak Finder">
+              {[
+                {
+                  icon: Route,
+                  title: "Waktu perjalanan",
+                  description:
+                    "Pilih dari perjalanan sehari hingga multi-hari.",
+                },
+                {
+                  icon: Compass,
+                  title: "Tingkat pengalaman",
+                  description:
+                    "Sesuaikan medan dengan kemampuan dan persiapan.",
+                },
+                {
+                  icon: Sunrise,
+                  title: "Momen yang dicari",
+                  description:
+                    "Temukan sabana, kawah, kemah, atau matahari terbit.",
+                },
+              ].map((item) => {
+                const Icon = item.icon;
 
-              return (
-                <div
-                  className="flex gap-sm rounded-lg border border-divider bg-surface-elevated p-md shadow-surface"
-                  key={item.title}
-                >
-                  <span className="flex size-touch shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
-                    <Icon aria-hidden="true" className="size-sm" />
-                  </span>
-                  <div>
-                    <h3 className="font-heading text-h4 font-semibold text-text-primary">
-                      {item.title}
-                    </h3>
-                    <p className="mt-3xs text-body-sm text-text-secondary">
-                      {item.description}
-                    </p>
+                return (
+                  <div
+                    className="flex gap-sm rounded-lg border border-divider bg-surface-elevated p-md shadow-surface"
+                    key={item.title}
+                  >
+                    <span className="flex size-touch shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
+                      <Icon aria-hidden="true" className="size-sm" />
+                    </span>
+                    <div>
+                      <h3 className="font-heading text-h4 font-semibold text-text-primary">
+                        {item.title}
+                      </h3>
+                      <p className="mt-3xs text-body-sm text-text-secondary">
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </Container>
+        </Container>
+      </ScrollReveal>
     </section>
   );
 }

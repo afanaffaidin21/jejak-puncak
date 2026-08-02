@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ContentCardSkeleton } from "@/components/common/content-card-skeleton";
 import { EmptyState } from "@/components/common/empty-state";
 import { ErrorState } from "@/components/common/error-state";
+import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { MountainCardActions } from "@/components/explore/mountain-card-actions";
 import { MountainCard } from "@/components/mountains/mountain-card";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -132,19 +133,25 @@ export function InfiniteMountainGrid({
     <>
       <div className="grid gap-md sm:grid-cols-2 xl:grid-cols-3">
         {mountains.map((mountain, index) => (
-          <article id={mountain.slug} key={mountain.id}>
-            <MountainCard
-              actions={
-                <MountainCardActions
-                  id={mountain.id}
-                  name={mountain.name}
-                  slug={mountain.slug}
-                />
-              }
-              mountain={mountain}
-              priority={index < 2}
-            />
-          </article>
+          <ScrollReveal
+            className="h-full"
+            delay={Math.min(index * 60, 240)}
+            key={mountain.id}
+          >
+            <article id={mountain.slug} className="h-full">
+              <MountainCard
+                actions={
+                  <MountainCardActions
+                    id={mountain.id}
+                    name={mountain.name}
+                    slug={mountain.slug}
+                  />
+                }
+                mountain={mountain}
+                priority={index < 2}
+              />
+            </article>
+          </ScrollReveal>
         ))}
       </div>
 

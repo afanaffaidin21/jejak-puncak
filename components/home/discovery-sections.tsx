@@ -13,6 +13,7 @@ import { Container } from "@/components/common/container";
 import { ContentCardSkeleton } from "@/components/common/content-card-skeleton";
 import { EmptyState } from "@/components/common/empty-state";
 import { ErrorState } from "@/components/common/error-state";
+import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { SectionHeading } from "@/components/common/section-heading";
 import { MountainCard } from "@/components/mountains/mountain-card";
 import {
@@ -72,11 +73,13 @@ async function PopularMountainGrid() {
   return (
     <div className="grid gap-md sm:grid-cols-2 lg:grid-cols-4">
       {mountains.map((mountain, index) => (
-        <MountainCard
+        <ScrollReveal
+          className="h-full"
+          delay={Math.min(index * 60, 240)}
           key={mountain.id}
-          mountain={mountain}
-          priority={index < 2}
-        />
+        >
+          <MountainCard mountain={mountain} priority={index < 2} />
+        </ScrollReveal>
       ))}
     </div>
   );
@@ -88,34 +91,36 @@ export function PopularMountainsSection() {
       aria-labelledby="popular-mountains-heading"
       className="bg-background py-3xl md:py-4xl"
     >
-      <Container>
-        <SectionHeading
-          action={
-            <Link
-              className={buttonVariants({ variant: "outline" })}
-              href="/explore"
-            >
-              Lihat semua
-              <ArrowRight aria-hidden="true" data-icon="inline-end" />
-            </Link>
-          }
-          description="Mulai dari gunung yang paling sering masuk daftar perjalanan pendaki Indonesia."
-          eyebrow="Pilihan populer"
-          id="popular-mountains-heading"
-          title="Puncak yang banyak ingin dijelajahi"
-        />
-        <Suspense
-          fallback={
-            <div className="grid gap-md sm:grid-cols-2 lg:grid-cols-4">
-              {Array.from({ length: 4 }, (_, index) => (
-                <ContentCardSkeleton key={index} />
-              ))}
-            </div>
-          }
-        >
-          <PopularMountainGrid />
-        </Suspense>
-      </Container>
+      <ScrollReveal>
+        <Container>
+          <SectionHeading
+            action={
+              <Link
+                className={buttonVariants({ variant: "outline" })}
+                href="/explore"
+              >
+                Lihat semua
+                <ArrowRight aria-hidden="true" data-icon="inline-end" />
+              </Link>
+            }
+            description="Mulai dari gunung yang paling sering masuk daftar perjalanan pendaki Indonesia."
+            eyebrow="Pilihan populer"
+            id="popular-mountains-heading"
+            title="Puncak yang banyak ingin dijelajahi"
+          />
+          <Suspense
+            fallback={
+              <div className="grid gap-md sm:grid-cols-2 lg:grid-cols-4">
+                {Array.from({ length: 4 }, (_, index) => (
+                  <ContentCardSkeleton key={index} />
+                ))}
+              </div>
+            }
+          >
+            <PopularMountainGrid />
+          </Suspense>
+        </Container>
+      </ScrollReveal>
     </section>
   );
 }
@@ -133,60 +138,62 @@ export function MapIntroductionSection() {
       aria-labelledby="map-introduction-heading"
       className="bg-surface py-3xl md:py-4xl"
     >
-      <Container>
-        <div className="grid items-center gap-2xl lg:grid-cols-[0.75fr_1.25fr]">
-          <div>
-            <p className="text-label font-semibold text-primary">
-              Jelajah kepulauan
-            </p>
-            <h2
-              className="mt-xs text-balance font-heading text-h2 font-semibold text-text-primary"
-              id="map-introduction-heading"
-            >
-              Lihat perjalanan dalam konteks wilayah.
-            </h2>
-            <p className="mt-md text-pretty text-body-lg text-text-secondary">
-              Gunakan peta interaktif untuk melihat sebaran pilihan, lalu buka
-              detail gunung yang paling menarik perhatianmu.
-            </p>
-            <Link
-              className={cn(buttonVariants({ variant: "outline" }), "mt-lg")}
-              href="/map"
-            >
-              Buka peta gunung
-              <ArrowRight aria-hidden="true" data-icon="inline-end" />
-            </Link>
-          </div>
-          <div className="relative aspect-16/9 overflow-hidden rounded-xl border border-divider bg-accent shadow-surface">
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--divider)_1px,transparent_1px)] bg-size-[20px_20px] opacity-70"
-            />
-            <div
-              aria-hidden="true"
-              className="absolute inset-[12%] rounded-[45%_55%_50%_40%] border border-primary/15 bg-surface/65 blur-[1px]"
-            />
-            {markers.map((marker) => (
-              <span
-                className={cn(
-                  "absolute flex items-center gap-2xs rounded-full bg-surface-elevated px-xs py-2xs text-caption font-semibold text-text-primary shadow-floating",
-                  marker.className,
-                )}
-                key={marker.label}
+      <ScrollReveal>
+        <Container>
+          <div className="grid items-center gap-2xl lg:grid-cols-[0.75fr_1.25fr]">
+            <div>
+              <p className="text-label font-semibold text-primary">
+                Jelajah kepulauan
+              </p>
+              <h2
+                className="mt-xs text-balance font-heading text-h2 font-semibold text-text-primary"
+                id="map-introduction-heading"
               >
-                <MapPinned
-                  aria-hidden="true"
-                  className="size-xs text-primary"
-                />
-                {marker.label}
-              </span>
-            ))}
-            <p className="absolute right-sm bottom-sm rounded-full bg-foreground/75 px-sm py-2xs text-caption text-primary-foreground">
-              Preview peta — data interaktif segera hadir
-            </p>
+                Lihat perjalanan dalam konteks wilayah.
+              </h2>
+              <p className="mt-md text-pretty text-body-lg text-text-secondary">
+                Gunakan peta interaktif untuk melihat sebaran pilihan, lalu buka
+                detail gunung yang paling menarik perhatianmu.
+              </p>
+              <Link
+                className={cn(buttonVariants({ variant: "outline" }), "mt-lg")}
+                href="/map"
+              >
+                Buka peta gunung
+                <ArrowRight aria-hidden="true" data-icon="inline-end" />
+              </Link>
+            </div>
+            <div className="relative aspect-16/9 overflow-hidden rounded-xl border border-divider bg-accent shadow-surface">
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--divider)_1px,transparent_1px)] bg-size-[20px_20px] opacity-70"
+              />
+              <div
+                aria-hidden="true"
+                className="absolute inset-[12%] rounded-[45%_55%_50%_40%] border border-primary/15 bg-surface/65 blur-[1px]"
+              />
+              {markers.map((marker) => (
+                <span
+                  className={cn(
+                    "absolute flex items-center gap-2xs rounded-full bg-surface-elevated px-xs py-2xs text-caption font-semibold text-text-primary shadow-floating",
+                    marker.className,
+                  )}
+                  key={marker.label}
+                >
+                  <MapPinned
+                    aria-hidden="true"
+                    className="size-xs text-primary"
+                  />
+                  {marker.label}
+                </span>
+              ))}
+              <p className="absolute right-sm bottom-sm rounded-full bg-foreground/75 px-sm py-2xs text-caption text-primary-foreground">
+                Preview peta — data interaktif segera hadir
+              </p>
+            </div>
           </div>
-        </div>
-      </Container>
+        </Container>
+      </ScrollReveal>
     </section>
   );
 }
@@ -218,45 +225,52 @@ export function CollectionsSection() {
       aria-labelledby="collections-heading"
       className="bg-background py-3xl md:py-4xl"
     >
-      <Container>
-        <SectionHeading
-          align="center"
-          description="Kumpulan awal untuk mempersempit pilihan tanpa perlu mengetahui nama gunung terlebih dahulu."
-          eyebrow="Koleksi pilihan"
-          id="collections-heading"
-          title="Mulai dari pengalaman yang kamu cari"
-        />
-        <div className="grid gap-md md:grid-cols-3">
-          {collections.map((collection) => {
-            const Icon = collection.icon;
+      <ScrollReveal>
+        <Container>
+          <SectionHeading
+            align="center"
+            description="Kumpulan awal untuk mempersempit pilihan tanpa perlu mengetahui nama gunung terlebih dahulu."
+            eyebrow="Koleksi pilihan"
+            id="collections-heading"
+            title="Mulai dari pengalaman yang kamu cari"
+          />
+          <div className="grid gap-md md:grid-cols-3">
+            {collections.map((collection, index) => {
+              const Icon = collection.icon;
 
-            return (
-              <Link
-                className="group rounded-xl border border-divider bg-surface-elevated p-lg shadow-surface transition-[border-color,box-shadow,transform] duration-normal ease-standard hover:-translate-y-3xs hover:border-primary/35 hover:shadow-hover"
-                href={collection.href}
-                key={collection.title}
-              >
-                <span className="flex size-touch items-center justify-center rounded-full bg-accent text-accent-foreground">
-                  <Icon aria-hidden="true" className="size-sm" />
-                </span>
-                <h3 className="mt-lg font-heading text-h3 font-semibold text-text-primary">
-                  {collection.title}
-                </h3>
-                <p className="mt-xs text-body-sm text-text-secondary">
-                  {collection.description}
-                </p>
-                <span className="mt-md inline-flex items-center gap-2xs text-label font-semibold text-primary">
-                  Buka koleksi
-                  <ArrowRight
-                    aria-hidden="true"
-                    className="size-sm transition-transform duration-fast group-hover:translate-x-3xs"
-                  />
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-      </Container>
+              return (
+                <ScrollReveal
+                  className="h-full"
+                  delay={Math.min(index * 60, 240)}
+                  key={collection.title}
+                >
+                  <Link
+                    className="group flex h-full flex-col rounded-xl border border-divider bg-surface-elevated p-lg shadow-surface transition-[border-color,box-shadow,transform] duration-fast ease-standard motion-safe:hover:-translate-y-3xs hover:border-primary/35 hover:shadow-hover"
+                    href={collection.href}
+                  >
+                    <span className="flex size-touch items-center justify-center rounded-full bg-accent text-accent-foreground">
+                      <Icon aria-hidden="true" className="size-sm" />
+                    </span>
+                    <h3 className="mt-lg font-heading text-h3 font-semibold text-text-primary">
+                      {collection.title}
+                    </h3>
+                    <p className="mt-xs text-body-sm text-text-secondary">
+                      {collection.description}
+                    </p>
+                    <span className="mt-auto pt-md inline-flex items-center gap-2xs text-label font-semibold text-primary">
+                      Buka koleksi
+                      <ArrowRight
+                        aria-hidden="true"
+                        className="size-sm motion-safe:transition-transform motion-safe:duration-fast motion-safe:group-hover:translate-x-3xs"
+                      />
+                    </span>
+                  </Link>
+                </ScrollReveal>
+              );
+            })}
+          </div>
+        </Container>
+      </ScrollReveal>
     </section>
   );
 }
@@ -267,33 +281,35 @@ export function PassportSection() {
       aria-labelledby="passport-heading"
       className="bg-primary py-3xl text-primary-foreground md:py-4xl"
     >
-      <Container>
-        <div className="grid items-center gap-xl md:grid-cols-[minmax(0,1fr)_auto]">
-          <div>
-            <p className="inline-flex items-center gap-2xs text-label font-semibold text-primary-foreground/75">
-              <Stamp aria-hidden="true" className="size-sm shrink-0" />
-              Jejak Passport
-            </p>
-            <h2
-              className="mt-xs text-balance font-heading text-h2 font-semibold"
-              id="passport-heading"
+      <ScrollReveal>
+        <Container>
+          <div className="grid items-center gap-xl md:grid-cols-[minmax(0,1fr)_auto]">
+            <div>
+              <p className="inline-flex items-center gap-2xs text-label font-semibold text-primary-foreground/75">
+                <Stamp aria-hidden="true" className="size-sm shrink-0" />
+                Jejak Passport
+              </p>
+              <h2
+                className="mt-xs text-balance font-heading text-h2 font-semibold"
+                id="passport-heading"
+              >
+                Simpan puncak yang ingin dan sudah kamu jejak.
+              </h2>
+              <p className="mt-sm max-w-reading text-body-lg text-primary-foreground/80">
+                Login diperlukan untuk pengalaman personal. Pencatatan
+                perjalanan lengkap akan dibangun pada fase berikutnya.
+              </p>
+            </div>
+            <Link
+              className={buttonVariants({ variant: "secondary", size: "lg" })}
+              href="/login?next=/passport"
             >
-              Simpan puncak yang ingin dan sudah kamu jejak.
-            </h2>
-            <p className="mt-sm max-w-reading text-body-lg text-primary-foreground/80">
-              Login diperlukan untuk pengalaman personal. Pencatatan perjalanan
-              lengkap akan dibangun pada fase berikutnya.
-            </p>
+              Mulai Passport
+              <ArrowRight aria-hidden="true" data-icon="inline-end" />
+            </Link>
           </div>
-          <Link
-            className={buttonVariants({ variant: "secondary", size: "lg" })}
-            href="/login?next=/passport"
-          >
-            Mulai Passport
-            <ArrowRight aria-hidden="true" data-icon="inline-end" />
-          </Link>
-        </div>
-      </Container>
+        </Container>
+      </ScrollReveal>
     </section>
   );
 }
@@ -304,27 +320,29 @@ export function HomeFaqSection() {
       aria-labelledby="home-faq-heading"
       className="bg-surface py-3xl md:py-4xl"
     >
-      <Container className="max-w-4xl">
-        <SectionHeading
-          align="center"
-          description="Hal penting sebelum menjadikan Jejak Puncak bagian dari rencana perjalananmu."
-          eyebrow="Pertanyaan umum"
-          id="home-faq-heading"
-          title="Rencanakan dengan informasi yang tepat"
-        />
-        <Accordion className="rounded-xl border border-divider bg-surface-elevated px-md shadow-surface">
-          {HOME_FAQS.map((item) => (
-            <AccordionItem key={item.question} value={item.question}>
-              <AccordionTrigger className="py-md text-body">
-                {item.question}
-              </AccordionTrigger>
-              <AccordionContent className="pb-md text-body-sm text-text-secondary">
-                {item.answer}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </Container>
+      <ScrollReveal>
+        <Container className="max-w-4xl">
+          <SectionHeading
+            align="center"
+            description="Hal penting sebelum menjadikan Jejak Puncak bagian dari rencana perjalananmu."
+            eyebrow="Pertanyaan umum"
+            id="home-faq-heading"
+            title="Rencanakan dengan informasi yang tepat"
+          />
+          <Accordion className="rounded-xl border border-divider bg-surface-elevated px-md shadow-surface">
+            {HOME_FAQS.map((item) => (
+              <AccordionItem key={item.question} value={item.question}>
+                <AccordionTrigger className="py-md text-body">
+                  {item.question}
+                </AccordionTrigger>
+                <AccordionContent className="pb-md text-body-sm text-text-secondary">
+                  {item.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </Container>
+      </ScrollReveal>
     </section>
   );
 }

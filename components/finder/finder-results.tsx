@@ -76,11 +76,11 @@ function RecommendationCard({
   const detailHref = `/mountains/${mountain.slug}`;
 
   return (
-    <article className="flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card shadow-surface">
+    <article className="group/finder-card flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card shadow-surface transition-[border-color,box-shadow,transform] duration-fast ease-standard motion-safe:hover:-translate-y-3xs hover:border-primary/35 hover:shadow-hover">
       <div className="relative aspect-16/10 overflow-hidden bg-muted">
         <Image
           alt={`Lanskap ${mountain.name}`}
-          className="object-cover transition-transform duration-slow ease-emphasized hover:scale-[1.03]"
+          className="object-cover motion-safe:transition-transform motion-safe:duration-fast motion-safe:ease-emphasized motion-safe:group-hover/finder-card:scale-[1.03]"
           fill
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           src={mountain.heroImage}

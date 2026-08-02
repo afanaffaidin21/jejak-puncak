@@ -18,7 +18,7 @@ function Card({
       data-size={size}
       className={cn(
         "group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-lg border border-border bg-card py-(--card-spacing) text-body-sm text-card-foreground shadow-surface [--card-spacing:var(--spacing-md)] has-data-[slot=card-footer]:pb-0 data-[size=sm]:[--card-spacing:var(--spacing-sm)] data-[size=sm]:has-data-[slot=card-footer]:pb-0",
-        "transition-[border-color,box-shadow,transform] duration-normal ease-standard data-[interactive=true]:hover:-translate-y-3xs data-[interactive=true]:hover:border-primary/35 data-[interactive=true]:hover:shadow-hover data-[interactive=true]:focus-within:border-ring data-[interactive=true]:focus-within:ring-2 data-[interactive=true]:focus-within:ring-ring/50",
+        "transition-[border-color,box-shadow,transform] duration-fast ease-standard motion-safe:data-[interactive=true]:hover:-translate-y-3xs data-[interactive=true]:hover:border-primary/35 data-[interactive=true]:hover:shadow-hover data-[interactive=true]:focus-within:border-ring data-[interactive=true]:focus-within:ring-2 data-[interactive=true]:focus-within:ring-ring/50",
         className,
       )}
       {...props}

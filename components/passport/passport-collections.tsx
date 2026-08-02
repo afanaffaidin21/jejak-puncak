@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { EmptyState } from "@/components/common/empty-state";
+import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { MountainCard } from "@/components/mountains/mountain-card";
 import { RemoveWishlistButton } from "@/components/passport/remove-wishlist-button";
 import { buttonVariants } from "@/components/ui/button";
@@ -37,17 +38,22 @@ function CompletedCollection({ mountains }: { mountains: PassportMountain[] }) {
 
   return (
     <div className="grid gap-md sm:grid-cols-2 xl:grid-cols-3">
-      {mountains.map((mountain) => (
-        <MountainCard
+      {mountains.map((mountain, index) => (
+        <ScrollReveal
+          className="h-full"
+          delay={Math.min(index * 60, 240)}
           key={mountain.id}
-          metadata={
-            <span>Diselesaikan {formatDate(mountain.completedAt)}</span>
-          }
-          mountain={mountain}
-          onDetailClick={() =>
-            trackEvent("mountain_detail_click", { mountain: mountain.slug })
-          }
-        />
+        >
+          <MountainCard
+            metadata={
+              <span>Diselesaikan {formatDate(mountain.completedAt)}</span>
+            }
+            mountain={mountain}
+            onDetailClick={() =>
+              trackEvent("mountain_detail_click", { mountain: mountain.slug })
+            }
+          />
+        </ScrollReveal>
       ))}
     </div>
   );
@@ -71,30 +77,35 @@ function WishlistCollection({ mountains }: { mountains: PassportMountain[] }) {
 
   return (
     <div className="grid gap-md sm:grid-cols-2 xl:grid-cols-3">
-      {mountains.map((mountain) => (
-        <MountainCard
-          footerActions={
-            <>
-              <MarkCompletedButton
-                className="flex-1"
-                mountainId={mountain.id}
-                name={mountain.name}
-                size="sm"
-                slug={mountain.slug}
-              />
-              <RemoveWishlistButton
-                mountainId={mountain.id}
-                name={mountain.name}
-                slug={mountain.slug}
-              />
-            </>
-          }
+      {mountains.map((mountain, index) => (
+        <ScrollReveal
+          className="h-full"
+          delay={Math.min(index * 60, 240)}
           key={mountain.id}
-          mountain={mountain}
-          onDetailClick={() =>
-            trackEvent("mountain_detail_click", { mountain: mountain.slug })
-          }
-        />
+        >
+          <MountainCard
+            footerActions={
+              <>
+                <MarkCompletedButton
+                  className="flex-1"
+                  mountainId={mountain.id}
+                  name={mountain.name}
+                  size="sm"
+                  slug={mountain.slug}
+                />
+                <RemoveWishlistButton
+                  mountainId={mountain.id}
+                  name={mountain.name}
+                  slug={mountain.slug}
+                />
+              </>
+            }
+            mountain={mountain}
+            onDetailClick={() =>
+              trackEvent("mountain_detail_click", { mountain: mountain.slug })
+            }
+          />
+        </ScrollReveal>
       ))}
     </div>
   );

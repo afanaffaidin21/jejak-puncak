@@ -69,7 +69,7 @@ type StatisticCardProps = AnimatedNumberProps & {
 
 function StatisticCard({ icon: Icon, label, ...number }: StatisticCardProps) {
   return (
-    <Card size="sm">
+    <Card interactive size="sm">
       <CardHeader className="grid-cols-[1fr_auto] items-center">
         <CardTitle className="text-body-sm text-text-secondary">
           {label}
