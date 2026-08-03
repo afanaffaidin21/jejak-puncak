@@ -91,6 +91,12 @@ Sumber asli berukuran 4.496 × 3.000 px (PNG, 10,43 MB). Asset homepage dikonver
 3. **Danau Fajar (Sunrise)** - (CC BY-SA 3.0) Spencer Weart [File:Kelimutu_sunrise.jpg](https://commons.wikimedia.org/wiki/File:Kelimutu_sunrise.jpg)
 4. **Pemandangan Danau Kawah** - (CC BY-SA 3.0) Serenade [File:Flores_Moni_Kelimutu.jpg](https://commons.wikimedia.org/wiki/File:Flores_Moni_Kelimutu.jpg)
 
+> **Catatan (3 Agustus 2026):** URL `src` galeri Kelimutu di database diubah dari file resolusi penuh ke thumbnail resmi Wikimedia 1920px untuk menghindari rate limit (HTTP 429) yang menyebabkan gambar rusak. Kredit fotografer dan lisensi tidak berubah.
+> - `https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Kelimutu_lakes.jpg/1920px-Kelimutu_lakes.jpg`
+> - `https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Kelimutulakes1.jpg/1920px-Kelimutulakes1.jpg`
+> - `https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Kelimutu_sunrise.jpg/1920px-Kelimutu_sunrise.jpg`
+> - `https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Flores_Moni_Kelimutu.jpg/1920px-Flores_Moni_Kelimutu.jpg`
+
 ### Gunung Rinjani
 1. **Kaldera & Danau Segara Anak** - (CC BY-SA 4.0) Abdul Fatah [File:Kaldera_Gunung_Rinjani.jpg](https://commons.wikimedia.org/wiki/File:Kaldera_Gunung_Rinjani.jpg)
 2. **Bentang Alam dari Puncak** - (CC BY-SA 4.0) Suryasriyama [File:Gunung_Rinjani_dan_danau_Segara_Anak.jpg](https://commons.wikimedia.org/wiki/File:Gunung_Rinjani_dan_danau_Segara_Anak.jpg)
@@ -102,3 +108,9 @@ Sumber asli berukuran 4.496 × 3.000 px (PNG, 10,43 MB). Asset homepage dikonver
 2. **Bibir Kawah Gunung Bromo** - (CC BY-SA 4.0) Arabsalam [File:Bromo_Tengger_Semeru_National_Park_Java_505.jpg](https://commons.wikimedia.org/wiki/File:Bromo_Tengger_Semeru_National_Park_Java_505.jpg)
 3. **Kuda di Tengah Lautan Pasir** - (CC BY-SA 4.0) Ardianay [File:Berkuda_di_Tengah_Lautan_Pasir.jpg](https://commons.wikimedia.org/wiki/File:Berkuda_di_Tengah_Lautan_Pasir.jpg)
 4. **Pemandangan Sunrise di Bromo** - (CC BY-SA 4.0) Jeremia Pasaribu [File:Bromo_Sunrise.jpg](https://commons.wikimedia.org/wiki/File:Bromo_Sunrise.jpg)
+
+> **Catatan (3 Agustus 2026):** URL `src` galeri Bromo di database diubah dari file resolusi penuh ke thumbnail resmi Wikimedia 1920px untuk menghindari rate limit (HTTP 429) yang menyebabkan gambar rusak. Kredit fotografer dan lisensi tidak berubah.
+> - `https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Bromo_Tengger_Semeru_National_Park_Java_500.jpg/1920px-Bromo_Tengger_Semeru_National_Park_Java_500.jpg`
+> - `https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Bromo_Tengger_Semeru_National_Park_Java_505.jpg/1920px-Bromo_Tengger_Semeru_National_Park_Java_505.jpg`
+> - `https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Berkuda_di_Tengah_Lautan_Pasir.jpg/1920px-Berkuda_di_Tengah_Lautan_Pasir.jpg`
+> - `https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Bromo_Sunrise.jpg/1920px-Bromo_Sunrise.jpg`
